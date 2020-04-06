@@ -1,0 +1,280 @@
+#+TITLE:Notes de lectures: Closed-form Upper Bounds in Static Cost Analysis
+#+AUTHOR: Hector Suzanne
+#+date:<2020-04-06 Mon>
+* Introduction
+
+On cherche à borner le coût en une certaine ressource d'un programme /P/ sur une
+entrée arbitraire /x/ sans pour autant avoir à déterminer le /x/ qui réalise
+cette borne ou avoir à calculer /P(x)/. Pour ce faire, on procède avec un
+programme /P/ et un /modèle de coût/ donné. On produit dans un premier temps des
+/relations de coûts (CR)/ pour /P/. Ces relations décrivent le coût selon le
+modèle du calcul de /P/ en fonction de la /taille/ de son entrée /x/.
+
+Les CR sont un formalisme pertinent pour l'analyse de coût pour les raisons
+suivantes:
+- Elles sont agnostiques au langage et modèle de coût utilisés
+- Elles couvrent de nombreuses classes de complexités algorithmiques, et sont
+  donc polyvalentes
+- On peut y capturer des notions non-triviales de coûts, même à posteriori en
+  changeant le modèle.
+La dynamique des CR est néanmoins non-triviale: l'abstraction des données du
+programme à leurs tailles crée une source de non-déterminisme: par exemple,
+quand on branche selon une valeur du programme, et que les deux branches n'ont
+pas de coût égaux, notre analyse statique doit résoudre l'ambiguïté.
+
+Dans la littérature, on utilise souvent des /relations de récurrences/ à la
+place des relations de coûts. Cela à conduit à essayer de déléguer la recherche
+de formes fermées des relations de coûts par des systèmes experts de calculs
+symboliques (Mapple, Mathematica,etc.). Mais, nous le verrons, cette approche na
+pas eue la succès escompté.
+
+Notre nouvelle approche, basée sur l'analyse statique d'une sémantique de
+programmation par contrainte des CR, est la première permettant d'obtenir des
+formes closes des CR automatiquement pour un grand nombre de programmes
+impératifs représentatifs de ceux présent dans le monde réel.
+
+* Relations de Coûts
+
+** Obtention
+
+On veut pouvoir inférer, depuis le code source d'un programme impératif
+structuré (avec =if=, =while=,...) ou non-structuré (avec =goto=, =jump=) les
+relations de tailles qui existent entre les données qu'il manipule. On procède
+en trois étapes:
+1. On construit les /Control Flow Graph/ du programme pour rendre les
+   récurrences explicites.
+2. En utilisant l'interprétation abstraite, on obtient des /relation de tailles/
+   entres les différents appels récursifs. Les relations obtenues sont
+   généralement linéaires (i.e. on travaille dans les domaine abstrait des
+   polyèdres convexes), mais on peut utiliser un autre formalisme à condition
+   d'avoir un solveur adapté plus loin dans le traitement.
+3. On interprète le programme dans le modèle de coût choisi, afin de générer les
+   relations de coûts en elles-mêmes.
+
+** Syntaxe
+
+#+BEGIN_SRC
+r   ::= ℝ+
+n   ::= ℕ
+v   ::= Ζ
+lin ::= v1*x1 + ... vn*xn
+c   ::= lin < lin | lin ≤ lin | lin = lin
+φ   ::= c+
+
+exp ::= r         | nat(lin)
+      | exp + exp | exp * exp  | exp - r
+      | exp ^ r   | log_n(exp) | n^exp
+      | max( exp+ )
+
+cost ::=  C(x1...xn) = exp + ∑(i=1...n) D_i(yi1...yim) where φ
+CRS  ::= cost+
+#+END_SRC
+
+On notera que dans =cost=, les variables de =exp= et =y1..ym= ne sont pas
+/définies/ grâce à =x1...xn=, mais seulement reliées à elles par les contraintes
+présentes dans =φ=.
+
+** Sémantique
+
+La sémantique des /CRS/ suit celle d'un programme en progammation logique par
+contrainte: Pour évaluer un =C(v1...vn)=, on procède par étape:
+1. On choisie une des clauses du CRS qui a =C= en tête.
+2. on instancie les variables =x1...xn, yi1...yim, vars(exp)= de manière à
+   satisfaire =φ=.
+3. On calcule et accumule =exp= sous l'instanciation précédente
+4. On itère sur tout les =D_i=
+Quand on ne peut pas satisfaire =φ=, on a atteint un échec.
+La sémantique est parallèle à celle d'un programme Prolog.
+
+On définit alors la sémantique d'un CRS comme l'ensemble de arbres d'évaluations
+qu'il engendre. Le coût d'un arbre est défini par induction, et le coût du CRS
+l'ensemble des coût que ses arbres d'évaluation.
+
+On note =Trees(C(v1...vn), S)= l'ensemble des arbres de l'évaluation de
+=C(v1...vn)= dans le CRS =S=, et =Answer(C(v1...vn), S)= l'ensemble des coûts
+engendrés.
+
+** Comparaison avec des RR
+
+- Non-déterminisme :: L'abstraction des valeurs par leurs tailles rends les CR
+  /très/ non-déterministes, même dans les cas ou le programme ne l'est pas. Voir
+  par exemple la fonction =filter=.
+- Contraintes inexactes :: Les arguments des appels récursifs des CR ne sont
+  liées aux arguments à la racine que par des relations imprécises. On peut
+  avoir à les tirer dans les ensembles infinis. Dans les RR, les arguments des
+  appels récursifs sont connus si on connaît les arguments de l'appel précédent.
+- Arguments multiples :: Dans les RR, l'argument décroît selon un ordre bien
+  fondé, ce qui garantie la terminaison: on parle de récurrence structurelle.
+  Dans les CR, l'ordre bien-fondé peut exister sur une /relation de taille/
+  arbitraire.
+
+  Les deux premiers cas sont une source importante de non-déterminisme du
+  résultat. Les CR ne définissent pas des fonctions mais des relations entre les
+  tailles des arguments et la "taille" du calcul associé. De plus, les systèmes
+  experts de résolutions de récurrence ne peuvent généralement par inférer seuls
+  l'argument décroissant de manière bien-fondé nécessaire à la résolution de la
+  récurrence. Ces systèmes ne sont pas adaptés à la mise en forme close de CR.
+
+  On pourrait, enfin essayer de simplifier les CR pour en retirer le
+  non-déterminisme. Hélas, les exemples réels simples montrent sans ambiguïté
+  qu'il existe des CR non-déterministes dont la borne sup n'est pas modélisable
+  par celle d'une de ses sous-CR déterministe.
+
+* Bornes Supérieures de Forme Fermées des Relations de Coûts
+
+On définit les /Bornes Supérieures de =C= de formes fermées dans un CRS/ =S=
+comme une fonction =f : Ζ^n -> ℝ+= telle que:
+- =f(x1...xn) = exp=
+- =∀ v1...vn, ∀r ∈ Answers(C(v1...vn), S), f(v1...vn) ≥ r=
+
+La méthode décrite dans l'article construit les bornes sup =f= en approchant par
+le haut le nombre et le coût individuel des noeuds internes et des feuilles des
+arbres d'évaluation de =C=. Formellement:
+
+=f(x) = internes(x)*cout-interne(x) + feuilles(x)*cout-feuille(x)=
+
+** Bornage du Nombre de Noeuds
+
+On borne les valeurs de =internes(x)= et =feuilles(x)= en donnant une borne supérieure
+de la hauteur =h(x)= et du /facteur de branchement/ =b= des arbres d'évaluation.
+Le facteur de branchement est facilement borné par le nombre maximal d'appels
+récursifs dans une équation pour =C=. Il est donc immédiatement calculable.
+
+On cherche maintenant à borner, pour un arbre d'évaluation =T ∈
+Trees(C(v1...vn), S)=. On applique un pré-traitement à =S= pour garantir un
+invariant sur =T=: C'est la /Mise en forme de récurrence directe/: Dans une
+descente dans =T=, les noeuds successifs représentent des appels imbriqués aux
+relations de coût idoines, étiquetés par les têtes des relations (=C=, =D=,
+...); La forme de récurrence directe impose que si =C= apparaît comme un
+descendant de =C=, alors c'est un descendant direct. Ce résultat permet de
+réduire le bornage de =h(x)= au bornage du nombre d'appels successifs à une
+relation de coût =C=. Une technique de passage en forme de récurrence directe
+est présentée plus loin.
+
+Le bornage du nombre d'appel successifs à une relation de coût ou de récurrence
+à été étudié dans le cadre de l'analyse de terminaison, aussi il existe des
+algorithmes d'inférence de /fonctions de classement/, qui associe aux arguments
+des relations un /rang/ dans un ordre bien-fondé. Si une fonction de classement
+=f_C= existe pour une relation de coût =C=, alors la hauteur de l'arbre engendré
+par =C(v1...vn)= est bornée =f_C(v1...vn)=. Les fonctions de classements que
+nous utilisons sont linéaires, et inférées par l'algorithme décrit par Podelski
+& Rybalchenko dans /A complete method for the for synthesis of linear ranking
+functions (VMCAI04)/.
+
+Une fois les bornes de la hauteur est du facteur de branchement établie, il
+suffit d'approximer l'arbre d'évaluation par un arbre complet de hauteur
+=h(v1...vn)= et de facteur =b=.
+
+** Bornage du Coût par Noeud
+
+Il reste maintenant à obtenir les fonctions =cout-interne= et =cout-feuille=.
+Premièrement, on utilise l'interprétation abstraite sur la forme de récurrence
+directe pour obtenir des approximations sûres des invariants entre les appels
+successifs aux relations de coûts. Les coûts sont monotones en leurs composants
+=nat=. Ils suffit alors de borner ces composants en utilisant les invariants
+calculés plus haut et les arguments à la racine de l'arbre d'évaluation. (Voir
+la functions =ub_exp= de l'article original pour le code exact). Les relations
+de coûts récursives de =S= engendrent les noeuds internes, et les non-récursives
+engendrent les feuilles. Les bornes supérieures calculées ici forment les
+fonctions =cout-interne= et =cout-feuille=.
+
+** Cas des Algorithmes /Diviser-pour-régner/
+
+Dans les cas des algorithmes diviser-pour-régner, l'approximation
+noeud-par-noeud n'est pas assez précise. On borne alors le coût d'une relation
+de coût =C= par =C+(x) = levels(x)*cout-level(x)=. Comme précédemment, on borne
+de nombre de niveau avec la hauteur de l'arbre.
+
+Pour borner le coût par niveau, nous développons une caractérisation des CR
+/diviser-pour-régner/ compatible avec notre analyse, un test automatique
+d'appartenance à cette classe de CR, et une méthode pour calculer une borne
+=cout-level= pour ces CR.
+
+- Caractérisation :: Une CR est /diviser-pour-régner/ si, pour tout ses arbres
+  d'évaluation, le coût propre d'un niveau de son arbre d'évaluation des
+  supérieur ou égal au coût propre du niveau directement en dessous
+- Calcul :: On calcule, pour une CR =C=, les paires des coûts abstraits propres
+  de chaque équation définissant =C= et de la somme des coût abstraits propres
+  de leurs enfants respectif. Pour prouver que =C= est diviser-pour-régner, il
+  suffit de prouver que pour tout assignement satisfaisant les contraintes
+  locales à ces noeuds, le coût de =C= est au moins égal au coût total de ces
+  enfants.
+- Bornage :: On borne alors le coût d'un niveau par le coût de la racine, qui
+  est le niveau de coût maximal. L'algorithme de calcul est le même que pour le
+  calcul de =cout-interne=.
+
+* Mise en Forme de Récurrence Directe des Relations de Coûts
+
+*TODO* On a rien compris à leurs définition maître de "BTC". En même temps ils
+pourrait la définir proprement. Mgr. Gigard aurait eu des mots durs sur cette
+partie.
+
+Mais, en gros, il s'agit de déterminer, par une analyse de composante fortement
+connexe dans le CFG des système de CR, lesquelles sont définies récursivement et
+le cas échéant d'effectuer assez l'inlining pour rendre toutes les définitions
+récursives /directement/ récursives.
+
+* Incomplétude de l'Analyse de Coût
+
+La terminaison de programme peut se réduire à un calcul de coût dans un modèle.
+Donc notre analyse sera forcément incomplète. Même quand un programme admet un
+coût fini dans le modèle considéré, notre analyse comporte des sources de pertes
+de précision:
+- La transformation du programme en système de relations de coût utilise des
+  techniques d'interprétation abstraites qui donnent des résultats approximatifs
+  sur des problèmes comme l'aliasing ou les relations de tailles. On notera que
+  certain de ces problèmes sont en soit indécidables.
+- L'obtention de bornes supérieures pour les systèmes de CR est aussi
+  indécidable, même pour des systèmes appauvris. On distingue les pertes de
+  précisions suivantes dans notes analyse :
+  - La mise en forme de récurrence directe n'est pas systématiquement faisable,
+    notamment dans le cas de définition mutuellement récursives.
+  - Certaines CR n'ont pas de fonction de classement linéaires. On pourrait
+    étendre nos fonctions de classement à des classes plus expressives, mais le
+    besoin ne s'est pas fait ressentir en pratique.
+  - Les invariants recherchés lors du bornage du coût par noeud peuvent ne pas
+    être linéaires. Pour intégrer des classes d'invariants plus intéressantes,
+    il conviendrait d'adapter la procédure de maximisation.
+
+* Évaluation Expérimentale
+
+*TODO*
+
+* Travaux Connexes & Conclusion
+
+Dès le système /METRIC/ de Wegbriet, on cherche à obtenir des CR à partir de
+programme. Mais /METRIC/ se limite aux RR, qui sont déterministes, et déjà, les
+solution exactes sous formes closes sont ors de portée. On se contente alors de
+bornes supérieures. On retrouve ensuite les travaux de Métayer avec /ACE/, de
+Rosenthal avec l'interprétation abstraite, de Walder avec l'analyse de rigueur
+au service de l'analyse de ressources, et Sands et ses théories d'équivalence de
+coûts. Notre avancée consiste à considérer des relations (1) non-déterministes,
+(2) augmentées de contraintes de tailles sur leurs arguments.
+
+Les systèmes *algébriques* sont basés sur les travaux extensifs sur la
+résolution de relations de récurrences, soit en implémentant un solveur limité
+en tant que composant de l'analyseur, soit en déléguant la résolution à un
+/Computer Algebra System/. On citera /Mathematica, Mapple, Maxima/...
+
+Les systèmes *transformationnels* représentent les CR comme des programmes
+fonctionnels, et la mise en forme close correspond à une réécriture du programme
+de base augmenté d'une notion de consommation de ressource. /ACE/ fût le premier
+de ces systéme, basé sur une grande quantité de règles de réécriture manuelles.
+Depuis, des avancées ont permis de trouver des bornes sous forme close pour
+certaines classes de programmes (cf. Rosenthal FPCA'89).
+
+Les deux approches souffrent de problèmes en cas de non-déterminisme des CR, ce
+qui est assez courant dans le monde réel, et les résultats obtenus sont rarement
+utiles s'il sont trop coûteux ou trop précis, et donc algébriquement complexes
+(que faire de 5*sqrt(5)*(1-sqrt(5))^(x+1) - 5*sqrt(5)*(1+sqrt(5))^(x+1) + ... ?)
+Au contraire, l'approche décrite dans cette article produit des résultats
+corrects et simple même en cas de non-déterminisme.
+
+On note l'existence de /PURRS/, qui ressemble à notre travail, mais avec
+uniquement des CR déterministes, et des travaux de Marion&al. sur les bornes
+polynomiales des tailles de piles pour les programmes fonctionnels.
+
+Notre travail mets en lumière la pertinence des CR comme /langage cible/ des
+analyses de coûts pour une analyse agnostique du langage source. Nous avons
+étendu notre travail à des CR prenant en compte les phénomènes de libération
+mémoire par un ramasse-miette, et donc le bornage de tas.
