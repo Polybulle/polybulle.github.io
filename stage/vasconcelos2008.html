@@ -1,0 +1,1026 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-04-06 Mon 18:44 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Notes: Space cost analysis using sized types</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.cacheClassElem = elem.className;
+         elem.cacheClassTarget = target.className;
+         target.className = "code-highlighted";
+         elem.className   = "code-highlighted";
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(elem.cacheClassElem)
+         elem.className = elem.cacheClassElem;
+       if(elem.cacheClassTarget)
+         target.className = elem.cacheClassTarget;
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<div id="outline-container-orgd76baf4" class="outline-2">
+<h2 id="orgd76baf4">Introduction</h2>
+<div class="outline-text-2" id="text-orgd76baf4">
+</div>
+<div id="outline-container-org016bc59" class="outline-3">
+<h3 id="org016bc59">Programmation embarquée</h3>
+<div class="outline-text-3" id="text-org016bc59">
+<p>
+On veut pouvoir utiliser des langages de haut niveaux dans les systèmes
+embarqués pour des raison évidentes de productivité par rapport à C ou
+l&rsquo;assembleur. Mais cela vient avec une perte de prédictabilité quand à la
+correction et la consommation de ressources des programmes. Les tests et le
+profilage ne suffisent pas à <i>garantir</i> le bon comportement des programmes de
+haut niveaux dans les contextes embarqués: on y cherche des
+performances prévisible et garanties plutôt meilleures à tout prix.
+</p>
+
+<p>
+On distingue programmation <i>embarquée</i>, dans laquelle le programme doit jouer avec
+des ressources limités génériques, et la programmation <i>en temps réel</i>, dans laquelle le
+temps de réponse est la quantité bornée. Dans les systèmes embarqués
+traditionnels, on garantie la terminaison et la correction en excluant les
+constructions syntaxique les plus dangereuses (la récursion, l&rsquo;allocation
+dynamique, les boucles sans bornes sup triviales&#x2026;). Mais le développement de
+la programmation de haut niveau (java, python) sur micro-controlleurs et la
+complexification des besoins en embarqué (IOT, exécution par un tierce partie)
+ont créés de nouveaux besoins. (cf Stankovic 1988)
+</p>
+</div>
+</div>
+<div id="outline-container-org9e6e747" class="outline-3">
+<h3 id="org9e6e747">Langages fonctionnels</h3>
+<div class="outline-text-3" id="text-org9e6e747">
+<p>
+Les langages fonctionnels permettent de garantir statiquement de bons invariants
+<i>logiques</i> de programmes, mais pas de bons invariants <i>de ressources</i>. Pourquoi:
+</p>
+<dl class="org-dl">
+<dt>fonctions d&rsquo;ordre supérieur</dt><dd>Le flux de contrôle du programme est dynamique,
+et donc plus dur à évaluer. En C, le graphe de flux de contrôle est genérable
+statiquement.</dd>
+<dt>Copy-on-write data structures</dt><dd>Même dans les cas simple d&rsquo;un pipeline de
+transformation, on a pas d&rsquo;assurance que l&rsquo;implémentation va générer un
+programme travaillant en-place sur les structures déjà allouées.</dd>
+<dt>le ramasse-miette</dt><dd>peut échouer à libérer la mémoire non-accessible dès
+qu&rsquo;elle peut l&rsquo;être, voir peut échouer à la libérer tout court. Ils
+obscurcissent la gestion mémoire.</dd>
+<dt>sémantiques non-strictes</dt><dd>le coût d&rsquo;un calcul ne dépend pas que de ça
+définition, mais aussi du contexte d&rsquo;évaluation. Par exemple:
+<code>let null = fun [] -&gt; true | _::_ -&gt; false</code> n&rsquo;a pas besoin d&rsquo;évaluer
+entièrement son argument. Il est plus complexe de prendre en compte ces
+interaction appelant-appelé. Aussi, les thunks peuvent maintenir en vie des
+ressources, et donc peuvent causer des fuites mémoires.</dd>
+<dt>Optimisations</dt><dd>On veut garantir les consommation du programme à l&rsquo;exécution
+à partir du code source. Entre les deux se tient un compilateur-optimisateur,
+que l&rsquo;on doit prendre en compte. Il faut adapter les passes d&rsquo;optimisations.</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-org38f1af0" class="outline-3">
+<h3 id="org38f1af0">Contribution</h3>
+<div class="outline-text-3" id="text-org38f1af0">
+<p>
+On cherche à étendre l&rsquo;application des langages fonctionnels à la programmation
+critique et embarquée en créant une analyse automatique des consommations en
+temps et mémoire des langages fonctionnels. Il s&rsquo;agit d&rsquo;une analyse statique
+modulaire dirigée par les types pour prédire les bornes sup des consommations
+mémoire. Les bornes sont exprimés par des compositions de fonctions familières
+à croissance connues, en fonction non pas des valeurs des arguments, mais à partir
+de grandeurs abstraites pertinentes extraites de leurs type.
+</p>
+
+<p>
+On introduit un langage sur lequel porte l&rsquo;analyse: <i>Hume</i>. Il est fonctionnel
+strict, avec types et fonctions récursives, mais son cœur est d&rsquo;ordre 1
+uniquement. Il vient avec une machine abstraite à région mémoires et
+ramasse-miette sans copie qui sert de modèle de coût pour ce langage. Cette
+machine est basée sur SECD et est étendue pour supporter des optimisations
+mémoires tractables pour l&rsquo;analyse. Contrairement aux travaux précédents, on
+supporte les types et tailles définis par l&rsquo;utilisateur.
+</p>
+
+<p>
+Notre contribution est limité de la manière suivante:
+</p>
+<ul class="org-ul">
+<li>On se restreint à <i>Hume core</i>, une simplification de Hume de premier ordre.
+Certaine constructions de Hume sont néanmoins admissibles dans Hume core.</li>
+<li>On impose des contraintes linéaires entre les coût/les tailles. Cela permet de
+garantir une analyse automatique par des technique d&rsquo;interprétation abstraite
+(accélération de point fixe dans le domaine abstrait des polyèdres).</li>
+<li>On ne supporte pas les calculs de coût en temps. Il sera simple d&rsquo;ajouter un
+registre abstrait à la machine, incrémenté lors de l&rsquo;exécution et de
+l&rsquo;analyser. Mais l&rsquo;hypothèse d&rsquo;uniformité en coût d&rsquo;une transition de la
+machine peut ne pas tenir dans les systèmes réels. La machine abstraite de
+Hume garantie qu&rsquo;une transition a toujours une consommation bornée, mais cette
+borne cache de nombreux détails d&rsquo;implémentation. [NDLR on pense
+immédiatement aux lancements du GC]</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdadcad4" class="outline-3">
+<h3 id="orgdadcad4">Exemple d&rsquo;analyse</h3>
+<div class="outline-text-3" id="text-orgdadcad4">
+<p>
+On considère le filtre simple, qui à un flux de flottant <code>x0,x1,...</code> renvoie un
+flux <code>y0,y1,...</code> caractérisé par <code>yi = ∑(1≤k≤n) wk*x(i-k)</code>. Dans une
+implémentation naïve en Haskell, il n&rsquo;existe aucune garantie de libération des
+éléments du premier flux quand ils ne sont plus nécessaires. Le ramasse miette
+ne garantie pas non plus une borne précise de consommation mémoire pour cette
+fonction.
+</p>
+
+<p>
+En hume, on implémente un acteur synchrone qui génère le nouveau flux. La
+dépendance entre (pre xs) et (post xs) est rendu explicite par la clause <code>wire</code>.
+L&rsquo;analyse statique détermine automatiquement que la liste qu&rsquo;ils partagent un
+invariant du programme.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-haskell"><span style="color: #3b6ea8;">type</span> <span style="color: #9a7500;">Float</span> <span style="color: #cb9aad;">=</span> float <span style="color: #97365b; font-weight: bold;">32</span> <span style="color: #b1b1b1;">-- </span><span style="color: #b1b1b1;">32-bit floating point numbers</span>
+<span style="color: #29838d;">box</span> fir
+ <span style="color: #3b6ea8;">in</span> (x<span style="color: #cb9aad;">::</span><span style="color: #9a7500;">Float</span>, xs<span style="color: #cb9aad;">::</span>[<span style="color: #9a7500;">Float</span>])
+ out (y<span style="color: #cb9aad;">::</span><span style="color: #9a7500;">Float</span>, xs&#8217;<span style="color: #cb9aad;">::</span>[<span style="color: #9a7500;">Float</span>])
+<span style="color: #29838d;">match</span>
+ (x, xs) <span style="color: #cb9aad;">-&gt;</span> (dotp [<span style="color: #97365b; font-weight: bold;">0.5</span>,<span style="color: #97365b; font-weight: bold;">2</span>,<span style="color: #97365b; font-weight: bold;">0.5</span>] xs, x<span style="color: #9a7500;">:</span>init xs)
+<span style="color: #29838d;">wire</span> fir<span style="color: #cb9aad;">.</span>xs fir<span style="color: #cb9aad;">.</span>xs&#8217; initially [<span style="color: #97365b; font-weight: bold;">0</span>,<span style="color: #97365b; font-weight: bold;">0</span>,<span style="color: #97365b; font-weight: bold;">0</span>]
+</pre>
+</div>
+
+<p>
+Si on observe le type complet de <code>init</code>
+<code>init : ∀n,m,s,h. &lt; ∀a. List&lt;n&gt; a --(s,h)--&gt; List&lt;m&gt; a | n=1+m, 0≤m, s≤6n-3,
+h=3n-2&gt;</code>
+On remarque:
+</p>
+<ul class="org-ul">
+<li>la présence de paramètres de tailles dans les types <code>List&lt;k&gt;</code> garantissant que
+l&rsquo;argument est non-vide (<code>0≤m</code>) et que la sortie contient un élément en plus (<code>n=m+1</code>).</li>
+<li>le type contient des informations de coût en pile et tas (<code>s</code> et <code>h</code>) et des
+bornes sur l&rsquo;empreinte sur la pile et l&rsquo;occupation mémoire. Ces propriétés
+ne sont pas purement dénotationnelle, mais demandent de fixer un modèle
+d&rsquo;exécution (ici une machine virtuelle basée sur SECD).</li>
+<li><p>
+Le type est polymorphique en ses taille, et indique donc que l&rsquo;implémentation
+est de consommation uniforme. Le polymorphisme permet d&rsquo;avoir une analyse
+modulaire. On doit faire attention: les optimisations (comme la fusion)
+peuvent faire mentir le type obtenu (en fusionnant les créateurs et les
+consommateurs de structure par exemple).
+</p>
+
+<p>
+On extrait de l&rsquo;analyse de type un système d&rsquo;inéquations linéaires qui est
+automatiquement calculé par approximation de point fixe sur un treilli, comme
+en interprétation abstraite. On obtient au final:
+</p>
+
+<p>
+<code>fir.xs : Size ∈ [3,3], Stack ∈ [1,19], Heap ∈ [16,28]</code>
+</p></li>
+</ul>
+<p>
+<b>*</b>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orge54e087" class="outline-2">
+<h2 id="orge54e087">Analyse de programme</h2>
+<div class="outline-text-2" id="text-orge54e087">
+</div>
+<div id="outline-container-orgc6ceafc" class="outline-3">
+<h3 id="orgc6ceafc">Objectif</h3>
+<div class="outline-text-3" id="text-orgc6ceafc">
+<p>
+Etendre le typage d&rsquo;un langage pour y annoter des propriétés
+dynamiques sur les valeurs, les calculs. Raisonner ensuite avec les outils de la
+théorie des types. On raisonne uniquement sur des structures définies
+inductivement, donc toujours modulo des equivalences [NDRL ie. dans des
+groupoïdes].
+</p>
+</div>
+</div>
+<div id="outline-container-orgbf061cc" class="outline-3">
+<h3 id="orgbf061cc">Premier exemple</h3>
+<div class="outline-text-3" id="text-orgbf061cc">
+<p>
+On prend par exemple l&rsquo;extension d&rsquo;un λ-calcul simplement typé avec exceptions,
+et un système d&rsquo;effet modélisant ces exceptions: On a <code>Γ ⊢ e : t &amp; φ</code>, avec φ un
+ensemble d&rsquo;exception, défini par <code>φ = ε | {e} | φ ∪ φ</code>. On implémente
+inductivement l&rsquo;égalité, l&rsquo;appartenance, l&rsquo;inclusion,&#x2026; l&rsquo;annotation des types
+des fonctions avec l&rsquo;ensemble des exceptions qu&rsquo;elle peut lancer induit une une
+relation de sous-typage simple sur les types annotées: On a
+</p>
+
+<p>
+<code>a -(φ)-&gt; b ≺ c -(ψ)-&gt;d iff. c ≺ a ∧ b ≺ d ∧ φ ⊂ ψ</code>
+</p>
+
+<p>
+Et <code>≺</code> triviale autrement. Ce sous-typage est &ldquo;shape-conformant&rdquo;, ce qui
+simplifie l&rsquo;inférence de type. Mais une relation de sous-typage plus complexe
+peut améliorer la précision de l&rsquo;analyse, en permettant de retarder
+l&rsquo;affaiblissement des effets (<code>φ⊂ψ</code>) jusqu&rsquo;au point d&rsquo;appel de la fonction analysée.
+</p>
+</div>
+</div>
+<div id="outline-container-org5cbca58" class="outline-3">
+<h3 id="org5cbca58">Polymorphisme d&rsquo;effets</h3>
+<div class="outline-text-3" id="text-org5cbca58">
+<p>
+On ajoute à notre système de type un <code>let</code> polymorphique, où l&rsquo;on peut
+quantifier sur les effets et les types. C&rsquo;est essentiel pour une analyse fine
+des paradigmes fonctionnels classique (plis, filtrage, nappage,&#x2026;). On peut
+alors typer, par exemple, la composition de fonction:
+</p>
+
+<p>
+<code>compose : ∀a,b,c. ∀φ,ψ. (a -(φ)-&gt; b) -&gt; (b -(ψ)-&gt; c) -&gt; (a -(φ∪ψ)-&gt; c)</code>
+</p>
+
+<p>
+Pour notre système simple de lancement d&rsquo;exception, le traitement du
+polymorphisme est insidieusement simple: En général, il faut restreindre les
+généralisation de type &#x2013; c&rsquo;est à dire la liaison des variables libres sous un ∀
+pour les domaines des formes <code>let</code>. Sinon, l&rsquo;inférence est trop complexe
+</p>
+</div>
+</div>
+<div id="outline-container-org0c40a8e" class="outline-3">
+<h3 id="org0c40a8e">Inférence</h3>
+<div class="outline-text-3" id="text-org0c40a8e">
+<p>
+Le système d&rsquo;effet exige de pouvoir &ldquo;deviner&rdquo; le type annoté d&rsquo;expressions
+quelconque. Il nous faut donc un algorithme d&rsquo;inférence de type et d&rsquo;effet. On
+procède par <i>normalisation de preuves</i>: On restreint l&rsquo;usage des règles de
+typage non-structurelles à certains noeuds syntaxiques où l&rsquo;on sait inférer les
+types. Ici, on fait du <i>let-bound polymorphism</i>: les valeurs liées par des <code>let</code>
+sont quantifiées au maximum sur leurs types et effets à la déclaration, puis
+spécialisées au site d&rsquo;utilisation de l&rsquo;identifieur lié.
+</p>
+
+<p>
+Avec notre relation de sous-effets moins forte que le sous-typage, ou peut
+adapter l&rsquo;algorithme <i>W</i> de Damas. On restreint les annotations d&rsquo;effets sur les
+flèches à des variables fraiches uniquement, et on maintient séparément un
+ensemble de contraintes de capacité <code>φ ⊂ ψ</code>. Alors, l&rsquo;unification des types et
+d&rsquo;ordre 1, pour lequel on peut utiliser W. Sans séparer les contraintes, c&rsquo;est
+un problème d&rsquo;unification modulo théorie des ensembles finis. Les contraintes
+d&rsquo;inclusion des effets sont résolues par un solveur à part.
+</p>
+
+<p>
+Etendre cet approche avec une relation de sous-typage exigent &ldquo;généralement&rdquo;
+(sic.) d&rsquo;ajouter des contraintes d&rsquo;inégalité de types afin d&rsquo;inférer un typage
+initial (au sens catégorique). La complétude de l&rsquo;inférence de type dans ce cas
+reste un problème ouvert, mais des algorithmes existent. Pour notre relation de
+sous-typage <i>shape-conformant</i>, un algorithme en deux temps permet d&rsquo;obtenir un
+type pour tout terme, mais pas forcément son type initial. On procède en deux
+temps:
+</p>
+<ul class="org-ul">
+<li>Inférence des types (<i>W</i>) et collecte des contraintes <code>φ ⊂ ψ</code>,</li>
+<li>Résolution des contraintes et mise-à-jour des types.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org482127c" class="outline-3">
+<h3 id="org482127c">Interprétation abstraite</h3>
+<div class="outline-text-3" id="text-org482127c">
+<p>
+<i>NDLR. C&rsquo;est très classique, on mentionne vite fait les concepts déjà vu en TAS.</i>
+<i>On cite beaucoup le travail de Cousot&amp;Cousot</i>
+</p>
+</div>
+<div id="outline-container-orgd4a7383" class="outline-4">
+<h4 id="orgd4a7383">Concepts classiques</h4>
+<div class="outline-text-4" id="text-orgd4a7383">
+<ul class="org-ul">
+<li>Domaine abstrait en concret</li>
+<li>Structure de treillis sur ces domaines</li>
+<li>Connexion de Galois, et que faire quand il n&rsquo;y en a pas</li>
+<li>Approximation de points fixes</li>
+<li>Opérateurs d&rsquo;élargissement</li>
+<li>Treillis des intervalles</li>
+<li>Treillis des polyèdres convexes</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org801b1b0" class="outline-4">
+<h4 id="org801b1b0">Élargissement avec carburant</h4>
+<div class="outline-text-4" id="text-org801b1b0">
+<p>
+On commence l&rsquo;itération de point fixe avec un nombre fini de carburant. Quand
+l&rsquo;usage de l&rsquo;élargissement causerais une perte de précision, on consomme un
+carburant et on fait une itération simple. Quand on a plus de carburant, on
+élargi même si on perd de la précision. Cela est utile pour la convergence des
+polyèdres.
+Voir <i>Bagnara et al., Generation of ba- sic semi-algebraic invariants using
+convex polyhedra</i> pour plus d&rsquo;information au besoin
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf3ddd98" class="outline-2">
+<h2 id="orgf3ddd98">Analyse statique de consommation de ressource</h2>
+<div class="outline-text-2" id="text-orgf3ddd98">
+</div>
+<div id="outline-container-orgc10e0bf" class="outline-3">
+<h3 id="orgc10e0bf">Analyse de complexité automatique</h3>
+<div class="outline-text-3" id="text-orgc10e0bf">
+</div>
+<div id="outline-container-org2eabd4a" class="outline-4">
+<h4 id="org2eabd4a">Préhistoire et système METRIC</h4>
+<div class="outline-text-4" id="text-org2eabd4a">
+<p>
+On cherche a simuler/aider/automatiser les analyses manuelles de complexité
+temporelle asymptotique de programmes. On procède comme un humain:
+</p>
+<ul class="org-ul">
+<li>Trouver une relation de récurrence sur le programme;</li>
+<li>En extraire une récurrence sur la compléxité,</li>
+<li>Avec une métrique d&rsquo;entrée pertinente;</li>
+<li>Résoudre la relation, si possible.</li>
+</ul>
+
+<p>
+Le premier de ces système, <i>METRIC</i> (1975) suit de près les travaux séminaux de
+Knuth (1973). On passe au relation entière en donnant un coût à chaque
+primitive. Le résultat idéal est une formule close portant sur le coût de ces
+primitive et soit la longueur en tant que liste des arguments, ou leur taille en
+temps de S-expression.
+</p>
+
+<p>
+Les métriques étudiés doivent être cumulatives et analytiques, donc on ne peut
+pas mesurer la taille maximale de la pile. On peut néanmoins compter le nombre
+de cellules <i>CONS</i> allouées avec une métrique ou <i>CONS</i> est de coût 1 et le
+reste gratuit. Les types utilisateurs de sont analysés que comme S-expressions.
+Enfin, l&rsquo;hypothèse d&rsquo;accumulation du temps n&rsquo;est pas valide dans les sémantiques
+non-strictes. Ce sera une épine récurrente.
+</p>
+</div>
+</div>
+<div id="outline-container-org339bd4b" class="outline-4">
+<h4 id="org339bd4b">Le système ACE de Métayer (1988)</h4>
+<div class="outline-text-4" id="text-org339bd4b">
+<p>
+Une nouvelle approche, basée sur la réécriture équationnelle. Le langage ciblé
+est fonctionnel, applicatif, à base de combinateur, et est donc bien adapté au
+problème. ACE produit une analyse au pire cas et asymptotique. Il procède par
+réécriture selon l&rsquo;algèbre applicative et le <i>principe d&rsquo;induction récursive</i> de
+McCarthy : &ldquo;Deux fonctions satisfaisant la même relatinon de récurrence sont
+égale sur le domaine défini par point fixe par le bas de la relation&rdquo;. Le
+système de réécriture contient plus de 1000 règles entrées manuellement, sans
+étude (encore moins automatique) de leurs cohérence, ce qui aurait demandé bien
+trop de travail (on est en 1988 tout de même). L&rsquo;analyse de dit pas si le terme
+asymptotique peut être dominé par les premiers termes, et ne supporte dans
+l&rsquo;analyse de la consommation mémoire.
+</p>
+</div>
+</div>
+<div id="outline-container-orgb81f218" class="outline-4">
+<h4 id="orgb81f218">Ensuite</h4>
+<div class="outline-text-4" id="text-orgb81f218">
+<dl class="org-dl">
+<dt>Rosendahl (1989)</dt><dd>utilise l&rsquo;interprétation abstraite pour définir une
+transformation de programme permettant d&rsquo;associer, pour un préfixe d&rsquo;entrée,
+une borne supérieure de la consommation de temps.</dd>
+<dt>Liu&amp;Gomez (1998)</dt><dd>ont une approche semblable à du profilage: on peut exécuter
+symboliquement le programme transformé pour obtenir des relations de récurrence
+sur le temps d&rsquo;exécution à partir d&rsquo;entrée partielle. On n&rsquo;obtient pas de
+forme closes de ces relations.</dd>
+<dt>Walder (1988)</dt><dd>brise le plafond de verre en proposant une analyse
+asymptomatique, et modulaire en présence de sémantique non-stricte, utilisant
+des <i>transformeurs de projection</i> décrivant la &ldquo;paresse&rdquo; des fonctions
+analysées. Il n&rsquo;est pas allé jusqu&rsquo;à un algorithme d&rsquo;analyse.</dd>
+<dt>Sands (1990)</dt><dd>a créé plusieurs théories pour l&rsquo;analyse des programmes
+fonctionnels avec fonctions d&rsquo;ordre supérieur et évaluation paresseuse. Il
+peut ainsi obtenir des bornes [temps nécéssaire, temps suffisant] pour les
+fonctions paresseuses.</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-org5a5a7b1" class="outline-4">
+<h4 id="org5a5a7b1">Conclusion</h4>
+<div class="outline-text-4" id="text-org5a5a7b1">
+<p>
+Ces formalismes ont pour but d&rsquo;assister l&rsquo;analyse asymptotique manuelle
+d&rsquo;algorithmes, et donc ne considèrent pas:
+</p>
+<ul class="org-ul">
+<li>L&rsquo;automatisation des techniques d&rsquo;analyse</li>
+<li>Les coûts d&rsquo;exécution réels des programmes: On compte de nombre d&rsquo;appels
+récursifs des fonctions.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org4509b57" class="outline-3">
+<h3 id="org4509b57">Système de type et d&rsquo;effets pour le WCET</h3>
+<div class="outline-text-3" id="text-org4509b57">
+</div>
+<div id="outline-container-orgc812351" class="outline-4">
+<h4 id="orgc812351">Travaux de Dornic &amp; al</h4>
+<div class="outline-text-4" id="text-orgc812351">
+<p>
+Dornic&amp;al. (1992) propose un &ldquo;système de temps&rdquo; pour un langage d&rsquo;ordre
+ supérieur à sémantique call-by-value. Une version spécialisé d&rsquo;un système
+ permettant de raisonner statiquement sur une classe de propriétés
+ <i>intentionnelles</i> des programmes à l&rsquo;exécution. Les jugements de typages sont
+ annotés d&rsquo;un coût arithmétique entier. Les flèches sont annotés d&rsquo;un coût
+ latent de leur exécution.
+</p>
+
+<p>
+Le système devient intéressant quand on peut quantifier sur les coûts latent,
+ce qui permet de typer le coût les fonctions d&rsquo;ordre supérieur en fonction du
+coût latent de leur argument.
+</p>
+
+<p>
+Mais de nombreuses limites:
+</p>
+<ul class="org-ul">
+<li>Les fonctions récursives sont annotés avec un temps <code>long</code>, car pas de
+raisonnement sur la taille des arguments.</li>
+<li>Pas de sous-typage des effets. Il est donc impossible de typer les jointures
+de deux calculs au coût différents, comme les deux branches d&rsquo;une conditionnelle.</li>
+<li>Pas d&rsquo;inférence. Le problème sera résolu plus tard (1994)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7ef0929" class="outline-4">
+<h4 id="org7ef0929">Extensions</h4>
+<div class="outline-text-4" id="text-org7ef0929">
+<p>
+ce système a été étendu par Reistad &amp; Gifford avec des annotation pour les
+tailles des entiers naturels, des listes et des vecteurs. Ces annotations sont
+des bornes sup statiques des tailles dynamiques des valeurs. Ils reconstruisent
+les types et effets dans un système d&rsquo;effets algébrique. Par exemple:
+</p>
+
+<p>
+<code>succ : ∀n. Nat(n) -(1)-&gt; &gt;Nat(n+1)</code>
+<code>map : ∀a,b,c,l. (a -(c)-&gt; b) × List(a,n) -(k0+l*(k1+c))-&gt; List(b,n)</code>
+</p>
+
+
+<p>
+On remarque le polymorphisme de taille sur les arguments, qui permet de donner
+un coût aux fonctions d&rsquo;ordre supérieur usuelles. Comme le système de Dornic &amp;
+al., on ne gère pas la récursion, donc les types de ces schéma de récursions
+primitif doivent être donnés.
+</p>
+
+<p>
+<code>sub : ∀n,m. Nat(n) × Nat(m) -(c)-&gt; Nat(n)</code> <code>twice succ : Nat long -(7)-&gt; Nat
+long</code>
+</p>
+
+<p>
+On doit surestimer les tailles des résultats des fonctions
+non-croissantes: on a <code>Nat(n)</code> en résultat de <code>seb</code>, alors que <code>Nat(n-m)</code> est
+plus précis (et souhaitable). Enfin, le manque de polymorphisme cause des
+surestimations de tailles. Dans le dernier exemple, on ne peux par obtenir le
+typage souhaitable <code>Nat(n) -(7)-&gt; Nat(n+2)</code>, par il faudra <code>succ</code> avec deux
+types différents.
+</p>
+
+<p>
+Une solution, de Loild (1998), consiste à étendre le système avec les types
+intersections. Cela permet de spécialiser les fonctions polymorphiques sur
+plusieurs arguments en parallèle, et donc de typer la double application de
+<code>succ</code> de la forme <code>Nat(n) --&gt; Nat(n+1) --&gt; Nat(n+2)</code>
+</p>
+
+<p>
+Finalement, Vasconcelos &amp; Hammond (2004) ont étendu cette technique aux
+définitions récurrentes, laissant le soin à l&rsquo;utilisateur ou à un système
+d&rsquo;algèbre automatisé de clore les relations de récurrences. Les problèmes de
+METRIC apparaissent aussi ici. On note aussi que l&rsquo;approche se casse les dents
+sur les algorithmes diviser-pour-régner tels que quicksort.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org18b1d24" class="outline-3">
+<h3 id="org18b1d24">Sized Types</h3>
+<div class="outline-text-3" id="text-org18b1d24">
+</div>
+<div id="outline-container-org627fbd0" class="outline-4">
+<h4 id="org627fbd0">Hughes, Pareto, Sabry (1996-2000)</h4>
+<div class="outline-text-4" id="text-org627fbd0">
+<p>
+Il existe des systèmes de types pour la déduction de propriétés de tailles
+uniquement, pour les preuves de terminaisons, ou les optimisations. Les autheurs
+présentent en 1996 un système de type étendu aux tailles pour prouver la
+terminaison des programmes embarqués, et la propriétés <i>co</i>-respondante, la
+productivité des programmes co-récursifs (comme les streams).
+</p>
+
+<p>
+Les types des constructeurs sont annotés avec des bornes sup des tailles des
+données construites pour les types récursifs, et des bornes sup pour les types
+co-récursifs. Ces bornes sont limités à l&rsquo;arithmétique de Presburger pour la
+décidabilité, donc pas de multiplication native.
+</p>
+
+<pre class="example">
+zero : Nat_{1}
+succ : ∀i. Nat_{i} -&gt; Nat_{i+1}
+
+mk_stream : ∀i. ∀a. a -&gt; Stream^{i} a -&gt; Stream^{i+1} a
+</pre>
+
+<p>
+La relation d&rsquo;ordre sur les tailles induit un sous-typage structurel sur les
+sized types. On note ω la taille arbitrairement grande. Donc, <code>∀i. Nat_{i} ⊂
+Nat_{ω}</code> On peut alors typer les expressions du genre
+</p>
+
+<pre class="example">
+if cond then (??? : List_{i} a) else (??? : List_{j} a) : List_{k} a
+</pre>
+
+<p>
+en sur-approximant la taille de la branche la plus petite. On fini avec <code>k=max i
+j</code> sans pour autant avoir l&rsquo;opérateur <code>max</code> dans le système de type. La régle de
+la récurrence (nouvelle) permet la récursion primitive sur les types à taille,
+garantissant la terminaison des fonctions récursives et la productivité des
+fonctions co-récursives.
+</p>
+
+<p>
+On encode naturellement les récursions primitives sur les entiers et les
+listes, et on peut aménager un polymorphisme de taille pour gérer les arguments
+accumulateur des fonctions taill-call récursives comme <code>reverse</code>. Mais il faut
+alors abandonner le polymorphisme classique pour garder la décidabilité de
+l&rsquo;analyse.
+</p>
+
+<p>
+Les schéma de récursions non-linéaires ne sont pas aussi bien gérés. Prenons
+l&rsquo;exemple de <code>quicksort</code>: pour la fonction auxiliaire <code>pivot : ∀t. t -&gt; list t
+-&gt; list t * list t</code>, la meilleure approximation est :
+</p>
+
+<p>
+<code>pivot : ∀t. ∀i. t -&gt; list_{i} t -&gt; list_{i} t * list_{i} t</code>
+</p>
+
+<p>
+mais la &ldquo;bonne&rdquo; approximation, qui permet de garantir la spécification de
+<code>quicksort</code> serait:
+</p>
+
+<p>
+<code>pivot : ∀t. ∀i,j. t -&gt; list_{i+j} t -&gt; list_{i} t * list_{j} t</code>,
+</p>
+
+<p>
+mais on ne peut pas induire sur les sommes !
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3a10451" class="outline-4">
+<h4 id="org3a10451"><i>Embedded ML</i> : Hughes &amp; Pareto (1999)</h4>
+<div class="outline-text-4" id="text-org3a10451">
+<p>
+Extension de leurs système à un langage de programmation à la ML, avec
+sémantique opérationelle à petit-pas basée sur la SECD, avec analyse des coûts
+de pile et tas. On ajoute une primitive d&rsquo;allocation de mémoire <code>letregion ρ#e
+in e</code> où <code>ρ#e</code> est une nouvelle région mémoire de capacité dynamique.
+</p>
+
+<p>
+Ce n&rsquo;est hélas pas suffisant pour l&rsquo;espace mémoire d&rsquo;instant de système
+synchrone, car la récursion peut créer des piles de régions. Le système est donc
+augmenté d&rsquo;un <i>region resetting</i>. Aussi, on ne peut pas implémenter les
+structures infinies commes les streams.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1f36d08" class="outline-4">
+<h4 id="org1f36d08">Chin, Khoo (2001-2006)</h4>
+<div class="outline-text-4" id="text-org1f36d08">
+<p>
+Chin&amp;Khoo ont un système avec inférence, basé sur l&rsquo;arithmétique de Presburger,
+qui est décidable (en passant par Omega). Il gèrent la récurrence avec une
+opération de <i>fermeture transitive des contraintes linéaires</i> permettant de
+&ldquo;fermer la boucle&rdquo;: passer d&rsquo;une étape de récurrence au calcul complet.
+</p>
+
+<p>
+<i>Exemple de résultat: <code>append</code></i>
+</p>
+<pre class="example">
+append : list_{m} t -&gt; list_{n} t -&gt; list{l} t
+avec:
+  - m ≥ 0, n ≥ 0, l = m + n
+  - m &gt; m' ≥ 0, n' = n
+</pre>
+<p>
+<code>n'</code> et <code>m'</code> sont les tailles à l&rsquo;étape de récursion suivante. (comme une sorte
+de post/pre)
+</p>
+
+<p>
+On s&rsquo;intéresse à des propriétés de <i>sécurité</i>, pas de <i>liveliness</i> ou de
+<i>productivité</i> comme chez Hughes &amp; Pareto. Chaque type possède sa propre notion
+de taille: p.ex les booléens sont de taille 0 ou 1. On peut alors typer <code>null</code>
+sur les listes de la manière suivante:
+</p>
+
+<pre class="example">
+null : List_{n} a -&gt; bool_{c} s.t. (n = 0 ∧ c = 1) ∨ (n &gt; 0 ∧ c = 0)
+</pre>
+
+<p>
+Ca ressemble à ce qu&rsquo;on peut faire avec des GADT, il faudra regarder ce lien de
+plus près. On pourrait faire une équivalence entre les variables fantôme des
+GADT (empty | nonempty) et des invariants de tailles (n = 0 | n &gt; 0). On ferra
+attention à ne pas oublier qu&rsquo;on travaille à l&rsquo;ordre supérieur. La discipline de
+typage de Chin &amp; Khoo n&rsquo;a pas de preuve valide pour les types d&rsquo;ordre
+supérieurs. Leur preuve implique l&rsquo;existence de contraintes décrivant exactement
+la taille d&rsquo;une valeur annoté d&rsquo;un certain type. Ces contraintes n&rsquo;existent pas
+à l&rsquo;ordre supérieure.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5136054" class="outline-3">
+<h3 id="org5136054">Types Dépendants</h3>
+<div class="outline-text-3" id="text-org5136054">
+</div>
+<div id="outline-container-org79a1a90" class="outline-4">
+<h4 id="org79a1a90"><i>Dependent ML</i></h4>
+<div class="outline-text-4" id="text-org79a1a90">
+<p>
+Créé en 1999, <i>dependent ML</i> (DML) est une extension d&rsquo;OCaml avec types
+dépendants, mais relativement conservative. On y maintient la décidabilité du
+typage et on s&rsquo;y efforce de maintenir les annotations des types dépendants au
+minimum. DML sépare les valeurs classique d&rsquo;OCaml des <i>indices</i> présents dans
+les types, qui sont pris dans un domaine de contraintes décidables. On peut par
+exemple utiliser des indices dans ℕ avec l&rsquo;arithmétique de Presburger, qui sont
+ensuite résolus par Omega: l&rsquo;évaluation des indices est limitée à la
+normalisation des contraintes.
+</p>
+
+<p>
+Les types dépendants sont introduits par des raffinement de types afin de ne pas
+avoir à changer le code non-dépendants. <code>{v:T} U</code> introduit le produit Π(v:T)U
+et <code>[v:T | P]</code> introduit la somme Σ(v:T)P.
+</p>
+
+<pre class="example">
+append &lt;| {m:nat}{n:nat} 'a list(m) * 'a list(n) -&gt; 'a list(m+n)
+filter &lt;| ('a -&gt; bool) * {n:nat} 'a list(n) -&gt; [m:nat| m&lt;=n] 'a list(m)
+</pre>
+
+
+<dl class="org-dl">
+<dt>Avantage</dt><dd>On peut définir nos propres notions de tailles, alors qu&rsquo;avec les
+<i>Sized Types</i> la notion est rigide.</dd>
+<dt>Inconvénient</dt><dd>On ne résout par le problème de l&rsquo;inférence, au contraire !
+On est passé au problème de l&rsquo;inférence des types dépendants&#x2026;</dd>
+</dl>
+
+<p>
+Grobauer a utilisé DML pour inférer des relations de récurrences sur les coûts
+des calculs, mais ils faut encore les résoudre à la main.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1872371" class="outline-4">
+<h4 id="org1872371">LXres (Crary &amp; Weirich)</h4>
+<div class="outline-text-4" id="text-org1872371">
+<p>
+<i>LXres</i> est un langage de programmation avec type dépendants et
+code-comme-preuve permettant d&rsquo;exposer des &ldquo;horloges virtuelles&rdquo; au niveau des
+types, et donc de mesurer les coûts liés à ces horloges. Ces estimations de
+coûts sont des <i>fonctions primitives récursives</i>, un formalisme puissant pour le
+problème en question. (En comparaison à, par exemple, l&rsquo;arithmétique de
+Presburger).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org15537d0" class="outline-4">
+<h4 id="org15537d0">à la Epigram (Brady &amp; Hammond)</h4>
+<div class="outline-text-4" id="text-org15537d0">
+<p>
+Un langage dépendant avec un type <code>Size</code>: les valeurs <code>size v p : Size A P</code>
+annotent les valeurs <code>v</code> indicés par une taille entière <code>n</code> et de type <code>A n</code>. La
+preuve <code>p : P</code> témoigne alors d&rsquo;une propriété de taille de <code>v</code>. On étend cette
+technique aux fonctions d&rsquo;ordre supérieur en associant des fonctions générant
+les <code>Size</code> des arguments d&rsquo;ordre supérieurs. Mais ces approximations de taille
+pour les valeurs d&rsquo;ordre supérieur ne sont pas inférées, et les obtenir
+manuellement.
+</p>
+
+<p>
+Aussi, le système infère des propriétés de taille, donc dénotationnelles, mais ne
+considère pas l&rsquo;obtention de propriétés intentionnelles. On ne peut pas
+directement utiliser ces travaux pour obtenir des informations sur l&rsquo;évaluation.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd182757" class="outline-4">
+<h4 id="orgd182757">Cost Monad (Danielson)</h4>
+<div class="outline-text-4" id="text-orgd182757">
+<div class="org-src-container">
+<pre class="src src-haskell"><span style="color: #29838d;">return</span> <span style="color: #cb9aad;">::</span> a <span style="color: #cb9aad;">-&gt;</span> <span style="color: #9a7500;">Thunk</span> <span style="color: #97365b; font-weight: bold;">0</span> a
+<span style="color: #29838d;">bind</span> <span style="color: #cb9aad;">::</span> <span style="color: #9a7500;">Thunk</span> n a <span style="color: #cb9aad;">-&gt;</span> (a <span style="color: #cb9aad;">-&gt;</span> <span style="color: #9a7500;">Thunk</span> m b) <span style="color: #cb9aad;">-&gt;</span> <span style="color: #9a7500;">Thunk</span> (n<span style="color: #cb9aad;">+</span>m) b
+<span style="color: #29838d;">tick</span> <span style="color: #cb9aad;">::</span> <span style="color: #9a7500;">Thunk</span> n a <span style="color: #cb9aad;">-&gt;</span> <span style="color: #9a7500;">Thunk</span> (<span style="color: #9a7500;">S</span> n) a
+</pre>
+</div>
+
+<p>
+Des monades avec un indice dépendant pour la taille, implémenté dans Agda. On
+peut raisonner sur l&rsquo;évaluation paresseuse en incluant directement les <code>Thunk</code>
+dans des structures de données. Il faut par contre bien connaître Agda pour
+obtenir des résultats : On est loin de l&rsquo;analyse automatique de ressource. On
+peut néanmoins étendre cette approche aux coût dans une machine virtuelle.
+Encore une fois, par d&rsquo;inférence.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6ace4ab" class="outline-3">
+<h3 id="org6ace4ab">Analyse amortie</h3>
+<div class="outline-text-3" id="text-org6ace4ab">
+<p>
+On passe tout le blabla usuel sur Tarjan. Merci à lui quand même. On note
+l&rsquo;existence de &ldquo;Purely Functionnal Data Structures&rdquo; de Okasaki, inspiré de sa
+thèse de doctorat de 1996.
+</p>
+
+<p>
+Hoffman &amp; Jost ont présenté dans &ldquo;Type-Based Amortised Heap-Space Analysis&rdquo; une
+méthode&#x2026; d&rsquo;analyse amortie d&rsquo;estimation de l&rsquo;usage du tas par des programmes
+fonctionnels, induite par les types des valeurs allouées. On est dans le
+contexte d&rsquo;un langage fonctionnel du premier ordre, avec évaluation stricte. Le
+langage libère explicitement la mémoire alloué dynamiquement par une indication
+syntaxique sur les clauses <code>match</code>. [NDLR: ce n&rsquo;est pas très restrictif en
+pratique. Par exemple, GHC n&rsquo;alloue que sur les <code>let</code> et ne libère que sur les
+=case of=].
+</p>
+
+<p>
+Dans cette analyse, les jugements et environnement des typages sont étendus par
+des coefficients de poids dans le tas, et des potentiels. On n&rsquo;infère pas des
+tailles, mais la part de la consommation de tas des structures. Les estimations
+de taille mémoire ne sont obtenus qu&rsquo;avec les tailles inconnues des structures
+en entrée et en sorties.
+</p>
+
+<pre class="example">
+x : List(List(Bool, 1), 2), 3 ⊢ e : List(Bool, 4), 5
+</pre>
+<p>
+Signifie que <code>x</code> est une liste de liste de booléens, et que si <code>x</code> contient <i>n</i>
+éléments de tailles <i>t<sub>1</sub>,&#x2026; t<sub>n</sub></i>, alors un tas de <i>3+2n+∑t<sub>i</sub></i> suffit à évaluer
+<code>e</code>, dont les <i>m</i> éléments occuperont <i>4m+5</i> cases du tas.
+</p>
+
+<p>
+Cette analyse peut inférer les poids des types non-annotés. On peut donc la
+qualifier d&rsquo;automatique. Pour ce faire, elle associe au programme un système
+d&rsquo;équation linéaires dont les solutions sont les poids à inférer. On peut alors
+utiliser un système de résolution linéaire efficace tierce pour obtenir les
+annotations.
+</p>
+
+<p>
+Limites: Les bornes de la taille du tas sont des expressions linéaires en la
+tailles des entrées-sorties. Mais on peut quand même diviser pour régner en
+découpant le potentiel. On manque aussi de polymorphisme pour l&rsquo;analyse des
+fonctions, qui prennent des poids fixes, qui doivent correspondre à tout leurs
+site d&rsquo;appels. Enfin, étendre l&rsquo;analyse à la pile est non-trivial. Les bornes en
+les tailles des structures sont linéaire, alors que l&rsquo;occupation de la pile est
+souvent sub-linéaire. Campbell, dans sa thèse de 2008, étend ce système à la
+prise en compte de la <i>profondeur</i> des structures considérées.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2020-04-06 Mon 18:44</p>
+</div>
+</body>
+</html>
