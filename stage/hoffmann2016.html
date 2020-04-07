@@ -3,12 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-04-06 Mon 18:40 -->
+<!-- 2020-04-07 Tue 12:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Notes de Lecture: Towards Automatic Resource Bound Analysis for OCaml</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Hector Suzanne" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -193,7 +192,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -221,44 +220,9 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">Notes de Lecture: Towards Automatic Resource Bound Analysis for OCaml</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#orgdba2bde">1. Introduction</a></li>
-<li><a href="#org01000f3">2. Survol</a></li>
-<li><a href="#org841e12b">3. Analyse de la programmation fonctionnelle</a>
-<ul>
-<li>
-<ul>
-<li><a href="#org2f46677">3.0.1. Fermetures et curryfication</a></li>
-<li><a href="#org97c2f76">3.0.2. Gestion de l&rsquo;ordre supérieur</a></li>
-<li><a href="#org75615d0">3.0.3. Effets de bord</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#org2246bd5">4. Limites</a></li>
-<li><a href="#org45fb675">5. Typage</a>
-<ul>
-<li><a href="#org2895e3b">5.1. Core RAML</a>
-<ul>
-<li><a href="#orgd038cd1">5.1.1. Syntaxe</a></li>
-<li><a href="#org26cbfd9">5.1.2. Définitons préalables</a></li>
-<li><a href="#org4b83cba">5.1.3. Valeurs</a></li>
-<li><a href="#orge9e9925">5.1.4. Sémantique à grand pas</a></li>
-</ul>
-</li>
-<li><a href="#orgc480b82">5.2. Consommation de ressource</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
 <div id="outline-container-orgdba2bde" class="outline-2">
-<h2 id="orgdba2bde"><span class="section-number-2">1</span> Introduction</h2>
-<div class="outline-text-2" id="text-1">
+<h2 id="orgdba2bde">Introduction</h2>
+<div class="outline-text-2" id="text-orgdba2bde">
 <p>
 Contribution : une analyse statique de
 ressources pour les programmes OCaml <i>fonctionnels</i>, <i>d&rsquo;ordre supérieur</i>, <i>avec
@@ -299,8 +263,8 @@ nuage.
 </div>
 </div>
 <div id="outline-container-org01000f3" class="outline-2">
-<h2 id="org01000f3"><span class="section-number-2">2</span> Survol</h2>
-<div class="outline-text-2" id="text-2">
+<h2 id="org01000f3">Survol</h2>
+<div class="outline-text-2" id="text-org01000f3">
 <p>
 On extrait un AST typé du compilateur OCaml, puis on infère de nouveaux types
 contenant des information de potentiel pour chaque expression. D&rsquo;une déclaration
@@ -317,16 +281,16 @@ programme en produisant et résolvant des contraintes d&rsquo;unification.
 </div>
 
 <div id="outline-container-org841e12b" class="outline-2">
-<h2 id="org841e12b"><span class="section-number-2">3</span> Analyse de la programmation fonctionnelle</h2>
-<div class="outline-text-2" id="text-3">
+<h2 id="org841e12b">Analyse de la programmation fonctionnelle</h2>
+<div class="outline-text-2" id="text-org841e12b">
 <p>
 Il y a trois principale difficultés: Les fermeture/l&rsquo;application partielle,
 les arguments d&rsquo;ordre supérieurs, et les effets de bords
 </p>
 </div>
 <div id="outline-container-org2f46677" class="outline-4">
-<h4 id="org2f46677"><span class="section-number-4">3.0.1</span> Fermetures et curryfication</h4>
-<div class="outline-text-4" id="text-3-0-1">
+<h4 id="org2f46677">Fermetures et curryfication</h4>
+<div class="outline-text-4" id="text-org2f46677">
 <p>
 On prend comme exemple <code>val append : 'a list -&gt; 'a list -&gt; 'a list</code> de la
 bibliothèque standard. L&rsquo;appel <code>let foo = append xs</code> termine en temps constant,
@@ -360,8 +324,8 @@ raffinement des types avec des types dépendants.
 </div>
 </div>
 <div id="outline-container-org97c2f76" class="outline-4">
-<h4 id="org97c2f76"><span class="section-number-4">3.0.2</span> Gestion de l&rsquo;ordre supérieur</h4>
-<div class="outline-text-4" id="text-3-0-2">
+<h4 id="org97c2f76">Gestion de l&rsquo;ordre supérieur</h4>
+<div class="outline-text-4" id="text-org97c2f76">
 <p>
 Dans le cas plus simple où on se limite à des estimations linéaires du coût, il est
 possible de calculer la consommation de ressource en présence d&rsquo;arguments
@@ -397,8 +361,8 @@ exemple:
 </div>
 
 <div id="outline-container-org75615d0" class="outline-4">
-<h4 id="org75615d0"><span class="section-number-4">3.0.3</span> Effets de bord</h4>
-<div class="outline-text-4" id="text-3-0-3">
+<h4 id="org75615d0">Effets de bord</h4>
+<div class="outline-text-4" id="text-org75615d0">
 <p>
 L&rsquo;analyse vérifie que le coût du programme est indépendant des valeurs stockées
 dans un état mutable quelconque. Dans le cas contraire, on peut peux pas
@@ -418,8 +382,8 @@ annotant le type de l&rsquo;exception et de ses arguments.
 </div>
 </div>
 <div id="outline-container-org2246bd5" class="outline-2">
-<h2 id="org2246bd5"><span class="section-number-2">4</span> Limites</h2>
-<div class="outline-text-2" id="text-4">
+<h2 id="org2246bd5">Limites</h2>
+<div class="outline-text-2" id="text-org2246bd5">
 <p>
 Ne sont pas supportés:
 </p>
@@ -436,12 +400,12 @@ Ne sont pas supportés:
 </div>
 </div>
 <div id="outline-container-org45fb675" class="outline-2">
-<h2 id="org45fb675"><span class="section-number-2">5</span> Typage</h2>
-<div class="outline-text-2" id="text-5">
+<h2 id="org45fb675">Typage</h2>
+<div class="outline-text-2" id="text-org45fb675">
 </div>
 <div id="outline-container-org2895e3b" class="outline-3">
-<h3 id="org2895e3b"><span class="section-number-3">5.1</span> Core RAML</h3>
-<div class="outline-text-3" id="text-5-1">
+<h3 id="org2895e3b">Core RAML</h3>
+<div class="outline-text-3" id="text-org2895e3b">
 <p>
 Après simplification de l&rsquo;AST OCaml, on se ramène à un langage simple, où les
 termes sont sous forme <i>let-share-normale</i>, ou l&rsquo;on a remplacé le plus de sous
@@ -454,8 +418,8 @@ opérations, ou conditionelle.
 </p>
 </div>
 <div id="outline-container-orgd038cd1" class="outline-4">
-<h4 id="orgd038cd1"><span class="section-number-4">5.1.1</span> Syntaxe</h4>
-<div class="outline-text-4" id="text-5-1-1">
+<h4 id="orgd038cd1">Syntaxe</h4>
+<div class="outline-text-4" id="text-orgd038cd1">
 <dl class="org-dl">
 <dt>Les classiques</dt><dd>variables, application n-aire, abstraction, constructeurs,
 tuples, références, let, let rec de fonctions, pattern matching</dd>
@@ -466,8 +430,8 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </div>
 </div>
 <div id="outline-container-org26cbfd9" class="outline-4">
-<h4 id="org26cbfd9"><span class="section-number-4">5.1.2</span> Définitons préalables</h4>
-<div class="outline-text-4" id="text-5-1-2">
+<h4 id="org26cbfd9">Définitons préalables</h4>
+<div class="outline-text-4" id="text-org26cbfd9">
 <dl class="org-dl">
 <dt>K ∈ Syn</dt><dd>les neouds de syntaxe</dd>
 <dt>M : Syn × ℕ -&gt; ℚ</dt><dd>Une <i>métrique de ressource</i></dd>
@@ -481,8 +445,8 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </div>
 </div>
 <div id="outline-container-org4b83cba" class="outline-4">
-<h4 id="org4b83cba"><span class="section-number-4">5.1.3</span> Valeurs</h4>
-<div class="outline-text-4" id="text-5-1-3">
+<h4 id="org4b83cba">Valeurs</h4>
+<div class="outline-text-4" id="text-org4b83cba">
 <dl class="org-dl">
 <dt>l</dt><dd>position d&rsquo;une valeur sur le tas</dd>
 <dt>(l1, &#x2026;, ln)</dt><dd>tuples de valeur</dd>
@@ -492,8 +456,8 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </div>
 </div>
 <div id="outline-container-orge9e9925" class="outline-4">
-<h4 id="orge9e9925"><span class="section-number-4">5.1.4</span> Sémantique à grand pas</h4>
-<div class="outline-text-4" id="text-5-1-4">
+<h4 id="orge9e9925">Sémantique à grand pas</h4>
+<div class="outline-text-4" id="text-orge9e9925">
 <p>
 Le jugement de la sémantique est
 </p>
@@ -514,8 +478,8 @@ selon la métrique de ressource M. Les réductions w sont soit
 </div>
 </div>
 <div id="outline-container-orgc480b82" class="outline-3">
-<h3 id="orgc480b82"><span class="section-number-3">5.2</span> Consommation de ressource</h3>
-<div class="outline-text-3" id="text-5-2">
+<h3 id="orgc480b82">Consommation de ressource</h3>
+<div class="outline-text-3" id="text-orgc480b82">
 <p>
 Les consommation de ressources sont de la forme (q,q&rsquo;) où q est la &ldquo;marée
 haute&rdquo;, la quantité maximale de ressource dont on à besoin, et q&rsquo; est la quantité
@@ -548,8 +512,7 @@ exemple:
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Hector Suzanne</p>
-<p class="date">Created: 2020-04-06 Mon 18:40</p>
+<p class="date">Created: 2020-04-07 Tue 12:48</p>
 </div>
 </body>
 </html>
