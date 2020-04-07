@@ -3,10 +3,9 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-04-07 Tue 14:34 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Notes de Lecture: Towards Automatic Resource Bound Analysis for OCaml</title>
+<title>Notes de Lectures: Towards Automatic Resource Bound Analysis for OCaml</title>
 <meta name="generator" content="Org mode" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
@@ -220,9 +219,11 @@
 </head>
 <body>
 <div id="content">
-<div id="outline-container-org152bf57" class="outline-2">
-<h2 id="org152bf57">Introduction</h2>
-<div class="outline-text-2" id="text-org152bf57">
+<h1 class="title">Notes de Lectures: Towards Automatic Resource Bound Analysis for OCaml</h1>
+
+<div id="outline-container-org735b13b" class="outline-2">
+<h2 id="org735b13b">Introduction</h2>
+<div class="outline-text-2" id="text-org735b13b">
 <p>
 Contribution : une analyse statique de
 ressources pour les programmes OCaml <i>fonctionnels</i>, <i>d&rsquo;ordre supérieur</i>, <i>avec
@@ -262,9 +263,9 @@ nuage.
 </div>
 </div>
 </div>
-<div id="outline-container-org34d622c" class="outline-2">
-<h2 id="org34d622c">Survol</h2>
-<div class="outline-text-2" id="text-org34d622c">
+<div id="outline-container-orgd84fb5a" class="outline-2">
+<h2 id="orgd84fb5a">Survol</h2>
+<div class="outline-text-2" id="text-orgd84fb5a">
 <p>
 On extrait un AST typé du compilateur OCaml, puis on infère de nouveaux types
 contenant des information de potentiel pour chaque expression. D&rsquo;une déclaration
@@ -280,17 +281,17 @@ programme en produisant et résolvant des contraintes d&rsquo;unification.
 </div>
 </div>
 
-<div id="outline-container-orgd8b4593" class="outline-2">
-<h2 id="orgd8b4593">Analyse de la programmation fonctionnelle</h2>
-<div class="outline-text-2" id="text-orgd8b4593">
+<div id="outline-container-org9d57eae" class="outline-2">
+<h2 id="org9d57eae">Analyse de la programmation fonctionnelle</h2>
+<div class="outline-text-2" id="text-org9d57eae">
 <p>
 Il y a trois principale difficultés: Les fermeture/l&rsquo;application partielle,
 les arguments d&rsquo;ordre supérieurs, et les effets de bords
 </p>
 </div>
-<div id="outline-container-org17e760c" class="outline-4">
-<h4 id="org17e760c">Fermetures et curryfication</h4>
-<div class="outline-text-4" id="text-org17e760c">
+<div id="outline-container-orga65d99f" class="outline-4">
+<h4 id="orga65d99f">Fermetures et curryfication</h4>
+<div class="outline-text-4" id="text-orga65d99f">
 <p>
 On prend comme exemple <code>val append : 'a list -&gt; 'a list -&gt; 'a list</code> de la
 bibliothèque standard. L&rsquo;appel <code>let foo = append xs</code> termine en temps constant,
@@ -323,9 +324,9 @@ raffinement des types avec des types dépendants.
 </p>
 </div>
 </div>
-<div id="outline-container-org5a06c5f" class="outline-4">
-<h4 id="org5a06c5f">Gestion de l&rsquo;ordre supérieur</h4>
-<div class="outline-text-4" id="text-org5a06c5f">
+<div id="outline-container-org1fd3c6b" class="outline-4">
+<h4 id="org1fd3c6b">Gestion de l&rsquo;ordre supérieur</h4>
+<div class="outline-text-4" id="text-org1fd3c6b">
 <p>
 Dans le cas plus simple où on se limite à des estimations linéaires du coût, il est
 possible de calculer la consommation de ressource en présence d&rsquo;arguments
@@ -360,9 +361,9 @@ exemple:
 </div>
 </div>
 
-<div id="outline-container-org406e8e5" class="outline-4">
-<h4 id="org406e8e5">Effets de bord</h4>
-<div class="outline-text-4" id="text-org406e8e5">
+<div id="outline-container-org2faff2a" class="outline-4">
+<h4 id="org2faff2a">Effets de bord</h4>
+<div class="outline-text-4" id="text-org2faff2a">
 <p>
 L&rsquo;analyse vérifie que le coût du programme est indépendant des valeurs stockées
 dans un état mutable quelconque. Dans le cas contraire, on peut peux pas
@@ -381,9 +382,9 @@ annotant le type de l&rsquo;exception et de ses arguments.
 </div>
 </div>
 </div>
-<div id="outline-container-orgdee8694" class="outline-2">
-<h2 id="orgdee8694">Limites</h2>
-<div class="outline-text-2" id="text-orgdee8694">
+<div id="outline-container-org6f4f401" class="outline-2">
+<h2 id="org6f4f401">Limites</h2>
+<div class="outline-text-2" id="text-org6f4f401">
 <p>
 Ne sont pas supportés:
 </p>
@@ -399,13 +400,13 @@ Ne sont pas supportés:
 </ul>
 </div>
 </div>
-<div id="outline-container-org6c29cc6" class="outline-2">
-<h2 id="org6c29cc6">Typage</h2>
-<div class="outline-text-2" id="text-org6c29cc6">
+<div id="outline-container-orgd2c1ec5" class="outline-2">
+<h2 id="orgd2c1ec5">Typage</h2>
+<div class="outline-text-2" id="text-orgd2c1ec5">
 </div>
-<div id="outline-container-org7dc8d94" class="outline-3">
-<h3 id="org7dc8d94">Core RAML</h3>
-<div class="outline-text-3" id="text-org7dc8d94">
+<div id="outline-container-orgc687ee4" class="outline-3">
+<h3 id="orgc687ee4">Core RAML</h3>
+<div class="outline-text-3" id="text-orgc687ee4">
 <p>
 Après simplification de l&rsquo;AST OCaml, on se ramène à un langage simple, où les
 termes sont sous forme <i>let-share-normale</i>, ou l&rsquo;on a remplacé le plus de sous
@@ -417,9 +418,9 @@ présente ici un langage réduit, sans types primitifs comme les tableaux, leurs
 opérations, ou conditionelle.
 </p>
 </div>
-<div id="outline-container-org78db4ca" class="outline-4">
-<h4 id="org78db4ca">Syntaxe</h4>
-<div class="outline-text-4" id="text-org78db4ca">
+<div id="outline-container-org8fe7dcb" class="outline-4">
+<h4 id="org8fe7dcb">Syntaxe</h4>
+<div class="outline-text-4" id="text-org8fe7dcb">
 <dl class="org-dl">
 <dt>Les classiques</dt><dd>variables, application n-aire, abstraction, constructeurs,
 tuples, références, let, let rec de fonctions, pattern matching</dd>
@@ -429,9 +430,9 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-org13f1d46" class="outline-4">
-<h4 id="org13f1d46">Définitons préalables</h4>
-<div class="outline-text-4" id="text-org13f1d46">
+<div id="outline-container-org46c475b" class="outline-4">
+<h4 id="org46c475b">Définitons préalables</h4>
+<div class="outline-text-4" id="text-org46c475b">
 <dl class="org-dl">
 <dt>K ∈ Syn</dt><dd>les neouds de syntaxe</dd>
 <dt>M : Syn × ℕ -&gt; ℚ</dt><dd>Une <i>métrique de ressource</i></dd>
@@ -444,9 +445,9 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-org7d4ac55" class="outline-4">
-<h4 id="org7d4ac55">Valeurs</h4>
-<div class="outline-text-4" id="text-org7d4ac55">
+<div id="outline-container-org0776332" class="outline-4">
+<h4 id="org0776332">Valeurs</h4>
+<div class="outline-text-4" id="text-org0776332">
 <dl class="org-dl">
 <dt>l</dt><dd>position d&rsquo;une valeur sur le tas</dd>
 <dt>(l1, &#x2026;, ln)</dt><dd>tuples de valeur</dd>
@@ -455,9 +456,9 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-orgacbb5b8" class="outline-4">
-<h4 id="orgacbb5b8">Sémantique à grand pas</h4>
-<div class="outline-text-4" id="text-orgacbb5b8">
+<div id="outline-container-org418bb20" class="outline-4">
+<h4 id="org418bb20">Sémantique à grand pas</h4>
+<div class="outline-text-4" id="text-org418bb20">
 <p>
 Le jugement de la sémantique est
 </p>
@@ -477,9 +478,9 @@ selon la métrique de ressource M. Les réductions w sont soit
 </div>
 </div>
 </div>
-<div id="outline-container-org90245fd" class="outline-3">
-<h3 id="org90245fd">Consommation de ressource</h3>
-<div class="outline-text-3" id="text-org90245fd">
+<div id="outline-container-org5fcf970" class="outline-3">
+<h3 id="org5fcf970">Consommation de ressource</h3>
+<div class="outline-text-3" id="text-org5fcf970">
 <p>
 Les consommation de ressources sont de la forme (q,q&rsquo;) où q est la &ldquo;marée
 haute&rdquo;, la quantité maximale de ressource dont on à besoin, et q&rsquo; est la quantité
@@ -510,9 +511,6 @@ exemple:
 </div>
 </div>
 </div>
-</div>
-<div id="postamble" class="status">
-<p class="date">Created: 2020-04-07 Tue 14:34</p>
 </div>
 </body>
 </html>

@@ -3,7 +3,6 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-04-07 Tue 14:34 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Notes: Space cost analysis using sized types</title>
@@ -220,13 +219,15 @@
 </head>
 <body>
 <div id="content">
-<div id="outline-container-org62d23cc" class="outline-2">
-<h2 id="org62d23cc">Introduction</h2>
-<div class="outline-text-2" id="text-org62d23cc">
+<h1 class="title">Notes: Space cost analysis using sized types</h1>
+
+<div id="outline-container-org46af25c" class="outline-2">
+<h2 id="org46af25c">Introduction</h2>
+<div class="outline-text-2" id="text-org46af25c">
 </div>
-<div id="outline-container-orgabc7ed1" class="outline-3">
-<h3 id="orgabc7ed1">Programmation embarquée</h3>
-<div class="outline-text-3" id="text-orgabc7ed1">
+<div id="outline-container-org754089e" class="outline-3">
+<h3 id="org754089e">Programmation embarquée</h3>
+<div class="outline-text-3" id="text-org754089e">
 <p>
 On veut pouvoir utiliser des langages de haut niveaux dans les systèmes
 embarqués pour des raison évidentes de productivité par rapport à C ou
@@ -250,9 +251,9 @@ ont créés de nouveaux besoins. (cf Stankovic 1988)
 </p>
 </div>
 </div>
-<div id="outline-container-org90d5b7d" class="outline-3">
-<h3 id="org90d5b7d">Langages fonctionnels</h3>
-<div class="outline-text-3" id="text-org90d5b7d">
+<div id="outline-container-orga76c8ac" class="outline-3">
+<h3 id="orga76c8ac">Langages fonctionnels</h3>
+<div class="outline-text-3" id="text-orga76c8ac">
 <p>
 Les langages fonctionnels permettent de garantir statiquement de bons invariants
 <i>logiques</i> de programmes, mais pas de bons invariants <i>de ressources</i>. Pourquoi:
@@ -279,9 +280,9 @@ que l&rsquo;on doit prendre en compte. Il faut adapter les passes d&rsquo;optimi
 </dl>
 </div>
 </div>
-<div id="outline-container-org3fc62e4" class="outline-3">
-<h3 id="org3fc62e4">Contribution</h3>
-<div class="outline-text-3" id="text-org3fc62e4">
+<div id="outline-container-orgdec62b9" class="outline-3">
+<h3 id="orgdec62b9">Contribution</h3>
+<div class="outline-text-3" id="text-orgdec62b9">
 <p>
 On cherche à étendre l&rsquo;application des langages fonctionnels à la programmation
 critique et embarquée en créant une analyse automatique des consommations en
@@ -321,9 +322,9 @@ immédiatement aux lancements du GC]</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org445056a" class="outline-3">
-<h3 id="org445056a">Exemple d&rsquo;analyse</h3>
-<div class="outline-text-3" id="text-org445056a">
+<div id="outline-container-org961613c" class="outline-3">
+<h3 id="org961613c">Exemple d&rsquo;analyse</h3>
+<div class="outline-text-3" id="text-org961613c">
 <p>
 On considère le filtre simple, qui à un flux de flottant <code>x0,x1,...</code> renvoie un
 flux <code>y0,y1,...</code> caractérisé par <code>yi = ∑(1≤k≤n) wk*x(i-k)</code>. Dans une
@@ -388,13 +389,13 @@ en interprétation abstraite. On obtient au final:
 </div>
 </div>
 </div>
-<div id="outline-container-org07e15d1" class="outline-2">
-<h2 id="org07e15d1">Analyse de programme</h2>
-<div class="outline-text-2" id="text-org07e15d1">
+<div id="outline-container-org8483f00" class="outline-2">
+<h2 id="org8483f00">Analyse de programme</h2>
+<div class="outline-text-2" id="text-org8483f00">
 </div>
-<div id="outline-container-org7e5c4c7" class="outline-3">
-<h3 id="org7e5c4c7">Objectif</h3>
-<div class="outline-text-3" id="text-org7e5c4c7">
+<div id="outline-container-org196a79f" class="outline-3">
+<h3 id="org196a79f">Objectif</h3>
+<div class="outline-text-3" id="text-org196a79f">
 <p>
 Etendre le typage d&rsquo;un langage pour y annoter des propriétés
 dynamiques sur les valeurs, les calculs. Raisonner ensuite avec les outils de la
@@ -404,9 +405,9 @@ groupoïdes].
 </p>
 </div>
 </div>
-<div id="outline-container-org86c3bf4" class="outline-3">
-<h3 id="org86c3bf4">Premier exemple</h3>
-<div class="outline-text-3" id="text-org86c3bf4">
+<div id="outline-container-orgca43fde" class="outline-3">
+<h3 id="orgca43fde">Premier exemple</h3>
+<div class="outline-text-3" id="text-orgca43fde">
 <p>
 On prend par exemple l&rsquo;extension d&rsquo;un λ-calcul simplement typé avec exceptions,
 et un système d&rsquo;effet modélisant ces exceptions: On a <code>Γ ⊢ e : t &amp; φ</code>, avec φ un
@@ -428,9 +429,9 @@ l&rsquo;affaiblissement des effets (<code>φ⊂ψ</code>) jusqu&rsquo;au point d
 </p>
 </div>
 </div>
-<div id="outline-container-org1a7fa2a" class="outline-3">
-<h3 id="org1a7fa2a">Polymorphisme d&rsquo;effets</h3>
-<div class="outline-text-3" id="text-org1a7fa2a">
+<div id="outline-container-orgde9859d" class="outline-3">
+<h3 id="orgde9859d">Polymorphisme d&rsquo;effets</h3>
+<div class="outline-text-3" id="text-orgde9859d">
 <p>
 On ajoute à notre système de type un <code>let</code> polymorphique, où l&rsquo;on peut
 quantifier sur les effets et les types. C&rsquo;est essentiel pour une analyse fine
@@ -450,9 +451,9 @@ pour les domaines des formes <code>let</code>. Sinon, l&rsquo;inférence est tro
 </p>
 </div>
 </div>
-<div id="outline-container-org7a0f547" class="outline-3">
-<h3 id="org7a0f547">Inférence</h3>
-<div class="outline-text-3" id="text-org7a0f547">
+<div id="outline-container-orga53b51d" class="outline-3">
+<h3 id="orga53b51d">Inférence</h3>
+<div class="outline-text-3" id="text-orga53b51d">
 <p>
 Le système d&rsquo;effet exige de pouvoir &ldquo;deviner&rdquo; le type annoté d&rsquo;expressions
 quelconque. Il nous faut donc un algorithme d&rsquo;inférence de type et d&rsquo;effet. On
@@ -489,17 +490,17 @@ temps:
 </div>
 </div>
 
-<div id="outline-container-orgfd4ac59" class="outline-3">
-<h3 id="orgfd4ac59">Interprétation abstraite</h3>
-<div class="outline-text-3" id="text-orgfd4ac59">
+<div id="outline-container-org214e131" class="outline-3">
+<h3 id="org214e131">Interprétation abstraite</h3>
+<div class="outline-text-3" id="text-org214e131">
 <p>
 <i>NDLR. C&rsquo;est très classique, on mentionne vite fait les concepts déjà vu en TAS.</i>
 <i>On cite beaucoup le travail de Cousot&amp;Cousot</i>
 </p>
 </div>
-<div id="outline-container-orgae148c7" class="outline-4">
-<h4 id="orgae148c7">Concepts classiques</h4>
-<div class="outline-text-4" id="text-orgae148c7">
+<div id="outline-container-orgad62101" class="outline-4">
+<h4 id="orgad62101">Concepts classiques</h4>
+<div class="outline-text-4" id="text-orgad62101">
 <ul class="org-ul">
 <li>Domaine abstrait en concret</li>
 <li>Structure de treillis sur ces domaines</li>
@@ -511,9 +512,9 @@ temps:
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd14fdf0" class="outline-4">
-<h4 id="orgd14fdf0">Élargissement avec carburant</h4>
-<div class="outline-text-4" id="text-orgd14fdf0">
+<div id="outline-container-org58da6ca" class="outline-4">
+<h4 id="org58da6ca">Élargissement avec carburant</h4>
+<div class="outline-text-4" id="text-org58da6ca">
 <p>
 On commence l&rsquo;itération de point fixe avec un nombre fini de carburant. Quand
 l&rsquo;usage de l&rsquo;élargissement causerais une perte de précision, on consomme un
@@ -527,17 +528,17 @@ convex polyhedra</i> pour plus d&rsquo;information au besoin
 </div>
 </div>
 </div>
-<div id="outline-container-org2973276" class="outline-2">
-<h2 id="org2973276">Analyse statique de consommation de ressource</h2>
-<div class="outline-text-2" id="text-org2973276">
+<div id="outline-container-orgabf5079" class="outline-2">
+<h2 id="orgabf5079">Analyse statique de consommation de ressource</h2>
+<div class="outline-text-2" id="text-orgabf5079">
 </div>
-<div id="outline-container-org1d17d12" class="outline-3">
-<h3 id="org1d17d12">Analyse de complexité automatique</h3>
-<div class="outline-text-3" id="text-org1d17d12">
+<div id="outline-container-org76a9941" class="outline-3">
+<h3 id="org76a9941">Analyse de complexité automatique</h3>
+<div class="outline-text-3" id="text-org76a9941">
 </div>
-<div id="outline-container-orgca986ca" class="outline-4">
-<h4 id="orgca986ca">Préhistoire et système METRIC</h4>
-<div class="outline-text-4" id="text-orgca986ca">
+<div id="outline-container-org3864c95" class="outline-4">
+<h4 id="org3864c95">Préhistoire et système METRIC</h4>
+<div class="outline-text-4" id="text-org3864c95">
 <p>
 On cherche a simuler/aider/automatiser les analyses manuelles de complexité
 temporelle asymptotique de programmes. On procède comme un humain:
@@ -567,9 +568,9 @@ non-strictes. Ce sera une épine récurrente.
 </p>
 </div>
 </div>
-<div id="outline-container-org7ab2197" class="outline-4">
-<h4 id="org7ab2197">Le système ACE de Métayer (1988)</h4>
-<div class="outline-text-4" id="text-org7ab2197">
+<div id="outline-container-org650d8e9" class="outline-4">
+<h4 id="org650d8e9">Le système ACE de Métayer (1988)</h4>
+<div class="outline-text-4" id="text-org650d8e9">
 <p>
 Une nouvelle approche, basée sur la réécriture équationnelle. Le langage ciblé
 est fonctionnel, applicatif, à base de combinateur, et est donc bien adapté au
@@ -585,9 +586,9 @@ l&rsquo;analyse de la consommation mémoire.
 </p>
 </div>
 </div>
-<div id="outline-container-org6f02206" class="outline-4">
-<h4 id="org6f02206">Ensuite</h4>
-<div class="outline-text-4" id="text-org6f02206">
+<div id="outline-container-org6be31a4" class="outline-4">
+<h4 id="org6be31a4">Ensuite</h4>
+<div class="outline-text-4" id="text-org6be31a4">
 <dl class="org-dl">
 <dt>Rosendahl (1989)</dt><dd>utilise l&rsquo;interprétation abstraite pour définir une
 transformation de programme permettant d&rsquo;associer, pour un préfixe d&rsquo;entrée,
@@ -607,9 +608,9 @@ fonctions paresseuses.</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-org109d5eb" class="outline-4">
-<h4 id="org109d5eb">Conclusion</h4>
-<div class="outline-text-4" id="text-org109d5eb">
+<div id="outline-container-orgf57140d" class="outline-4">
+<h4 id="orgf57140d">Conclusion</h4>
+<div class="outline-text-4" id="text-orgf57140d">
 <p>
 Ces formalismes ont pour but d&rsquo;assister l&rsquo;analyse asymptotique manuelle
 d&rsquo;algorithmes, et donc ne considèrent pas:
@@ -622,13 +623,13 @@ récursifs des fonctions.</li>
 </div>
 </div>
 </div>
-<div id="outline-container-orgc7f58ee" class="outline-3">
-<h3 id="orgc7f58ee">Système de type et d&rsquo;effets pour le WCET</h3>
-<div class="outline-text-3" id="text-orgc7f58ee">
+<div id="outline-container-org85f0d45" class="outline-3">
+<h3 id="org85f0d45">Système de type et d&rsquo;effets pour le WCET</h3>
+<div class="outline-text-3" id="text-org85f0d45">
 </div>
-<div id="outline-container-org376d3c4" class="outline-4">
-<h4 id="org376d3c4">Travaux de Dornic &amp; al</h4>
-<div class="outline-text-4" id="text-org376d3c4">
+<div id="outline-container-org6b0ff3c" class="outline-4">
+<h4 id="org6b0ff3c">Travaux de Dornic &amp; al</h4>
+<div class="outline-text-4" id="text-org6b0ff3c">
 <p>
 Dornic&amp;al. (1992) propose un &ldquo;système de temps&rdquo; pour un langage d&rsquo;ordre
  supérieur à sémantique call-by-value. Une version spécialisé d&rsquo;un système
@@ -656,9 +657,9 @@ de deux calculs au coût différents, comme les deux branches d&rsquo;une condit
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd95c4a5" class="outline-4">
-<h4 id="orgd95c4a5">Extensions</h4>
-<div class="outline-text-4" id="text-orgd95c4a5">
+<div id="outline-container-orgb82475a" class="outline-4">
+<h4 id="orgb82475a">Extensions</h4>
+<div class="outline-text-4" id="text-orgb82475a">
 <p>
 ce système a été étendu par Reistad &amp; Gifford avec des annotation pour les
 tailles des entiers naturels, des listes et des vecteurs. Ces annotations sont
@@ -711,13 +712,13 @@ sur les algorithmes diviser-pour-régner tels que quicksort.
 </div>
 </div>
 
-<div id="outline-container-org18879ca" class="outline-3">
-<h3 id="org18879ca">Sized Types</h3>
-<div class="outline-text-3" id="text-org18879ca">
+<div id="outline-container-org6d643da" class="outline-3">
+<h3 id="org6d643da">Sized Types</h3>
+<div class="outline-text-3" id="text-org6d643da">
 </div>
-<div id="outline-container-org5dd24ac" class="outline-4">
-<h4 id="org5dd24ac">Hughes, Pareto, Sabry (1996-2000)</h4>
-<div class="outline-text-4" id="text-org5dd24ac">
+<div id="outline-container-orgdec5c56" class="outline-4">
+<h4 id="orgdec5c56">Hughes, Pareto, Sabry (1996-2000)</h4>
+<div class="outline-text-4" id="text-orgdec5c56">
 <p>
 Il existe des systèmes de types pour la déduction de propriétés de tailles
 uniquement, pour les preuves de terminaisons, ou les optimisations. Les autheurs
@@ -791,9 +792,9 @@ mais on ne peut pas induire sur les sommes !
 </div>
 </div>
 
-<div id="outline-container-org22fa62d" class="outline-4">
-<h4 id="org22fa62d"><i>Embedded ML</i> : Hughes &amp; Pareto (1999)</h4>
-<div class="outline-text-4" id="text-org22fa62d">
+<div id="outline-container-org53aa91e" class="outline-4">
+<h4 id="org53aa91e"><i>Embedded ML</i> : Hughes &amp; Pareto (1999)</h4>
+<div class="outline-text-4" id="text-org53aa91e">
 <p>
 Extension de leurs système à un langage de programmation à la ML, avec
 sémantique opérationelle à petit-pas basée sur la SECD, avec analyse des coûts
@@ -810,9 +811,9 @@ structures infinies commes les streams.
 </div>
 </div>
 
-<div id="outline-container-orgaf92903" class="outline-4">
-<h4 id="orgaf92903">Chin, Khoo (2001-2006)</h4>
-<div class="outline-text-4" id="text-orgaf92903">
+<div id="outline-container-org3966777" class="outline-4">
+<h4 id="org3966777">Chin, Khoo (2001-2006)</h4>
+<div class="outline-text-4" id="text-org3966777">
 <p>
 Chin&amp;Khoo ont un système avec inférence, basé sur l&rsquo;arithmétique de Presburger,
 qui est décidable (en passant par Omega). Il gèrent la récurrence avec une
@@ -859,13 +860,13 @@ la taille d&rsquo;une valeur annoté d&rsquo;un certain type. Ces contraintes n&
 </div>
 </div>
 
-<div id="outline-container-org3ed38f8" class="outline-3">
-<h3 id="org3ed38f8">Types Dépendants</h3>
-<div class="outline-text-3" id="text-org3ed38f8">
+<div id="outline-container-org45bd117" class="outline-3">
+<h3 id="org45bd117">Types Dépendants</h3>
+<div class="outline-text-3" id="text-org45bd117">
 </div>
-<div id="outline-container-org5582b5f" class="outline-4">
-<h4 id="org5582b5f"><i>Dependent ML</i></h4>
-<div class="outline-text-4" id="text-org5582b5f">
+<div id="outline-container-org3c7bac9" class="outline-4">
+<h4 id="org3c7bac9"><i>Dependent ML</i></h4>
+<div class="outline-text-4" id="text-org3c7bac9">
 <p>
 Créé en 1999, <i>dependent ML</i> (DML) est une extension d&rsquo;OCaml avec types
 dépendants, mais relativement conservative. On y maintient la décidabilité du
@@ -903,9 +904,9 @@ des calculs, mais ils faut encore les résoudre à la main.
 </div>
 </div>
 
-<div id="outline-container-org438e5ba" class="outline-4">
-<h4 id="org438e5ba">LXres (Crary &amp; Weirich)</h4>
-<div class="outline-text-4" id="text-org438e5ba">
+<div id="outline-container-org36a01da" class="outline-4">
+<h4 id="org36a01da">LXres (Crary &amp; Weirich)</h4>
+<div class="outline-text-4" id="text-org36a01da">
 <p>
 <i>LXres</i> est un langage de programmation avec type dépendants et
 code-comme-preuve permettant d&rsquo;exposer des &ldquo;horloges virtuelles&rdquo; au niveau des
@@ -917,9 +918,9 @@ Presburger).
 </div>
 </div>
 
-<div id="outline-container-orge73698d" class="outline-4">
-<h4 id="orge73698d">à la Epigram (Brady &amp; Hammond)</h4>
-<div class="outline-text-4" id="text-orge73698d">
+<div id="outline-container-orgcf5f62f" class="outline-4">
+<h4 id="orgcf5f62f">à la Epigram (Brady &amp; Hammond)</h4>
+<div class="outline-text-4" id="text-orgcf5f62f">
 <p>
 Un langage dépendant avec un type <code>Size</code>: les valeurs <code>size v p : Size A P</code>
 annotent les valeurs <code>v</code> indicés par une taille entière <code>n</code> et de type <code>A n</code>. La
@@ -938,9 +939,9 @@ directement utiliser ces travaux pour obtenir des informations sur l&rsquo;éval
 </div>
 </div>
 
-<div id="outline-container-org77fd52a" class="outline-4">
-<h4 id="org77fd52a">Cost Monad (Danielson)</h4>
-<div class="outline-text-4" id="text-org77fd52a">
+<div id="outline-container-org934e9ae" class="outline-4">
+<h4 id="org934e9ae">Cost Monad (Danielson)</h4>
+<div class="outline-text-4" id="text-org934e9ae">
 <div class="org-src-container">
 <pre class="src src-haskell"><span style="color: #29838d;">return</span> <span style="color: #cb9aad;">::</span> a <span style="color: #cb9aad;">-&gt;</span> <span style="color: #9a7500;">Thunk</span> <span style="color: #97365b; font-weight: bold;">0</span> a
 <span style="color: #29838d;">bind</span> <span style="color: #cb9aad;">::</span> <span style="color: #9a7500;">Thunk</span> n a <span style="color: #cb9aad;">-&gt;</span> (a <span style="color: #cb9aad;">-&gt;</span> <span style="color: #9a7500;">Thunk</span> m b) <span style="color: #cb9aad;">-&gt;</span> <span style="color: #9a7500;">Thunk</span> (n<span style="color: #cb9aad;">+</span>m) b
@@ -960,9 +961,9 @@ Encore une fois, par d&rsquo;inférence.
 </div>
 </div>
 
-<div id="outline-container-org86098f6" class="outline-3">
-<h3 id="org86098f6">Analyse amortie</h3>
-<div class="outline-text-3" id="text-org86098f6">
+<div id="outline-container-org5d13b66" class="outline-3">
+<h3 id="org5d13b66">Analyse amortie</h3>
+<div class="outline-text-3" id="text-org5d13b66">
 <p>
 On passe tout le blabla usuel sur Tarjan. Merci à lui quand même. On note
 l&rsquo;existence de &ldquo;Purely Functionnal Data Structures&rdquo; de Okasaki, inspiré de sa
@@ -1018,9 +1019,6 @@ prise en compte de la <i>profondeur</i> des structures considérées.
 </div>
 </div>
 </div>
-</div>
-<div id="postamble" class="status">
-<p class="date">Created: 2020-04-07 Tue 14:34</p>
 </div>
 </body>
 </html>
