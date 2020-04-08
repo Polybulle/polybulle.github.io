@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -220,64 +220,97 @@
 <body>
 <div id="content">
 <h1 class="title">Notes de Lectures: Towards Automatic Resource Bound Analysis for OCaml</h1>
+<div id="table-of-contents">
+<h2>Table des matières</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org735b13b">Introduction</a>
+<ul>
+<li><a href="#org7a5e227">Premier exemple</a></li>
+</ul>
+</li>
+<li><a href="#org9d57eae">Analyse de la programmation fonctionnelle</a>
+<ul>
+<li><a href="#orga65d99f">Fermetures et curryfication</a></li>
+<li><a href="#org1fd3c6b">Gestion de l&rsquo;ordre supérieur</a></li>
+<li><a href="#org2faff2a">Effets de bord</a></li>
+</ul>
+</li>
+<li><a href="#orgc687ee4">Core RAML</a>
+<ul>
+<li><a href="#org8fe7dcb">Syntaxe</a></li>
+<li><a href="#org46c475b">Définitons préalables</a></li>
+<li><a href="#org0776332">Valeurs</a></li>
+<li><a href="#org418bb20">Sémantique à grand pas</a></li>
+<li><a href="#org5fcf970">Consommation de ressource</a></li>
+</ul>
+</li>
+<li><a href="#org6f4f401">Limites</a></li>
+</ul>
+</div>
+</div>
 
 <div id="outline-container-org735b13b" class="outline-2">
 <h2 id="org735b13b">Introduction</h2>
 <div class="outline-text-2" id="text-org735b13b">
 <p>
-Contribution : une analyse statique de
-ressources pour les programmes OCaml <i>fonctionnels</i>, <i>d&rsquo;ordre supérieur</i>, <i>avec
-polymorphisme et type utilisateurs</i>. On obtient des polynômes multivariables
-décrivant l&rsquo;usage de ressources tel que le WCET, l&rsquo;occupation mémoire ou la
-consommation d&rsquo;énergie. On utilise <b>AARA : Automatic Amortized Resource
-Analysis</b>, un npuveau système de type et une nouvelle sémantique de la machine
-virtuelle <i>ZINC</i> d&rsquo;OCaml.
-On peut trouver des bornes asymptotique fortes pour des programmes
-réels, comme les utilitaires standard sur les listes, l&rsquo;algorithme de Dijkstra,
-ou un client pour Amazon DynamoDB avec analyse statique du coût des accès au
-nuage.
+On introduit une analyse statique de ressources pour les programmes OCaml
+<i>fonctionnels</i>, <i>d&rsquo;ordre supérieur</i>, <i>avec polymorphisme</i> et <i>types
+utilisateurs</i>. On obtient en résultat des polynômes multivariables décrivant
+l&rsquo;usage de ressources tel que le temps d&rsquo;exécution au pire (WCET), l&rsquo;occupation
+mémoire, la consommation d&rsquo;énergie ou encore le nombre d&rsquo;appel à une API. Cette
+analyse utilise <b>AARA : Automatic Amortized Resource Analysis</b>, un nouveau
+système de type et une nouvelle sémantique de la machine virtuelle <i>ZINC</i>
+d&rsquo;OCaml. On peut trouver des bornes asymptotique fortes pour des programmes
+réels, comme les utilitaires de la bibliothèque standard sur les listes,
+l&rsquo;algorithme de Dijkstra, ou un client pour Amazon DynamoDB, avec à chaque fois
+les métriques pertinentes.
 </p>
+</div>
 
+<div id="outline-container-org7a5e227" class="outline-3">
+<h3 id="org7a5e227">Premier exemple</h3>
+<div class="outline-text-3" id="text-org7a5e227">
 <div class="org-src-container">
 <pre class="src src-ocaml"><span style="color: #000000; font-weight: bold;">type</span> <span style="color: #9a7500;">('a, 'b) ablist</span> =
 | <span style="color: #2a2a2a; background-color: #eeeeee;">Acons</span> <span style="color: #3b6ea8;">of</span> 'a * ('a, 'b) list
 | <span style="color: #2a2a2a; background-color: #eeeeee;">Bcons</span> <span style="color: #3b6ea8;">of</span> 'b * ('a, 'b) list
 | <span style="color: #2a2a2a; background-color: #eeeeee;">ABNil</span>
 
-<span style="color: #000000; font-weight: bold;">let</span> <span style="color: #29838d;">sort_the_as</span> <span style="color: #cb9aad;">ablist</span> = <span style="color: #3b6ea8;">match</span> ablist <span style="color: #3b6ea8;">with</span>
+<span style="color: #000000; font-weight: bold;">let</span> <span style="color: #29838d;">sort_the_as</span> <span style="color: #cb9aad;">the_arg</span> = <span style="color: #3b6ea8;">match</span> ablist <span style="color: #3b6ea8;">with</span>
 | <span style="color: #2a2a2a; background-color: #eeeeee;">Acons</span> (a, tail) -&gt; <span style="color: #2a2a2a; background-color: #eeeeee;">Acons</span> (quicksort a, sort_the_as tail)
 | <span style="color: #2a2a2a; background-color: #eeeeee;">Bcons</span> (b, tail) -&gt; <span style="color: #2a2a2a; background-color: #eeeeee;">Bcons</span> (b          , sort_the_as tail)
-| <span style="color: #2a2a2a; background-color: #eeeeee;">ABNil</span> -&gt; <span style="color: #2a2a2a; background-color: #eeeeee;">ABNil</span>
-
-<span style="color: #b1b1b1;">(*</span>
-<span style="color: #b1b1b1;">  RAML detecte les bornes suivantes:</span>
-<span style="color: #b1b1b1;">    N = nombre de noeuds Acons de `ablist`</span>
-<span style="color: #b1b1b1;">    K = max des tailles des arguments 'a des Acons</span>
-<span style="color: #b1b1b1;">    L = N+K = taille de `ablist`</span>
-<span style="color: #b1b1b1;">    Cout de sort_the_as:</span>
-<span style="color: #b1b1b1;">      13*K*N^2 + 22*K*N + 13*L + 15*N + 11</span>
-
-<span style="color: #b1b1b1;">  On retrouve bien la borne asymptotique en O(K^2 * N)</span>
-<span style="color: #b1b1b1;">*)</span>
+| <span style="color: #2a2a2a; background-color: #eeeeee;">ABNil</span> -&gt; ABNil
 </pre>
 </div>
-</div>
-</div>
-<div id="outline-container-orgd84fb5a" class="outline-2">
-<h2 id="orgd84fb5a">Survol</h2>
-<div class="outline-text-2" id="text-orgd84fb5a">
+
 <p>
-On extrait un AST typé du compilateur OCaml, puis on infère de nouveaux types
-contenant des information de potentiel pour chaque expression. D&rsquo;une déclaration
-<code>t : T</code>, on obtient une autre définition <code>t : (T'; &lt;qi...&gt;))</code> ou <code>T'</code> est proche
-de <code>T</code> (on précise les applications partielle/totales des fonctions aux sites
-d&rsquo;appels), et les <code>qi</code> sont des coefficients permettant de définir un potentiel
-φ(t) = Σ qi * pi(t). Les polynômes <code>pi</code> sont définis pour chaque constructeurs
-du type <code>T</code>. La sémantique du langage hôte induit des contraintes linéaires
-entre les potentiels. Elles sont résolues par un solveur de programmation
-linéaire externe lors d&rsquo;un parcours de l&rsquo;AST, comme on infère les types dans un
-programme en produisant et résolvant des contraintes d&rsquo;unification.
+Sur ce fragment de véritable code OCaml, RAML infère comme métriques pertinentes
 </p>
+<dl class="org-dl">
+<dt>N</dt><dd>le nombre de noeuds Acons de <code>the_arg</code>,</dd>
+<dt>K</dt><dd>le maximum des tailles des arguments de type <code>'a</code> des Acons, et</dd>
+<dt>L = N+K</dt><dd>la taille de <code>the_arg</code></dd>
+</dl>
+<p>
+Et assigne le coût mémoire <code>13*K*N^2 + 22*K*N + 13*L + 15*N + 11</code> à la fonction
+analysée, en terme d&rsquo;étape d&rsquo;évaluation dans la sémantique à grand pas de RAML.
+</p>
+
+<p>
+Pour ce faire, on extrait un AST typé du compilateur OCaml, puis on infère de
+nouveaux types contenant des information de potentiel pour chaque expression. A
+partir d&rsquo;une déclaration <code>t : T</code>, on obtient une autre définition <code>t : (T';
+&lt;q1...qn&gt;))</code> ou <code>T'</code> est proche de <code>T</code> (on y précise les applications
+partielle/totales des fonctions aux sites d&rsquo;appels), et les <code>qi</code> sont des
+coefficients permettant de définir un potentiel <i>φ(t) = Σ q<sub>i</sub> * p<sub>i</sub>(t)</i>. Les
+polynômes <code>pi</code> sont définis pour chaque constructeurs du type <code>T</code>. La sémantique
+du langage hôte induit des contraintes linéaires entre les potentiels. Elles
+sont résolues par un solveur de programmation linéaire externe lors d&rsquo;un
+parcours de l&rsquo;AST, comme on infère les types dans un programme en produisant et
+résolvant des contraintes d&rsquo;unification.
+</p>
+</div>
 </div>
 </div>
 
@@ -285,74 +318,88 @@ programme en produisant et résolvant des contraintes d&rsquo;unification.
 <h2 id="org9d57eae">Analyse de la programmation fonctionnelle</h2>
 <div class="outline-text-2" id="text-org9d57eae">
 <p>
-Il y a trois principale difficultés: Les fermeture/l&rsquo;application partielle,
-les arguments d&rsquo;ordre supérieurs, et les effets de bords
+On a distingué trois principales difficultés à l&rsquo;analyse de ressource:
+l&rsquo;application partielle, les arguments d&rsquo;ordre supérieurs, et les effets de
+bords
 </p>
 </div>
-<div id="outline-container-orga65d99f" class="outline-4">
-<h4 id="orga65d99f">Fermetures et curryfication</h4>
-<div class="outline-text-4" id="text-orga65d99f">
+
+<div id="outline-container-orga65d99f" class="outline-3">
+<h3 id="orga65d99f">Fermetures et curryfication</h3>
+<div class="outline-text-3" id="text-orga65d99f">
 <p>
 On prend comme exemple <code>val append : 'a list -&gt; 'a list -&gt; 'a list</code> de la
 bibliothèque standard. L&rsquo;appel <code>let foo = append xs</code> termine en temps constant,
-et ne fait que créer une fermeture. Par contre, l&rsquo;appel suivant <code>foo ys</code> renvoie
-la liste <code>xs ++ ys</code> en temps et espace O(xs). Donc, l&rsquo;usage de ressource de
-<code>foo</code> ne dépend pas de son argument <code>ys</code>, mais est linéaire en la taille de la
-valeur capturée <code>xs</code>. Hélas, il n&rsquo;est pas suffisant de dé-curryfier <code>append</code>
-pour retomber sur un cas plus simple: Un appel à <code>append</code> nécessite d&rsquo;allouer
-une paire pour les deux arguments. Dans le cas normal (<code>append</code> est curryfiée),
-on prduit une fermeture si l&rsquo;application est partielle, ou on appelle <code>append</code>
-sans allocation si les deux arguments sont fournis.
+et ne fait que créer une fermeture. Par contre, l&rsquo;appel <code>foo ys</code> renvoie la
+liste <code>xs @ ys</code> en temps et espace <i>O(xs)</i>. Donc, l&rsquo;usage de ressource de <code>foo</code>
+ne dépend pas de son argument <code>ys</code>, mais est linéaire en la taille de la valeur
+capturée <code>xs</code>. Hélas, il n&rsquo;est pas suffisant de dé-curryfier <code>append</code> pour
+retomber sur un cas plus simple: Un appel à une version dé-curryfiée d&rsquo;<code>append</code>
+nécessite d&rsquo;allouer une paire pour les deux arguments, alors que dans le cas
+normal, on produit une fermeture si l&rsquo;application est partielle, et on appelle
+<code>append</code> sans allocation si les deux arguments sont fournis.
 </p>
 
 <p>
 On résout ce problème en raffinant les types des fonctions sur leurs sites
 d&rsquo;appels. Les applications partielles peuvent être saturées par eta-expansion,
 et on change le type de la fonction de <code>a1 -&gt; ... -&gt; an -&gt; t</code> en <code>[a1 ... an] -&gt;
-t</code>, qui indique la saturation de l&rsquo;appel. L&rsquo;analyse rend compte de
-l&rsquo;usage correct des ressource pour le second type, mais pas pour le premier.
-En effet, l&rsquo;algorithme est bien plus complexe si les valeurs capturées
-dans les fermetures interviennent dans le calcul de complexité. L&rsquo;analyse est
-guidée par ce principe: <i>La complexité d&rsquo;un appel de fonction ne doit dépendre
-que de la taille de ses arguments</i>
+t</code>, où l&rsquo;annotation <code>[...]</code> indique la saturation de l&rsquo;appel. L&rsquo;analyse peut
+alors rendre compte de l&rsquo;usage correct des ressource pour le second type. Hélas,
+elle est bien plus complexe si les valeurs capturées dans les fermetures
+interviennent dans le calcul de complexité. L&rsquo;analyse est donc limitée aux
+appels annotés précédemment. De cet exemple ressort le critère principal de
+notre analyse:
 </p>
+<blockquote>
+<p>
+La complexité d&rsquo;un appel de fonction ne doit dépendre que de la
+taille de ses arguments.
+</p>
+</blockquote>
 
 <p>
-On reconnaît la possibilité d&rsquo;étendre le système pour gérer ces cas, mais cela a
-un coût important de compléxité de l&rsquo;analyse. On pourrait par exemple étendre le
-raffinement des types avec des types dépendants.
+On reconnaît la possibilité d&rsquo;étendre le système pour gérer les appels
+non-saturés, mais cela aurait un coût important en terme de complexité. On
+pourrait par exemple étendre le raffinement des types avec des types dépendants.
 </p>
 </div>
 </div>
-<div id="outline-container-org1fd3c6b" class="outline-4">
-<h4 id="org1fd3c6b">Gestion de l&rsquo;ordre supérieur</h4>
-<div class="outline-text-4" id="text-org1fd3c6b">
+
+<div id="outline-container-org1fd3c6b" class="outline-3">
+<h3 id="org1fd3c6b">Gestion de l&rsquo;ordre supérieur</h3>
+<div class="outline-text-3" id="text-org1fd3c6b">
 <p>
-Dans le cas plus simple où on se limite à des estimations linéaires du coût, il est
-possible de calculer la consommation de ressource en présence d&rsquo;arguments
-d&rsquo;ordre supérieur en se ramenant à l&rsquo;ordre 1. Mais c&rsquo;est seulement possible quand les arguments sont analysables, et on doit entrelacer le typage et la génération de
-contraintes. On préfère séparer les deux processus.
+Dans le cas plus simple où on se limite à des estimations linéaires du coût, il
+est possible de calculer la consommation de ressource en présence d&rsquo;arguments
+d&rsquo;ordre supérieur en se ramenant à l&rsquo;ordre un. Mais c&rsquo;est seulement possible
+quand les arguments sont eux-mêmes analysables, et on doit entrelacer le typage
+et la génération de contraintes. On préfère séparer les deux processus.
 </p>
 
 <p>
-On peut alors analyser des fonctions même en l&rsquo;absence d&rsquo;information sur les
-arguments: Il suffit de supposer leurs coût négligeable. L&rsquo;analyse n&rsquo;est alors
-pas veine: On peut déterminer le coût propre de fonctions comme <code>map</code> et <code>fold</code>,
-et l&rsquo;analyse sert de preuve de terminaison. On peut en effet dire qu&rsquo;une
-fonction ayant un coût défini termine si et seulement si les appels aux
-arguments terminent tous.
+On peut néanmoins analyser les fonctionelles en l&rsquo;absence d&rsquo;information sur
+leurs arguments: Il suffit de supposer les coûts qu&rsquo;ils engendrent négligeables.
+L&rsquo;analyse n&rsquo;est alors pas veine: On peut déterminer le coût propre de fonctions
+comme <code>map</code> et <code>fold</code>, et l&rsquo;analyse sert aussi de preuve de terminaison. On peut
+en effet dire qu&rsquo;une fonction d&rsquo;ordre supérieur ayant un coût défini termine si
+et seulement si les appels à ces arguments terminent tous.
 </p>
 
 <p>
 Dans les cas où la terminaison de la fonction dépend de propriétés des arguments
 d&rsquo;ordre supérieur, on ne peut pas conclure dans le cas général. Mais on peut
-reprendre l&rsquo;analyse dans les sites d&rsquo;appels où ces arguments sont connus !
-exemple:
+reprendre l&rsquo;analyse dans les sites d&rsquo;appels où ces arguments sont connus, comme
+dans le cas suivant:
 </p>
 
 <div class="org-src-container">
 <pre class="src src-ocaml"><span style="color: #b1b1b1;">(* </span><span style="color: #b1b1b1;">Impossible de conclure ici </span><span style="color: #b1b1b1;">*)</span>
-<span style="color: #000000; font-weight: bold;">let</span> <span style="color: #29838d;">iter</span> <span style="color: #cb9aad;">f</span> <span style="color: #cb9aad;">x</span> = <span style="color: #000000; font-weight: bold;">let</span> <span style="color: #cb9aad;">y</span> = f x <span style="color: #000000; font-weight: bold;">in</span> <span style="color: #3b6ea8;">if</span> y = <span style="color: #97365b; font-weight: bold;">0</span> <span style="color: #3b6ea8;">then</span> () <span style="color: #3b6ea8;">else</span> iter f y
+<span style="color: #000000; font-weight: bold;">let</span> <span style="color: #29838d;">iter</span> <span style="color: #cb9aad;">f</span> <span style="color: #cb9aad;">x</span> =
+  <span style="color: #000000; font-weight: bold;">let</span> <span style="color: #cb9aad;">y</span> = f x <span style="color: #000000; font-weight: bold;">in</span>
+  <span style="color: #3b6ea8;">if</span> y = <span style="color: #97365b; font-weight: bold;">0</span>
+  <span style="color: #3b6ea8;">then</span> ()
+  <span style="color: #3b6ea8;">else</span> iter f y
 
 <span style="color: #b1b1b1;">(* </span><span style="color: #b1b1b1;">mais ici on peut sp&#233;cialiser pour une valeur pr&#233;sice de `f`</span><span style="color: #b1b1b1;">*)</span>
 <span style="color: #000000; font-weight: bold;">let</span> <span style="color: #29838d;">foo</span> <span style="color: #cb9aad;">x</span> = iter (<span style="color: #3b6ea8;">fun</span> <span style="color: #cb9aad;">z</span> -&gt; <span style="color: #97365b; font-weight: bold;">0</span>) x
@@ -361,66 +408,45 @@ exemple:
 </div>
 </div>
 
-<div id="outline-container-org2faff2a" class="outline-4">
-<h4 id="org2faff2a">Effets de bord</h4>
-<div class="outline-text-4" id="text-org2faff2a">
+<div id="outline-container-org2faff2a" class="outline-3">
+<h3 id="org2faff2a">Effets de bord</h3>
+<div class="outline-text-3" id="text-org2faff2a">
 <p>
 L&rsquo;analyse vérifie que le coût du programme est indépendant des valeurs stockées
-dans un état mutable quelconque. Dans le cas contraire, on peut peux pas
-poursuivre. Il a été montré que l&rsquo;analyse à base de polynômes peut être étendu
-avec des potentiels pour les états mutables, mais le projet ne le fait pas, pour se
-focaliser sur la contribution principale, l&rsquo;analyse sur les programmes
-fonctionnels.
-L&rsquo;analyse peut néanmoins interagir avec l&rsquo;état mutable pour affiner ses
-résultat. On peut par exemple, effectuer une analyse d&rsquo;aliasing sur les
-références à des fonctions: Si la référence en question ne peut prendre qu&rsquo;un
-nombre fini de valeurs (et qu&rsquo;on peut le détecter,) alors on peut calculer un
-coût au pire pour les appels à travers la référence.
-Enfin, on peut étendre l&rsquo;analyse aux programme lançant des exceptions en
-annotant le type de l&rsquo;exception et de ses arguments.
+dans les états mutables. Dans le cas contraire, on peut peux pas poursuivre. Il
+a été montré que l&rsquo;analyse à base de polynômes peut être étendue avec des
+potentiels pour les états mutables, mais cela est ici hors du champ d&rsquo;étude, qui
+est l&rsquo;analyse sur les programmes fonctionnels. RAML peut néanmoins interagir
+avec l&rsquo;état mutable pour affiner ses résultat. On peut par exemple, effectuer
+une analyse d&rsquo;aliasing sur les références à des fonctions: Si la référence en
+question ne peut prendre qu&rsquo;un nombre fini de valeurs (et qu&rsquo;on peut le
+détecter), alors on peut calculer un coût au pire pour les appels à travers la
+référence. Enfin, on peut étendre l&rsquo;analyse aux programme lançant des exceptions
+en annotant le type de l&rsquo;exception et de ses arguments.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org6f4f401" class="outline-2">
-<h2 id="org6f4f401">Limites</h2>
-<div class="outline-text-2" id="text-org6f4f401">
-<p>
-Ne sont pas supportés:
-</p>
-<ul class="org-ul">
-<li>Les modules et les foncteurs</li>
-<li>Les enregistrements</li>
-<li>la POO d&rsquo;OCaml</li>
-<li>la FFI</li>
-<li>le pattern matching imbriqué</li>
-<li>les arguments optionnels</li>
-<li>les structures mutables dans le cas général</li>
-<li>Les try/with en cas d&rsquo;exception lancée</li>
-</ul>
-</div>
-</div>
-<div id="outline-container-orgd2c1ec5" class="outline-2">
-<h2 id="orgd2c1ec5">Typage</h2>
-<div class="outline-text-2" id="text-orgd2c1ec5">
-</div>
-<div id="outline-container-orgc687ee4" class="outline-3">
-<h3 id="orgc687ee4">Core RAML</h3>
-<div class="outline-text-3" id="text-orgc687ee4">
+
+
+<div id="outline-container-orgc687ee4" class="outline-2">
+<h2 id="orgc687ee4">Core RAML</h2>
+<div class="outline-text-2" id="text-orgc687ee4">
 <p>
 Après simplification de l&rsquo;AST OCaml, on se ramène à un langage simple, où les
-termes sont sous forme <i>let-share-normale</i>, ou l&rsquo;on a remplacé le plus de sous
-expressions possibles par les variables créées par let ou share (voir syntaxe).
-Pour garantir que le programme transformé rend compte de la consommation du
-programme en entrée, on peut marquer des constructions comme <i>gratuites</i>
-(meta-syntaxe). Les constructions gratuites sont ignorés dans l&rsquo;analyse. On
-présente ici un langage réduit, sans types primitifs comme les tableaux, leurs
+termes sont sous forme <i>let-share-normale</i>: on a remplacé le plus de
+sous-expressions possibles par les variables créées par let ou share (voir
+syntaxe). Pour garantir que le programme transformé rend compte de la
+consommation du programme en entrée, on peut marquer des constructions comme
+<i>gratuites</i> via une meta-syntaxe, qui sont ignorés dans l&rsquo;analyse. On présente
+ici un langage réduit, sans types primitifs comme les tableaux, leurs
 opérations, ou conditionelle.
 </p>
 </div>
-<div id="outline-container-org8fe7dcb" class="outline-4">
-<h4 id="org8fe7dcb">Syntaxe</h4>
-<div class="outline-text-4" id="text-org8fe7dcb">
+
+<div id="outline-container-org8fe7dcb" class="outline-3">
+<h3 id="org8fe7dcb">Syntaxe</h3>
+<div class="outline-text-3" id="text-org8fe7dcb">
 <dl class="org-dl">
 <dt>Les classiques</dt><dd>variables, application n-aire, abstraction, constructeurs,
 tuples, références, let, let rec de fonctions, pattern matching</dd>
@@ -430,9 +456,10 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-org46c475b" class="outline-4">
-<h4 id="org46c475b">Définitons préalables</h4>
-<div class="outline-text-4" id="text-org46c475b">
+
+<div id="outline-container-org46c475b" class="outline-3">
+<h3 id="org46c475b">Définitons préalables</h3>
+<div class="outline-text-3" id="text-org46c475b">
 <dl class="org-dl">
 <dt>K ∈ Syn</dt><dd>les neouds de syntaxe</dd>
 <dt>M : Syn × ℕ -&gt; ℚ</dt><dd>Une <i>métrique de ressource</i></dd>
@@ -445,9 +472,10 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-org0776332" class="outline-4">
-<h4 id="org0776332">Valeurs</h4>
-<div class="outline-text-4" id="text-org0776332">
+
+<div id="outline-container-org0776332" class="outline-3">
+<h3 id="org0776332">Valeurs</h3>
+<div class="outline-text-3" id="text-org0776332">
 <dl class="org-dl">
 <dt>l</dt><dd>position d&rsquo;une valeur sur le tas</dd>
 <dt>(l1, &#x2026;, ln)</dt><dd>tuples de valeur</dd>
@@ -456,9 +484,10 @@ tuples, références, let, let rec de fonctions, pattern matching</dd>
 </dl>
 </div>
 </div>
-<div id="outline-container-org418bb20" class="outline-4">
-<h4 id="org418bb20">Sémantique à grand pas</h4>
-<div class="outline-text-4" id="text-org418bb20">
+
+<div id="outline-container-org418bb20" class="outline-3">
+<h3 id="org418bb20">Sémantique à grand pas</h3>
+<div class="outline-text-3" id="text-org418bb20">
 <p>
 Le jugement de la sémantique est
 </p>
@@ -477,13 +506,13 @@ selon la métrique de ressource M. Les réductions w sont soit
 </dl>
 </div>
 </div>
-</div>
+
 <div id="outline-container-org5fcf970" class="outline-3">
 <h3 id="org5fcf970">Consommation de ressource</h3>
 <div class="outline-text-3" id="text-org5fcf970">
 <p>
-Les consommation de ressources sont de la forme (q,q&rsquo;) où q est la &ldquo;marée
-haute&rdquo;, la quantité maximale de ressource dont on à besoin, et q&rsquo; est la quantité
+Les consommation de ressources sont de la forme (q,q&rsquo;) où q est la &laquo;&nbsp;marée
+haute&nbsp;&raquo;, la quantité maximale de ressource dont on à besoin, et q&rsquo; est la quantité
 de ressource disponible après l&rsquo;évaluation. La consommation est paramétrée par
 une <i>métrique de ressources</i> M, qui est une fonction qui à un noeud de la
 syntaxe k et sa taille n associe un coût propre de la construction M(k,n) =
@@ -509,6 +538,25 @@ exemple:
 (e1,e2) a une consommation M(tuple,2)·(q1,q1&rsquo;)·(q2,q2&rsquo;)
 </p>
 </div>
+</div>
+</div>
+
+<div id="outline-container-org6f4f401" class="outline-2">
+<h2 id="org6f4f401">Limites</h2>
+<div class="outline-text-2" id="text-org6f4f401">
+<p>
+Ne sont pas supportés:
+</p>
+<ul class="org-ul">
+<li>Les modules et les foncteurs</li>
+<li>Les enregistrements</li>
+<li>la POO d&rsquo;OCaml</li>
+<li>la FFI</li>
+<li>le pattern matching imbriqué</li>
+<li>les arguments optionnels</li>
+<li>les structures mutables dans le cas général</li>
+<li>Les try/with en cas d&rsquo;exception lancée</li>
+</ul>
 </div>
 </div>
 </div>
