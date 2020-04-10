@@ -230,6 +230,15 @@
 <li><a href="#org2591b9b">Composants clés de l&rsquo;analyse de ressources</a></li>
 </ul>
 </li>
+<li><a href="#org462018e"><span class="todo TODO">TODO</span> Logiques d&rsquo;invariants</a></li>
+<li><a href="#org74999b5">Travaux connexes</a>
+<ul>
+<li><a href="#org7c49fe2">Logiques de programmes</a></li>
+<li><a href="#orgfa16339">Analyses automatique de ressources</a></li>
+<li><a href="#org129e45b">Génération d&rsquo;invariants</a></li>
+<li><a href="#org9183344">Compilation vérifiée sensible au ressources</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -357,6 +366,223 @@ devient alors le point faible de la chaîne de confiance des garanties de
 consommation. Heureusement, des logiciels comme vérifiés formellement de fond
 en comble comme Coq peuvent remplir ce rôle.</dd>
 </dl>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org462018e" class="outline-2">
+<h2 id="org462018e"><span class="todo TODO">TODO</span> Logiques d&rsquo;invariants</h2>
+<div class="outline-text-2" id="text-org462018e">
+<p>
+Les logiques d&rsquo;invariants forment un corpus théorique utile aux preuves de
+corrections des algorithmes que l&rsquo;on va implémenter durant le stage. Il serait
+peu être bon d&rsquo;y jeter un oeil ?
+</p>
+</div>
+</div>
+
+<div id="outline-container-org74999b5" class="outline-2">
+<h2 id="org74999b5">Travaux connexes</h2>
+<div class="outline-text-2" id="text-org74999b5">
+</div>
+<div id="outline-container-org7c49fe2" class="outline-3">
+<h3 id="org7c49fe2">Logiques de programmes</h3>
+<div class="outline-text-3" id="text-org7c49fe2">
+<p>
+À la suite des travaux séminaux de Hoare, il s&rsquo;est posé la question de comment
+ajouter l&rsquo;entrée-sortie à la <b>Logique de Hoare</b>. Les méthodes classiques se
+basent sur des <i>variables auxiliaires</i> fraîches, présentes dans les pré- et post-
+conditions des programmes et simulant des arguments formels. Dans la logique
+d&rsquo;invariants, on se passe de ces variables auxiliaires en introduisant les
+arguments via des quantificateurs du formalisme logique ambiant. On note qu&rsquo;au
+moment de l&rsquo;écriture de la thèse, cette nouvelle méthode est la seule
+garantissant la  de la méthode tout en ayant une gestion simple (sic.)
+de la séquence et des variables auxiliaires.
+</p>
+
+<p>
+Pour les preuves de <b>cohérence et complétude</b>. On note l&rsquo;utilité d&rsquo;utiliser les
+techniques inventées par Wright et Felleisen dans <i>A Syntactic Approach to Type
+Soundness</i>, notamment la préservation des types par la réduction.
+</p>
+
+<p>
+Des <b>logiques de séparation quantitatives</b> ont été utilisées avec succès pour
+manipuler les fonctions de potentiels dans des logiques de programmes. On note
+l&rsquo;existence d&rsquo;outils permettant de quantifier l&rsquo;usage de ressource de bytecode
+JVM avec un certain succès, en se basant sur la <i>Vienna Development Method</i>.
+L&rsquo;article est Aspinall &amp; al, sous la direction de Hoffman:
+<a href="https://doi.org/10.1016/j.tcs.2007.09.003">https://doi.org/10.1016/j.tcs.2007.09.003</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfa16339" class="outline-3">
+<h3 id="orgfa16339">Analyses automatique de ressources</h3>
+<div class="outline-text-3" id="text-orgfa16339">
+<p>
+Les travaux présentés dans cette thèses sont conçus dans la lignée de ceux de
+Hoffmann, jusqu&rsquo;au système <i>RAML</i> et l&rsquo;article <i>Towards Automatic Resource Bound
+Analysis for OCaml</i> (<a href="https://doi.org/10.1145/3093333.300984">https://doi.org/10.1145/3093333.300984</a>). On note trois
+avancées sur ces travaux:
+</p>
+<ul class="org-ul">
+<li>Nos fonctions de potentiels sont plus générales: alors que celles de RAML sont
+des polynômes multi-variables, les nôtres sont des combinaisons linéaires de
+fonctions de croissance très diverses. Ce formalisme est plus expressif et
+permet à l&rsquo;analyse de conclure sur des inductions bien-fondées plus complexes.</li>
+<li>Nous permettons à l&rsquo;utilisateur d&rsquo;interagir avec l&rsquo;analyse par le biais
+d&rsquo;annotations. L&rsquo;introduction de logiques de programmes quantitatives et
+complètes nous permet de garantir la correction des bornes établies même en
+présence d&rsquo;annotations utilisateur pour guider la recherche.</li>
+<li>Enfin, notre système est le premier à générer effectivement des certificats
+pour les bornes inférées. La possibilité existait pour des travaux précédent,
+mais n&rsquo;avais pas été effectivement implémentée.</li>
+</ul>
+
+<p>
+Dans le monde impératif, de nombreux projets permettent d&rsquo;obtenir des bornes et
+des invariants de boucles, souvent sur des modèles abstraits des langages
+ciblés, et parfois de manière ad-hoc. L&rsquo;intérêt pour les méthodes de potentiels
+est montant dans le domaine. Quelque projets notables (<i>CoFloCo</i>, <i>Loopus</i> et
+<i>Rank</i> ne peuvent conclure sur les procédures récursives générales):
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Outil</th>
+<th scope="col" class="org-left">Auteurs</th>
+<th scope="col" class="org-left">Technique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">CoFloCo</td>
+<td class="org-left">Flores-Montoya</td>
+<td class="org-left">relations de coûts</td>
+</tr>
+
+<tr>
+<td class="org-left">KoAT</td>
+<td class="org-left">Brockschmidt &amp; al</td>
+<td class="org-left">ré-écriture + terminaison</td>
+</tr>
+
+<tr>
+<td class="org-left">Loopus</td>
+<td class="org-left">Sinn, Zuleger &amp; al</td>
+<td class="org-left">contraintes sur différences</td>
+</tr>
+
+<tr>
+<td class="org-left">PUBS</td>
+<td class="org-left">Albert &amp; al</td>
+<td class="org-left">relations de coûts</td>
+</tr>
+
+<tr>
+<td class="org-left">Rank</td>
+<td class="org-left">Alias, Darte &amp; al</td>
+<td class="org-left">ré-écriture + terminaison</td>
+</tr>
+
+<tr>
+<td class="org-left">SPEED</td>
+<td class="org-left">Gulwani</td>
+<td class="org-left">interprétation abstraite</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+Encore plus proche du métal, l&rsquo;analyse de <i>Worst Case Resource Usage</i>
+commerciale est bien développée, mais ne permet pas d&rsquo;inférer des bornes
+paramétriques, ou de vérifier la validité des annotations utilisateurs.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org129e45b" class="outline-3">
+<h3 id="org129e45b">Génération d&rsquo;invariants</h3>
+<div class="outline-text-3" id="text-org129e45b">
+<p>
+L&rsquo;analyse de ressource et la génération d&rsquo;invariants forment un système
+d&rsquo;étoiles binaires: l&rsquo;obtention d&rsquo;invariant permet de borner l&rsquo;usage de
+ressource, et la génération d&rsquo;invariants comprend souvent une réduction vers un
+solveur externe dans l&rsquo;esprit et le sillage de l&rsquo;analyse de ressource. Cette
+complémentarité est par exemple visible dans <i>SPEED</i>, mentionné plus haut. Plus
+récemment, Kincaid &amp; al ont combiné les registres abstraits accumulateurs et une
+interprétation abstraite complexe pour inférer les invariant <i>polynomiaux</i>.
+Hélas, la mise en forme fermée de ces invariants est un problème moins bien
+cerné que dans le cas linéaire.
+</p>
+
+<p>
+Dans tout les cas, il semble se dégager un schéma général en trois étapes de
+l&rsquo;analyse de programme:
+</p>
+<ol class="org-ol">
+<li>Choix d&rsquo;un &laquo;&nbsp;moule&nbsp;&raquo; pertinent pour les invariants recherchés;</li>
+<li>Extraction de contraintes linéraires dans cet espace de travail;</li>
+<li>Résolution par programmation linéaire.</li>
+</ol>
+
+<p>
+Les &laquo;&nbsp;moules&nbsp;&raquo; des contraintes sont remplis avec les coefficients extrais des
+structures syntaxiques du programme cible. La sémantique du langage cible
+engendre les contraintes entre ces coefficients. La complexité de l&rsquo;analyse est
+sensible à la logique interne des contraintes: les contraintes
+linéaires-par-morceaux avec quantificateurs ne peuvent pas être résolues en
+temps polynomial (pour le moment). Hors des contraintes linéaires et assimilées,
+Müller-Olm &amp; Seild obtiennent des invariants sous forme de polynômes à degré
+borné en utilisant un domaine abstrait de hauteur finie.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9183344" class="outline-3">
+<h3 id="org9183344">Compilation vérifiée sensible au ressources</h3>
+<div class="outline-text-3" id="text-org9183344">
+<p>
+<i>CompCert</i> est un compilateur vérifié d&rsquo;un fragment d&rsquo;<i>ANSI C</i> vers l&rsquo;assembleur
+<i>PowerPC</i>, qui fournit des certificats garantissant la conservation de la
+sémantique du code C en entrée. Les garanties de consommation de temps et de
+mémoire doivent néanmoins toujours être obtenues par un autre logiciel, par
+raisonnement sur le code assembleur produit &#x2013; sauf pour des invariants portant
+sur les états mémoires indépendamment les uns des autres. Nous avons étendu
+<i>CompCert</i> avec une gestion de la pile selon de standard PowerPC, notamment en
+prenant en compte sa finitude et en garantissant le non-débordement de pile des
+programmes compilés.
+</p>
+
+<p>
+De récents travaux ont permis de créer <i>CompCertS</i>, une version de CompCert qui
+prend en compte la finitude de la mémoire. La sémantique des opération
+allouantes inclut une vérification, sous hypothèses faibles, de la quantité de
+RAM disponible. L&rsquo;utilisateur peut alors obtenir des garanties simultanées sur
+la <i>correction opérationelle</i> de son programme et la <i>sûreté</i> de son utilisation
+des ressources. On contraste ceci avec notre approche, qui garantie la sûreté
+et accorde à l&rsquo;utilisateur le confort mental de pouvoir supposer la mémoire
+suffisamment grande.
+</p>
+
+<p>
+Enfin, Jost &amp; al ont développés une sémantique quantitative pour leur langage
+<i>Hume</i> et un compilateur sensible à l&rsquo;usage des ressources de Hume vers
+l&rsquo;assembleur des micro-contrôleurs <i>Renesas M32C-85U</i>, mais sans certification
+de la conservation sémantique par le compilateur.
+</p>
 </div>
 </div>
 </div>
