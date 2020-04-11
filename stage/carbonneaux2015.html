@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hector Suzanne</title>
+<title>Notes de lecture: Compositional Certified Resource Bounds</title>
 <meta name="generator" content="Org mode" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
@@ -191,8 +191,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
-<style type="text/css"> <!--/*--><![CDATA[/*><!--*/ .title { display: none; } /*]]>*/--> </style>
+<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -220,57 +219,148 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">Hector Suzanne</h1>
-
-<div id="outline-container-orgda14066" class="outline-2">
-<h2 id="orgda14066">Vous êtes sur la page personelle d&rsquo;Hector Suzanne</h2>
-<div class="outline-text-2" id="text-orgda14066">
-<p>
-Hector est étudiant en informatique, niveau M2, à Sorbonne Université.
-Il est né en 1996 et est passionné de programmation, de musique
-électronique et de bonne cuisine. Pour contacter Hector, envoyez-lui un
-mail à <a href="mailto:hectorsuzanne@gmail.com">hectorsuzanne@gmail.com</a>
-</p>
-</div>
-</div>
-
-<div id="outline-container-org559807f" class="outline-2">
-<h2 id="org559807f">Stage de M2</h2>
-<div class="outline-text-2" id="text-org559807f">
-<p>
-La plateforme <a href="https://github.com/stevenvar/omicrob">OMicroB</a> pour la
-programmation sur microcontrôleurs est développée au sein de l&rsquo;équipe
-<i>Algorithmes, Programmation, Recherche</i> (APR) du <a href="https://lip6.fr/">LIP6</a>.Elle
-permet d&rsquo;utiliser du code OCaml tel quel sur les système embarqués basé sur le
-matériel AVR ou PIC32, soumis à des contraintes mémoires importantes (2.5ko de
-RAM). Le stage consiste à développer une analyse statique du code OCaml
-permettant de borner l&rsquo;usage en RAM des programmes embarqués, en prenant en
-compte les effets liés, entre autre, à la pile et au ramasse-miette. Le stage se
-déroule dans l&rsquo;équipe APR sous la direction
-d&rsquo;<a href="https://www-apr.lip6.fr/~chaillou/">Emmanuel Chailloux</a>. Pour en savoir
-plus, consultez <a href="stage/sujet.pdf">Le sujet du Stage</a>.
-</p>
-</div>
-
-<div id="outline-container-org0fe5653" class="outline-3">
-<h3 id="org0fe5653">Notes de lectures</h3>
-<div class="outline-text-3" id="text-org0fe5653">
-<ul class="org-ul">
-<li><a href="stage/vasconcelos2008.html">P. Vasconcelos: Space cost analysis using
-sized types</a><sup>†</sup></li>
-<li><a href="stage/carbonneaux2018.html">Q. Carbonneaux : Modular and Certified
-Resource-Bound Analyses</a><sup>†</sup></li>
-<li><a href="stage/albert2008.html">E. Albert, A. Puri, G. Samir, P. Germán :
-Closed-Form Upper Bounds in Static Cost Analysis</a></li>
-<li><a href="stage/hoffmann2016.html">J. Hoffmann, D. Ankush &amp; W. Sun-Chun : Towards
-automatic resource bound analysis for OCaml</a><sup>‡</sup></li>
-<li><a href="stage/carbonneaux2015.html">Q. Carbonneaux, J. Hoffmann &amp; Z. Shao :
-Compositional Certified Resource Bounds</a><sup>‡</sup></li>
+<h1 class="title">Notes de lecture: Compositional Certified Resource Bounds</h1>
+<div id="table-of-contents">
+<h2>Table des matières</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org5e07632">Introduction</a>
+<ul>
+<li><a href="#orgc54ea30">Motivation</a></li>
+<li><a href="#orgc81ddcf">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</a></li>
+<li><a href="#org8c8e03d">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</a></li>
+<li><a href="#orgc175533">Contribution</a></li>
 </ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Cet article introduit l&rsquo;analyse/C<sup>4</sup>B/ pour la dérivation de bornes aux-pire-cas
+de consommation de ressource des programmes <i>C</i>. Par rapport à l&rsquo;état de l&rsquo;art
+de l&rsquo;époque (2015), elle est <i>composable</i>, <i>interactive</i>, <i>certifiante</i>, et
+<i>efficace à l&rsquo;échelle</i>. Les travaux présentés ici serviront de base pour la
+thèse de Carbonneaux.
+</p>
 
+<div id="outline-container-org5e07632" class="outline-2">
+<h2 id="org5e07632">Introduction</h2>
+<div class="outline-text-2" id="text-org5e07632">
+</div>
+<div id="outline-container-orgc54ea30" class="outline-3">
+<h3 id="orgc54ea30">Motivation</h3>
+<div class="outline-text-3" id="text-orgc54ea30">
+<p>
+<i>Voir l&rsquo;abstract de <a href="carbonneaux2018.html">carbonneaux2018.html</a></i>.
+</p>
 
 <p>
-<i>†: lecture partielle, ‡: brouillon</i>
+Au delà des avantages familiers de l&rsquo;analyse de ressource les programmes
+exécutés sur des plate-formes non-fiables doivent pouvoir bénéficier de
+garanties statistiques sur leur réussite. Si l&rsquo;opération matérielle <i>P</i> échoue
+avec probabilité <i>p</i>, une boucle contenant <i>P</i> a une change d&rsquo;échec d&rsquo;au moins
+<i>p<sup>k</sup></i>, avec <i>k</i> une borne du nombre de tours. Obtenir des informations statiques
+fines sur l&rsquo;exécution du programme affine donc les informations sur la confiance
+à accorder aux systèmes non-fiables.
+</p>
+
+<p>
+Enfin, l&rsquo;interaction avec l&rsquo;utilisateur est un espace des possibles: Les
+analyses de ressources considérées sont consistantes, donc incomplètes. Il est
+alors pertinent de permettre à un être humain de donner les dernières
+informations permettant à l&rsquo;analyse de conclure. Notons bien: si l&rsquo;interaction
+veut être compatible avec la génération de certificats, il faut automatiquement
+garantir que les &laquo;&nbsp;indices&nbsp;&raquo; fournis par l&rsquo;humain soient en suite re-dérivables
+par le système d&rsquo;analyse: l&rsquo;humain donne des coupures, pas des axiomes.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc81ddcf" class="outline-3">
+<h3 id="orgc81ddcf">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</h3>
+<div class="outline-text-3" id="text-orgc81ddcf">
+<p>
+Les outils d&rsquo;analyse statique de ressources forment deux grandes familles, que
+l&rsquo;on nommera <i>impératives</i> et <i>fonctionnelles</i>, par abus. Les analyses
+<i>impératives</i> permettent d&rsquo;obtenir des bornes très fines sur des programmes
+impératifs structurés entiers, mais elles composent relativement mal. Il est
+délicat d&rsquo;abstraire une procédure à ces appelants, ou encore d&rsquo;analyser une
+séquence de boucles sans avoir à calculer les pre-<i>post- conditions
+arithmétiques entre elles. Et c&rsquo;est /beaucoup</i> plus facile à dire qu&rsquo;à faire.
+</p>
+
+<p>
+Les travaux de cette branche de l&rsquo;analyse statique automatique de ressource ont
+produits des outils comme <i>SPEED</i>, <i>PUBS</i>, <i>LOOPUS</i>, <i>Rank</i> et <i>KoAT</i> (voir
+<a href="carbonneaux2018.html">carbonneaux2018.html</a>). Elles sont basées sur les <i>fonctions de classement</i>
+et les <i>registres virtuels</i>, qui sont une source majeurs de non-composition.
+L&rsquo;inlining est donc de mise, et avec lui la redondance, et donc l&rsquo;absence de
+passage à l&rsquo;échelle.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8c8e03d" class="outline-3">
+<h3 id="org8c8e03d">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</h3>
+<div class="outline-text-3" id="text-org8c8e03d">
+<p>
+La seconde forme d&rsquo;analyse est basée sur l&rsquo;analyse amortie (méthode du
+potentiel) et les systèmes de types. Les invariants de classes en OOP, et ceux
+des structures de données dans la logique de séparation peuvent être vues comme
+des types dans des systèmes pertinent pour l&rsquo;analyse de ressource.
+</p>
+
+<p>
+Les analyses <i>fonctionnelles</i> sont elles hautement composables, et peuvent
+fonctionner directement sur la syntaxe: on parle d&rsquo;analyse dirigée par les
+types. Mais elles reposent sur l&rsquo;obtention de décroissance sur un ordre
+bien-fondé, qui peut souvent leurs échapper. Par exemple, dans l&rsquo;itération
+<code>for(i:=n; i++; i&lt;m)</code>, la décroissance est sur l&rsquo;expression linéaire <code>m-i</code>. Les
+designs patterns impératifs courants comme le flux de contrôle non-linéaire ou
+la mutation ont formé jusqu&rsquo;à peut des obstacles insurmontables aux analyses
+<i>fonctionnelles</i>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc175533" class="outline-3">
+<h3 id="orgc175533">Contribution</h3>
+<div class="outline-text-3" id="text-orgc175533">
+<p>
+C<sup>4</sup>B est la première analyse <i>semi-automatique</i> de ressource. Nous avons
+adapté les méthodes à potentiels pour inférer l&rsquo;usage de ressource de programmes
+C comprenant, entre autres, les structures suivantes:
+</p>
+<ul class="org-ul">
+<li>les fonctions mutuellement récursives;</li>
+<li>les boucles en séquence;</li>
+<li>les boucles imbriqués partageant des indices;</li>
+<li>la libération mémoire dynamique.</li>
+</ul>
+<p>
+Notre système est basé sur une logique à la Hoare portant sur des combinaisons
+de variables. Il est le premier à gérer les bornes dépendants de variables
+<code>signed</code> et de différences entre variables. Il permet la composition d&rsquo;analyse,
+notamment en générant des abstractions de ressources pour les fonctions, et
+produit des certificats pour les bornes inférées vérifiables en temps linéaire.
+</p>
+
+<p>
+Les bornes sont produites en réduisant les relations linéaire et amorties
+non-linéaires entre les variables à un problème de programmation linéaire
+classique, une nouveauté. Notre analyse a été prouvée cohérence par rapport à
+une sémantique paramétrique de coût de C, qui peut être modifiée à posteriori
+(fonction <code>tick(n)</code>).
+</p>
+
+<p>
+Nos avons testé C<sup>4</sup>B sur plus de 2900 lignes de code C et l&rsquo;avons comparé dans
+un cadre expérimental avec d&rsquo;autre analyseurs de ressource existants. Le
+benchmark <i>cBench</i> à servi de banc de test, augmenté de plusieurs extraits de
+projets open source et libres ayant démontrés leurs résistance à l&rsquo;analyse
+statique. Il en ressort, avec les précautions d&rsquo;usage, que C<sup>4</sup>B est le seul
+capable de d&rsquo;inférer à la fois des bornes globales sur des programmes de grandes
+tailles et des bornes locales sur des flots de contrôles complexes.
 </p>
 </div>
 </div>
