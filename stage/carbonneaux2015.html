@@ -224,12 +224,18 @@
 <h2>Table des matières</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5e07632">Introduction</a>
+<li><a href="#org14f4a70">Introduction</a>
 <ul>
-<li><a href="#orgc54ea30">Motivation</a></li>
-<li><a href="#orgc81ddcf">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</a></li>
-<li><a href="#org8c8e03d">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</a></li>
-<li><a href="#orgc175533">Contribution</a></li>
+<li><a href="#orga38599a">Motivation</a></li>
+<li><a href="#org2035fd9">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</a></li>
+<li><a href="#orga49ee73">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</a></li>
+<li><a href="#org6b98179">Contribution</a></li>
+</ul>
+</li>
+<li><a href="#orge11fb06">Méthode du potentiel</a>
+<ul>
+<li><a href="#org926245d">Définitions</a></li>
+<li><a href="#org27ad630">Premiers exemples</a></li>
 </ul>
 </li>
 </ul>
@@ -243,13 +249,13 @@ de l&rsquo;époque (2015), elle est <i>composable</i>, <i>interactive</i>, <i>ce
 thèse de Carbonneaux.
 </p>
 
-<div id="outline-container-org5e07632" class="outline-2">
-<h2 id="org5e07632">Introduction</h2>
-<div class="outline-text-2" id="text-org5e07632">
+<div id="outline-container-org14f4a70" class="outline-2">
+<h2 id="org14f4a70">Introduction</h2>
+<div class="outline-text-2" id="text-org14f4a70">
 </div>
-<div id="outline-container-orgc54ea30" class="outline-3">
-<h3 id="orgc54ea30">Motivation</h3>
-<div class="outline-text-3" id="text-orgc54ea30">
+<div id="outline-container-orga38599a" class="outline-3">
+<h3 id="orga38599a">Motivation</h3>
+<div class="outline-text-3" id="text-orga38599a">
 <p>
 <i>Voir l&rsquo;abstract de <a href="carbonneaux2018.html">carbonneaux2018.html</a></i>.
 </p>
@@ -276,9 +282,9 @@ par le système d&rsquo;analyse: l&rsquo;humain donne des coupures, pas des axio
 </div>
 </div>
 
-<div id="outline-container-orgc81ddcf" class="outline-3">
-<h3 id="orgc81ddcf">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</h3>
-<div class="outline-text-3" id="text-orgc81ddcf">
+<div id="outline-container-org2035fd9" class="outline-3">
+<h3 id="org2035fd9">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</h3>
+<div class="outline-text-3" id="text-org2035fd9">
 <p>
 Les outils d&rsquo;analyse statique de ressources forment deux grandes familles, que
 l&rsquo;on nommera <i>impératives</i> et <i>fonctionnelles</i>, par abus. Les analyses
@@ -300,9 +306,9 @@ passage à l&rsquo;échelle.
 </div>
 </div>
 
-<div id="outline-container-org8c8e03d" class="outline-3">
-<h3 id="org8c8e03d">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</h3>
-<div class="outline-text-3" id="text-org8c8e03d">
+<div id="outline-container-orga49ee73" class="outline-3">
+<h3 id="orga49ee73">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</h3>
+<div class="outline-text-3" id="text-orga49ee73">
 <p>
 La seconde forme d&rsquo;analyse est basée sur l&rsquo;analyse amortie (méthode du
 potentiel) et les systèmes de types. Les invariants de classes en OOP, et ceux
@@ -323,9 +329,9 @@ la mutation ont formé jusqu&rsquo;à peut des obstacles insurmontables aux anal
 </div>
 </div>
 
-<div id="outline-container-orgc175533" class="outline-3">
-<h3 id="orgc175533">Contribution</h3>
-<div class="outline-text-3" id="text-orgc175533">
+<div id="outline-container-org6b98179" class="outline-3">
+<h3 id="org6b98179">Contribution</h3>
+<div class="outline-text-3" id="text-org6b98179">
 <p>
 C<sup>4</sup>B est la première analyse <i>semi-automatique</i> de ressource. Nous avons
 adapté les méthodes à potentiels pour inférer l&rsquo;usage de ressource de programmes
@@ -363,6 +369,61 @@ capable de d&rsquo;inférer à la fois des bornes globales sur des programmes de
 tailles et des bornes locales sur des flots de contrôles complexes.
 </p>
 </div>
+</div>
+</div>
+<div id="outline-container-orge11fb06" class="outline-2">
+<h2 id="orge11fb06">Méthode du potentiel</h2>
+<div class="outline-text-2" id="text-orge11fb06">
+</div>
+<div id="outline-container-org926245d" class="outline-3">
+<h3 id="org926245d">Définitions</h3>
+<div class="outline-text-3" id="text-org926245d">
+<p>
+On commence avec une <i>sémantique opérationnelle</i> à grands pas d&rsquo;un langage
+impératif idéal: un programme <b>S</b> munit d&rsquo;un état initial <b>σ</b>, s&rsquo;exécute avec un
+coût <b>n</b> et produit un état final <b>σ&rsquo;</b> et on note cela <b>(S,σ) ⇓n σ&rsquo;</b>. La méthode
+du potentiel consiste à définir une fonction <b>Φ</b> des états vers <b>ℚ<sup>+</sup></b> et de
+prouver la
+</p>
+
+<blockquote>
+<p>
+<i>Propriété des potentiels</i>: <br />
+Si <b>Φ(σ) ≥ n</b>, alors <b>(S, σ)  n σ&rsquo;</b> pour un certain <b>σ&rsquo;</b>.
+</p>
+</blockquote>
+
+<p>
+<b>Φ(σ)</b> est alors une borne statique acceptable de la consommation de
+ressource. On peut ensuite définir des triplés à la Hoare pour les fonctions de
+potentiels:
+</p>
+
+<blockquote>
+<p>
+<b>{Φ} S {Φ&rsquo;}</b> si et seulement si, pour tout <b>σ</b>, <b>σ&rsquo;</b>, <b>n</b>: <br />
+<b>(S, σ) ⇓n σ&rsquo;</b> implique <b>Φ(σ) ≥ n + Φ&rsquo;(σ&rsquo;)</b>
+</p>
+</blockquote>
+
+
+<p>
+On retrouve alors une règle classique de la logique de Hoare, mais <b>Φ&rsquo;</b> n&rsquo;est
+définie qu&rsquo;avec l&rsquo;aide de <b>S</b>, un avantage clair.
+</p>
+<blockquote>
+<p>
+<b>{Φ} S {Φ&rsquo;}</b> &emsp; &emsp; &emsp; <b>{Φ&rsquo;} S&rsquo; {Φ&rsquo;&rsquo;}</b> <br />
+<b>------------------------------------</b> <br />
+&emsp; &emsp; &emsp; &emsp; <b>{Φ} S;S&rsquo; {Φ&rsquo;&rsquo;}</b>
+</p>
+</blockquote>
+</div>
+</div>
+
+
+<div id="outline-container-org27ad630" class="outline-3">
+<h3 id="org27ad630">Premiers exemples</h3>
 </div>
 </div>
 </div>

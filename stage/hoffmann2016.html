@@ -224,35 +224,35 @@
 <h2>Table des matières</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org735b13b">Introduction</a>
+<li><a href="#orgf667ac6">Introduction</a>
 <ul>
-<li><a href="#org7a5e227">Premier exemple</a></li>
+<li><a href="#org34c4dcd">Premier exemple</a></li>
 </ul>
 </li>
-<li><a href="#org9d57eae">Analyse de la programmation fonctionnelle</a>
+<li><a href="#orgd79c081">Analyse de la programmation fonctionnelle</a>
 <ul>
-<li><a href="#orga65d99f">Fermetures et curryfication</a></li>
-<li><a href="#org1fd3c6b">Gestion de l&rsquo;ordre supérieur</a></li>
-<li><a href="#org2faff2a">Effets de bord</a></li>
+<li><a href="#org0e20879">Fermetures et curryfication</a></li>
+<li><a href="#org4ddb050">Gestion de l&rsquo;ordre supérieur</a></li>
+<li><a href="#org45f837f">Effets de bord</a></li>
 </ul>
 </li>
-<li><a href="#orgd51bce5">Core RAML, première sémantique</a>
+<li><a href="#org5f57d0a">Core RAML, première sémantique</a>
 <ul>
-<li><a href="#org8fe7dcb">Syntaxe</a></li>
-<li><a href="#org053e2d6">Définitions sémantique</a></li>
-<li><a href="#org418bb20">Sémantique à grand pas</a></li>
+<li><a href="#org931fefa">Syntaxe</a></li>
+<li><a href="#org67166f8">Définitions sémantique</a></li>
+<li><a href="#orgbbf2ede">Sémantique à grand pas</a></li>
 </ul>
 </li>
-<li><a href="#org6570a44">Core RAML, sémantique à pile</a></li>
-<li><a href="#org6f4f401">Limites</a></li>
+<li><a href="#orgffa54f6">Core RAML, sémantique à pile</a></li>
+<li><a href="#org090745a">Limites</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org735b13b" class="outline-2">
-<h2 id="org735b13b">Introduction</h2>
-<div class="outline-text-2" id="text-org735b13b">
+<div id="outline-container-orgf667ac6" class="outline-2">
+<h2 id="orgf667ac6">Introduction</h2>
+<div class="outline-text-2" id="text-orgf667ac6">
 <p>
 On introduit une analyse statique de ressources pour les programmes OCaml
 <i>fonctionnels</i>, <i>d&rsquo;ordre supérieur</i>, <i>avec polymorphisme</i> et <i>types
@@ -268,9 +268,9 @@ les métriques pertinentes.
 </p>
 </div>
 
-<div id="outline-container-org7a5e227" class="outline-3">
-<h3 id="org7a5e227">Premier exemple</h3>
-<div class="outline-text-3" id="text-org7a5e227">
+<div id="outline-container-org34c4dcd" class="outline-3">
+<h3 id="org34c4dcd">Premier exemple</h3>
+<div class="outline-text-3" id="text-org34c4dcd">
 <div class="org-src-container">
 <pre class="src src-ocaml"><span style="color: #000000; font-weight: bold;">type</span> <span style="color: #9a7500;">('a, 'b) ablist</span> =
 | <span style="color: #2a2a2a; background-color: #eeeeee;">Acons</span> <span style="color: #3b6ea8;">of</span> 'a * ('a, 'b) list
@@ -314,9 +314,9 @@ résolvant des contraintes d&rsquo;unification.
 </div>
 </div>
 
-<div id="outline-container-org9d57eae" class="outline-2">
-<h2 id="org9d57eae">Analyse de la programmation fonctionnelle</h2>
-<div class="outline-text-2" id="text-org9d57eae">
+<div id="outline-container-orgd79c081" class="outline-2">
+<h2 id="orgd79c081">Analyse de la programmation fonctionnelle</h2>
+<div class="outline-text-2" id="text-orgd79c081">
 <p>
 On a distingué trois principales difficultés à l&rsquo;analyse de ressource:
 l&rsquo;application partielle, les arguments d&rsquo;ordre supérieurs, et les effets de
@@ -324,9 +324,9 @@ bords
 </p>
 </div>
 
-<div id="outline-container-orga65d99f" class="outline-3">
-<h3 id="orga65d99f">Fermetures et curryfication</h3>
-<div class="outline-text-3" id="text-orga65d99f">
+<div id="outline-container-org0e20879" class="outline-3">
+<h3 id="org0e20879">Fermetures et curryfication</h3>
+<div class="outline-text-3" id="text-org0e20879">
 <p>
 On prend comme exemple <code>val append : 'a list -&gt; 'a list -&gt; 'a list</code> de la
 bibliothèque standard. L&rsquo;appel <code>let foo = append xs</code> termine en temps constant,
@@ -366,9 +366,9 @@ pourrait par exemple étendre le raffinement des types avec des types dépendant
 </div>
 </div>
 
-<div id="outline-container-org1fd3c6b" class="outline-3">
-<h3 id="org1fd3c6b">Gestion de l&rsquo;ordre supérieur</h3>
-<div class="outline-text-3" id="text-org1fd3c6b">
+<div id="outline-container-org4ddb050" class="outline-3">
+<h3 id="org4ddb050">Gestion de l&rsquo;ordre supérieur</h3>
+<div class="outline-text-3" id="text-org4ddb050">
 <p>
 Dans le cas plus simple où on se limite à des estimations linéaires du coût, il
 est possible de calculer la consommation de ressource en présence d&rsquo;arguments
@@ -408,9 +408,9 @@ dans le cas suivant:
 </div>
 </div>
 
-<div id="outline-container-org2faff2a" class="outline-3">
-<h3 id="org2faff2a">Effets de bord</h3>
-<div class="outline-text-3" id="text-org2faff2a">
+<div id="outline-container-org45f837f" class="outline-3">
+<h3 id="org45f837f">Effets de bord</h3>
+<div class="outline-text-3" id="text-org45f837f">
 <p>
 L&rsquo;analyse vérifie que le coût du programme est indépendant des valeurs stockées
 dans les états mutables. Dans le cas contraire, on peut peux pas poursuivre. Il
@@ -429,9 +429,9 @@ en annotant le type de l&rsquo;exception et de ses arguments.
 </div>
 
 
-<div id="outline-container-orgd51bce5" class="outline-2">
-<h2 id="orgd51bce5">Core RAML, première sémantique</h2>
-<div class="outline-text-2" id="text-orgd51bce5">
+<div id="outline-container-org5f57d0a" class="outline-2">
+<h2 id="org5f57d0a">Core RAML, première sémantique</h2>
+<div class="outline-text-2" id="text-org5f57d0a">
 <p>
 Après simplification de l&rsquo;AST OCaml, on se ramène à un langage simple, où les
 termes sont sous forme <i>let-share-normale</i>: on a remplacé le plus de
@@ -444,9 +444,9 @@ opérations, ou conditionelle.
 </p>
 </div>
 
-<div id="outline-container-org8fe7dcb" class="outline-3">
-<h3 id="org8fe7dcb">Syntaxe</h3>
-<div class="outline-text-3" id="text-org8fe7dcb">
+<div id="outline-container-org931fefa" class="outline-3">
+<h3 id="org931fefa">Syntaxe</h3>
+<div class="outline-text-3" id="text-org931fefa">
 <ul class="org-ul">
 <li>Les classiques:
 <ul class="org-ul">
@@ -462,9 +462,9 @@ opérations, ou conditionelle.
 </div>
 </div>
 
-<div id="outline-container-org053e2d6" class="outline-3">
-<h3 id="org053e2d6">Définitions sémantique</h3>
-<div class="outline-text-3" id="text-org053e2d6">
+<div id="outline-container-org67166f8" class="outline-3">
+<h3 id="org67166f8">Définitions sémantique</h3>
+<div class="outline-text-3" id="text-org67166f8">
 <p>
 Les valeurs <b>Val</b> sont
 </p>
@@ -489,9 +489,9 @@ dom(H)</b> tel que <b>H(null) = null</b>.
 </div>
 </div>
 
-<div id="outline-container-org418bb20" class="outline-3">
-<h3 id="org418bb20">Sémantique à grand pas</h3>
-<div class="outline-text-3" id="text-org418bb20">
+<div id="outline-container-orgbbf2ede" class="outline-3">
+<h3 id="orgbbf2ede">Sémantique à grand pas</h3>
+<div class="outline-text-3" id="text-orgbbf2ede">
 <p>
 Le jugement principal
 </p>
@@ -550,18 +550,18 @@ par exemple, <b>(e1,e2)</b> a une consommation <b>M(tuple,2)·(q1,q1&rsquo;)·(q
 </div>
 </div>
 
-<div id="outline-container-org6570a44" class="outline-2">
-<h2 id="org6570a44">Core RAML, sémantique à pile</h2>
-<div class="outline-text-2" id="text-org6570a44">
+<div id="outline-container-orgffa54f6" class="outline-2">
+<h2 id="orgffa54f6">Core RAML, sémantique à pile</h2>
+<div class="outline-text-2" id="text-orgffa54f6">
 <p>
 <i>TODO</i>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org6f4f401" class="outline-2">
-<h2 id="org6f4f401">Limites</h2>
-<div class="outline-text-2" id="text-org6f4f401">
+<div id="outline-container-org090745a" class="outline-2">
+<h2 id="org090745a">Limites</h2>
+<div class="outline-text-2" id="text-org090745a">
 <p>
 Ne sont pas inclut dans le langage réduit auquel RAML ramème OCaml:
 </p>
