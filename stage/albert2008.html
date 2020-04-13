@@ -240,9 +240,9 @@
 <li><a href="#orgdb24392">Cas des Algorithmes <i>Diviser-pour-régner</i></a></li>
 </ul>
 </li>
-<li><a href="#orgad76f88">Mise en Forme de Récurrence Directe des Relations de Coûts</a></li>
+<li><a href="#orgad76f88"><span class="todo TODO">TODO</span> Mise en Forme de Récurrence Directe des Relations de Coûts</a></li>
 <li><a href="#orgf53b508">Incomplétude de l&rsquo;Analyse de Coût</a></li>
-<li><a href="#org520b10a">Évaluation Expérimentale</a></li>
+<li><a href="#org520b10a"><span class="todo TODO">TODO</span> Évaluation Expérimentale</a></li>
 <li><a href="#orgc446e82">Travaux Connexes &amp; Conclusion</a></li>
 </ul>
 </div>
@@ -515,7 +515,7 @@ Il reste maintenant à obtenir les fonctions <code>cout-interne</code> et <code>
 Premièrement, on utilise l&rsquo;interprétation abstraite sur la forme de récurrence
 directe de <code>S</code> pour obtenir des approximations sûres des invariants entre les
 appels successifs aux relations de coûts. On remarque alors que les coûts sont
-monotones en leurs composants <code>nat</code>. Ils suffit alors de borner ces composants
+monotones en leurs composants <code>nat</code>. Il suffit alors de borner ces composants
 en utilisant les invariants calculés plus haut et les arguments à la racine de
 l&rsquo;arbre d&rsquo;évaluation. (Voir la functions <code>ub_exp</code> de l&rsquo;article original pour
 l&rsquo;algorithme exact). Les relations de coûts récursives de <code>S</code> engendrent les
@@ -547,33 +547,12 @@ d&rsquo;appartenance à cette classe de CR, et une méthode pour calculer une bo
 <dt>Caractérisation</dt><dd>Une CR est <i>diviser-pour-régner</i> si, pour tout ses arbres
 d&rsquo;évaluation, le coût propre d&rsquo;un niveau de son arbre d&rsquo;évaluation des
 supérieur ou égal au coût propre du niveau directement en dessous</dd>
-</dl>
-<p>
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
-</p>
-<dl class="org-dl">
 <dt>Calcul</dt><dd>On calcule, pour une CR <code>C</code>, les paires <code>(exp, exp')</code> des coûts
-abstraits propres <code>exp</code> de chaque équation définissant <code>C</code> et de la somme des
-coût abstraits propres de leurs enfants respectifs <code>exp'</code> .Pour prouver que
-<code>C</code> est diviser-pour-régner, il suffit de prouver que pour tout assignement
-satisfaisant les contraintes locales de ces noeuds, le coût de <code>C</code> est au moins
-égal au coût total de ces enfants.</dd>
-</dl>
-<p>
-<code>=====</code>
-</p>
-<dl class="org-dl">
-<dt>Calcul</dt><dd>On calcule, pour une CR <code>C</code>, les paires des coûts abstraits propres
-de chaque équation définissant <code>C</code> et de la somme des coût abstraits propres
-de leurs enfants respectif. Pour prouver que <code>C</code> est diviser-pour-régner, il
-suffit de prouver que pour tout assignement satisfaisant les contraintes
-locales à ces noeuds, le coût de <code>C</code> est au moins égal au coût total de ces
-enfants.</dd>
-</dl>
-<p>
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 2a81f433fbad6e0eaf2d5ac4388a74014b9c6ae8
-</p>
-<dl class="org-dl">
+abstraits propres <code>exp</code> de chaque équation la définissant, et de la somme
+<code>exp'</code> des coût abstraits propres de leurs enfants respectifs. Pour
+prouver que <code>C</code> est diviser-pour-régner, il suffit de prouver que pour tout
+assignement satisfaisant les contraintes locales de ces noeuds, le coût de <code>C</code>
+est au moins égal au coût total de ces enfants.</dd>
 <dt>Bornage</dt><dd>On borne alors le coût d&rsquo;un niveau par le coût de la racine, qui
 est le niveau de coût maximal. L&rsquo;algorithme de calcul est le même que pour le
 calcul de <code>cout-interne</code>.</dd>
@@ -583,16 +562,12 @@ calcul de <code>cout-interne</code>.</dd>
 </div>
 
 <div id="outline-container-orgad76f88" class="outline-2">
-<h2 id="orgad76f88">Mise en Forme de Récurrence Directe des Relations de Coûts</h2>
+<h2 id="orgad76f88"><span class="todo TODO">TODO</span> Mise en Forme de Récurrence Directe des Relations de Coûts</h2>
 <div class="outline-text-2" id="text-orgad76f88">
-<p>
-<b>TODO</b>
-</p>
-
 <p>
 &lt;Excuse de mauvaise foi&gt;
 On a rien compris à la définition maître de <i>Binding Time Classification</i>. En
-même temps ils pourrait la définir proprement. Mgr. Gigard aurait eu des mots
+même temps elle aurait pu être définie proprement. Mgr. Gigard aurait eu des mots
 durs sur cette partie.
 &lt;/Excuse de mauvaise foi&gt;
 </p>
@@ -638,12 +613,7 @@ il conviendrait d&rsquo;adapter la procédure de maximisation.</li>
 </div>
 
 <div id="outline-container-org520b10a" class="outline-2">
-<h2 id="org520b10a">Évaluation Expérimentale</h2>
-<div class="outline-text-2" id="text-org520b10a">
-<p>
-<b>TODO</b>
-</p>
-</div>
+<h2 id="org520b10a"><span class="todo TODO">TODO</span> Évaluation Expérimentale</h2>
 </div>
 
 <div id="outline-container-orgc446e82" class="outline-2">
