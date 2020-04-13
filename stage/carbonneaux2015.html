@@ -191,7 +191,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="/Users/polybulle/Site/css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -234,10 +234,21 @@
 </li>
 <li><a href="#orge11fb06">Méthode du potentiel</a>
 <ul>
-<li><a href="#org926245d">Définitions</a></li>
-<li><a href="#org27ad630">Premiers exemples</a></li>
+<li><a href="#org6ba9878">Analyse quantitative</a></li>
+<li><a href="#org2a0df54">Abstraction du programme</a></li>
+<li><a href="#org4ecbb51">Exemples juteux</a></li>
+<li><a href="#org02c13e6">Potentiels linéaires</a></li>
 </ul>
 </li>
+<li><a href="#orgc56621b">Système de type</a>
+<ul>
+<li><a href="#org8acbaec">Jugements de typage</a></li>
+<li><a href="#orgf1b5e73"><span class="todo TODO">TODO</span> Système de type</a></li>
+</ul>
+</li>
+<li><a href="#orgc3e0541"><span class="todo TODO">TODO</span> Inférence automatisée par programmation linéaire</a></li>
+<li><a href="#org23d647e"><span class="todo TODO">TODO</span> Contexte logique et interaction utilisateur</a></li>
+<li><a href="#orgf304d59"><span class="todo TODO">TODO</span> Relation à l&rsquo;état de l&rsquo;art</a></li>
 </ul>
 </div>
 </div>
@@ -344,6 +355,12 @@ C comprenant, entre autres, les structures suivantes:
 <li>la libération mémoire dynamique.</li>
 </ul>
 <p>
+Techniquement, l&rsquo;analyse porte sur <i>Clight</i>, la première représentation
+intermédiaire de <i>CompCert</i>. C&rsquo;est un sous-C avec une seule structure de boucle,
+et sans effets de bords dans les expressions.
+</p>
+
+<p>
 Notre système est basé sur une logique à la Hoare portant sur des combinaisons
 de variables. Il est le premier à gérer les bornes dépendants de variables
 <code>signed</code> et de différences entre variables. Il permet la composition d&rsquo;analyse,
@@ -371,20 +388,22 @@ tailles et des bornes locales sur des flots de contrôles complexes.
 </div>
 </div>
 </div>
+
 <div id="outline-container-orge11fb06" class="outline-2">
 <h2 id="orge11fb06">Méthode du potentiel</h2>
 <div class="outline-text-2" id="text-orge11fb06">
 </div>
-<div id="outline-container-org926245d" class="outline-3">
-<h3 id="org926245d">Définitions</h3>
-<div class="outline-text-3" id="text-org926245d">
+<div id="outline-container-org6ba9878" class="outline-3">
+<h3 id="org6ba9878">Analyse quantitative</h3>
+<div class="outline-text-3" id="text-org6ba9878">
 <p>
 On commence avec une <i>sémantique opérationnelle</i> à grands pas d&rsquo;un langage
-impératif idéal: un programme <b>S</b> munit d&rsquo;un état initial <b>σ</b>, s&rsquo;exécute avec un
-coût <b>n</b> et produit un état final <b>σ&rsquo;</b> et on note cela <b>(S,σ) ⇓n σ&rsquo;</b>. La méthode
-du potentiel consiste à définir une fonction <b>Φ</b> des états vers <b>ℚ<sup>+</sup></b> et de
-prouver la
+impératif idéal: un programme <b>S</b> munit d&rsquo;un ensemble d&rsquo;état initial <b>𝕊</b> et d&rsquo;un
+état initial <b>σ</b>, s&rsquo;exécute avec un coût <b>n</b> et produit un état final <b>σ&rsquo;</b> et on
+note cela <b>(S,σ) ⇓n σ&rsquo;</b>. La méthode du potentiel consiste à définir une fonction
+<b>Φ</b> des états vers <b>ℚ<sup>+</sup></b> et de prouver la
 </p>
+
 
 <blockquote>
 <p>
@@ -418,13 +437,260 @@ définie qu&rsquo;avec l&rsquo;aide de <b>S</b>, un avantage clair.
 &emsp; &emsp; &emsp; &emsp; <b>{Φ} S;S&rsquo; {Φ&rsquo;&rsquo;}</b>
 </p>
 </blockquote>
+
+
+<p>
+Enfin, pour s&rsquo;éviter une lourdeur syntaxique, nous notons <b>‹x,y›</b> la valeur
+<b>max(y-x,0)</b> (que le papier note <b>|[x,y]|</b>, la norme positive de l&rsquo;intervalle
+<b>[x,y]</b>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2a0df54" class="outline-3">
+<h3 id="org2a0df54">Abstraction du programme</h3>
+<div class="outline-text-3" id="text-org2a0df54">
+<p>
+Les analyses quantitatives ne suffisent pas à raisonner sur les programmes. Il
+faut maintenir <i>à minima</i> un état abstrait justifiant les opérations sur les
+fonctions de potentiels. Notre outil représente cette état comme un contexte
+logique, extrait d&rsquo;une interprétation abstraite. Le domaine de choix est celui
+des polyèdres, avec accélération importante des points fixes: des invariants
+locaux faibles sont empiriquement suffisant.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4ecbb51" class="outline-3">
+<h3 id="org4ecbb51">Exemples juteux</h3>
+<div class="outline-text-3" id="text-org4ecbb51">
+<p>
+Je conseille d&rsquo;essayer de trouver, à la main, le coût de ces fragments de code
+avant de lire la réponse exacte, inférée correctement par C<sup>4</sup>B. On passe les
+exemples sur les fonctions mutuellement récursives et les itérations tordues.
+</p>
+</div>
+
+<div id="outline-container-org0c71311" class="outline-4">
+<h4 id="org0c71311">Quelques itérations classiques:</h4>
+<div class="outline-text-4" id="text-org0c71311">
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #b1b1b1;">/* </span><span style="color: #b1b1b1;">(1)</span><span style="color: #b1b1b1;"> */</span> <span style="color: #3b6ea8;">while</span><span style="color: #3b6ea8;">(</span>x &lt; y<span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>x++; tick<span style="color: #97365b;">(</span><span style="color: #97365b; font-weight: bold;">1</span><span style="color: #97365b;">)</span><span style="color: #3b6ea8;">}</span>
+<span style="color: #b1b1b1;">/* </span><span style="color: #b1b1b1;">(2)</span><span style="color: #b1b1b1;"> */</span> <span style="color: #3b6ea8;">while</span><span style="color: #3b6ea8;">(</span>x+K &lt;= y<span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>x += K; tick<span style="color: #97365b;">(</span>T<span style="color: #97365b;">)</span><span style="color: #3b6ea8;">}</span>     <span style="color: #b1b1b1;">// </span><span style="color: #b1b1b1;">K et T sont des constantes</span>
+<span style="color: #b1b1b1;">/* </span><span style="color: #b1b1b1;">(3)</span><span style="color: #b1b1b1;"> */</span> <span style="color: #3b6ea8;">while</span><span style="color: #3b6ea8;">(</span>x &lt; y<span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>tick<span style="color: #97365b;">(</span>-<span style="color: #97365b; font-weight: bold;">1</span><span style="color: #97365b;">)</span>; x++; tick<span style="color: #97365b;">(</span><span style="color: #97365b; font-weight: bold;">1</span><span style="color: #97365b;">)</span><span style="color: #3b6ea8;">}</span>
+</pre>
+</div>
+
+<p>
+Parmi les outils testés, tous bornent correctement le coût <b>‹x,y›</b> pour <i>(1)</i>,
+mais seul C<sup>4</sup>B infère la borne exacte <b>(T/K)‹x,y›</b> pour <i>(2)</i>, qu&rsquo;il traite de
+manière totalement identique. Ce n&rsquo;est pas le cas pour les autres. L&rsquo;exemple
+<i>(3)</i> est de coût nul, ce qu&rsquo;une méthode basé sur les méthodes de classements ne
+peux établir. Nos fonctions de potentiels elles infèrent bien que le coût du
+programme est 0.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org70951b4" class="outline-4">
+<h4 id="org70951b4">Itérations imbriquées interdépendantes</h4>
+<div class="outline-text-4" id="text-org70951b4">
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #3b6ea8;">while</span> <span style="color: #3b6ea8;">(</span>n&lt;<span style="color: #97365b; font-weight: bold;">0</span><span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>
+    n++;
+    y = y+<span style="color: #97365b; font-weight: bold;">1000</span>;
+    <span style="color: #3b6ea8;">while</span><span style="color: #97365b;">(</span>y&gt;=<span style="color: #97365b; font-weight: bold;">100</span> &amp;&amp; rand_bool<span style="color: #4f894c;">()</span><span style="color: #97365b;">)</span> <span style="color: #97365b;">{</span>
+        y = y-<span style="color: #97365b; font-weight: bold;">100</span>;
+        tick<span style="color: #4f894c;">(</span><span style="color: #97365b; font-weight: bold;">5</span><span style="color: #4f894c;">)</span>;
+    <span style="color: #97365b;">}</span>
+    tick<span style="color: #97365b;">(</span><span style="color: #97365b; font-weight: bold;">9</span><span style="color: #97365b;">)</span>
+<span style="color: #3b6ea8;">}</span>
+</pre>
+</div>
+<p>
+La borne correcte est <b>59‹n,0› + 0.05‹0,y›</b>. En effet, la valeur initiale de <code>y</code>
+n&rsquo;influe que sur la première évaluation de la boucle.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org059ade0" class="outline-4">
+<h4 id="org059ade0">Traitement par bloc</h4>
+<div class="outline-text-4" id="text-org059ade0">
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #3b6ea8;">for</span><span style="color: #3b6ea8;">(</span> ; l&gt;=<span style="color: #97365b; font-weight: bold;">8</span>; l-=<span style="color: #97365b; font-weight: bold;">8</span><span style="color: #3b6ea8;">)</span>
+    <span style="color: #29838d;">tick</span><span style="color: #3b6ea8;">(</span>N<span style="color: #3b6ea8;">)</span>;  <span style="color: #b1b1b1;">// </span><span style="color: #b1b1b1;">N est une constante</span>
+<span style="color: #3b6ea8;">for</span><span style="color: #3b6ea8;">(</span> ; l&gt;<span style="color: #97365b; font-weight: bold;">0</span>; l--<span style="color: #3b6ea8;">)</span>
+    tick<span style="color: #3b6ea8;">(</span><span style="color: #97365b; font-weight: bold;">1</span><span style="color: #3b6ea8;">)</span>
+</pre>
+</div>
+
+<p>
+C&rsquo;est un schéma classique de traitement par bloc, qui a été retrouvé par les
+auteurs dans tout les chiffres par blocs implémentés par <i>PGP</i>, dans les
+manipulation de bits de <i>libtiff</i>, ou encore dans un encodeur <i>MPEG</i>. Le
+raisonnement est le même pour la machine et l&rsquo;humain avec d&rsquo;autres constantes
+que 8 et 1. Il faut en fait sublimement équilibrer les potentiels entre les deux
+boucles en fonction de la taille de <code>l</code> par rapport à <code>N</code>. Le coût exacte est
+ici <b>(N/8)‹0,l›</b> quand <b>N≥8</b>, et <b>(7/8)(8-N) + (N/8)‹0,l›</b> quand <b>N&lt;8</b>. Notre
+outil est le seul pouvant rendre compte des bornes précises pour toutes les
+valeurs de <b>N</b>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org02c13e6" class="outline-3">
+<h3 id="org02c13e6">Potentiels linéaires</h3>
+<div class="outline-text-3" id="text-org02c13e6">
+<p>
+Les fonctions de potentiel utilisées sont les combinaisons linéaires, à
+coefficients rationnels. Avant de proprement définir <b>Φ</b> nous devons définir les
+indices et éléments de bases des combinaisons linéaires. On travaille à
+programme fixe, et on définit:
+</p>
+<ul class="org-ul">
+<li><b>L</b> l&rsquo;ensemble des variables locales à un point du programme;</li>
+<li><b>G</b> l&rsquo;ensemble les variables globales;</li>
+<li><b>C</b> un ensemble fini de <i>symbole de constante</i>.</li>
+</ul>
+<p>
+On suppose ces trois ensembles sont disjoints.
+</p>
+
+<p>
+On définit <i>l&rsquo;état simplifié du programme</i> <b>σ : (G ∪ L ∪ C) → ℤ</b> associant aux
+variables et aux constantes leurs valeurs abstraites entières. L&rsquo;ensemble des
+indices des fonctions de potentiels est:
+</p>
+<blockquote>
+<p>
+<b>I = { (x,y) | x,y ∈ (G ∪ L ∪ C) ∧ x ≠ y }</b>
+</p>
+</blockquote>
+
+<p>
+L&rsquo;ensemble des fonctions de potentiel de base associe donc à une paire d&rsquo;entité
+du programme le potentiel qu&rsquo;elle engendre. Ce potentiel dépend évidemment de
+l&rsquo;indice <b>i ∈ I</b> considéré et de l&rsquo;état courant <b>σ</b>. On définit, pour <b>i = (x,y)</b>:
+</p>
+<blockquote>
+<p>
+<b>f<sub>i</sub>(σ) = ‹σ(x),σ(y)› = max(σ(y)-σ(x), 0)</b> si <b>i ≠ 0</b>
+<b>f<sub>0</sub>(σ) = 1</b>
+</p>
+</blockquote>
+
+<p>
+On peut enfin définir les fonctions de potentiels de notre analyse.
+</p>
+<blockquote>
+<p>
+<b>Φ : 𝕊 → ℤ</b> <br />
+<b>Φ(σ) = q<sub>0</sub> + q<sub>(x,y)</sub>‹σ(x),σ(y)› +  q<sub>(y,z)</sub>‹σ(y),σ(z)› + …</b> <br />
+où les indices parcourent <b>I</b>
+</p>
+</blockquote>
+
+<p>
+On utilisera les formes courtes de ses fonctions: on inclut un symbole <b>0</b> de 0
+dans <b>I</b>, que l&rsquo;on rend implicite:
+Les fonctions de potentiel sont entièrement définies par la famille <b>Q =
+(q<sub>i</sub>)<sub>i∈I</sub></b> des coefficients. Comme <b>I</b> est fini (chaque programme l&rsquo;est),
+<b>Q</b> est donc une <i>famille de rationnels positifs de support fini</i>, qui est une
+construction finitiste !
+</p>
+
+<blockquote>
+<p>
+<b>Φ(σ) = ∑<sub>i</sub> q<sub>i</sub> f<sub>i</sub>(σ) = Q(σ)</b>
+</p>
+</blockquote>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc56621b" class="outline-2">
+<h2 id="orgc56621b">Système de type</h2>
+<div class="outline-text-2" id="text-orgc56621b">
+<p>
+La sémantique de <i>Clight</i> est doté d&rsquo;une <i>métrique de ressource</i> <b>M</b> qui donne
+le coût dans <b>ℚ</b> de chaque étape de la sémantique opérationnelle. Dans nos
+règles, less sont limitées à <b>x ← y</b> et <b>x ← x ± y</b>. Pour ce faire,
+nous ré-écrivons le programme en explosant les affectations non-linéaires, en
+prenant soin d&rsquo;adapter les <b>q<sub>i</sub></b> idoines pour conserver un coût identique.
+Ce pré-traitement est sûr et garantit <i>qu&rsquo;aucune borne de boucle de dépend
+résultats d&rsquo;opérations non-linéaires</i>.
+</p>
+</div>
+
+<div id="outline-container-org8acbaec" class="outline-3">
+<h3 id="org8acbaec">Jugements de typage</h3>
+<div class="outline-text-3" id="text-org8acbaec">
+<p>
+On définit les jugements de typages quantitatifs pour ce langage: ils sont basés
+sur ceux de la logique de Hoare: toutes les propositions sont séparées en une partie
+logique <b>Γ</b> et une partie quantitative <b>Q</b>. Le jugement principal est:
+</p>
+
+<blockquote>
+<p>
+<b>(Γ<sub>B</sub>;Q<sub>B</sub>), (Γ<sub>R</sub>;Q<sub>R</sub>) ⊢ {Γ;Q} S {Γ&rsquo;;Q&rsquo;}</b>
+</p>
+
+<p>
+Pour un état initial <b>σ</b>, si <b>Q(σ)</b> de potentiel est disponible et <b>Γ</b> vaut, on
+peut exécuter <b>S</b> sans débordement en produisant un état <b>σ&rsquo;</b>; il
+reste au moins <b>Q&rsquo;(σ&rsquo;)</b> de potentiel et <b>Γ&rsquo;</b> vaut.
+</p>
+</blockquote>
+
+<p>
+Le jugement est en vérité un iota plus complexe, pour gérer les flux de
+contrôles non-linéaires: comme en logique de Hoare, <b>(Γ<sub>B</sub>;Q<sub>B</sub>)</b> est la
+post-condition qui tient si <b>S</b> sort d&rsquo;un boucle avec <code>break</code>, et <b>(Γ<sub>R</sub>;Q<sub>R</sub>)</b>
+celle qui tient s&rsquo;il &laquo;&nbsp;<code>return</code>&nbsp;&raquo;.
+</p>
+
+<p>
+Notre système de type collecte des informations sur les fonctions globales du
+programme dans un contexte implicite <b>Δ</b>. Pour une fonction <code>f</code> d&rsquo;arguments
+formels <code>α</code> et de valeur retour <code>ρ</code> pour l&rsquo;appelant, on a:
+</p>
+
+<blockquote>
+<p>
+<b>Δ(f) = λa.(Γ<sub>f</sub>;Q<sub>f</sub>), λρ.(Γ<sub>f</sub>&rsquo;;Q<sub>f</sub>&rsquo;)</b>
+</p>
+
+<p>
+En instanciant les paramètres des informations de fonctions, on sait que dans un
+état <b>σ</b>, si <b>Q<sub>f</sub>(σ)</b> de potentiel est disponible et que <b>Γ<sub>f</sub></b> vaut, alors
+l&rsquo;appel à <b>f</b> s&rsquo;exécute sans débordement en produisant un état <b>σ&rsquo;</b>; il reste au
+moins <b>Q<sub>f</sub>&rsquo;(σ&rsquo;)</b> de potentiel et <b>Γ<sub>f</sub>&rsquo;</b> vaut.
+</p>
+</blockquote>
 </div>
 </div>
 
 
-<div id="outline-container-org27ad630" class="outline-3">
-<h3 id="org27ad630">Premiers exemples</h3>
+<div id="outline-container-orgf1b5e73" class="outline-3">
+<h3 id="orgf1b5e73"><span class="todo TODO">TODO</span> Système de type</h3>
 </div>
+</div>
+
+
+
+<div id="outline-container-orgc3e0541" class="outline-2">
+<h2 id="orgc3e0541"><span class="todo TODO">TODO</span> Inférence automatisée par programmation linéaire</h2>
+</div>
+
+<div id="outline-container-org23d647e" class="outline-2">
+<h2 id="org23d647e"><span class="todo TODO">TODO</span> Contexte logique et interaction utilisateur</h2>
+</div>
+
+<div id="outline-container-orgf304d59" class="outline-2">
+<h2 id="orgf304d59"><span class="todo TODO">TODO</span> Relation à l&rsquo;état de l&rsquo;art</h2>
 </div>
 </div>
 </body>
