@@ -240,15 +240,15 @@
 <li><a href="#org02c13e6">Potentiels linéaires</a></li>
 </ul>
 </li>
-<li><a href="#orgf1b5e73">Système de type</a>
+<li><a href="#org4f16e86">Système de type</a>
 <ul>
 <li><a href="#org8acbaec">Jugements de typage</a></li>
-<li><a href="#org4f16e86"><span class="todo TODO">TODO</span> Système de type</a></li>
+<li><a href="#orgf052875"><span class="todo TODO">TODO</span> Système de type <code>[0/3]</code></a></li>
 </ul>
 </li>
 <li><a href="#orgc3e0541"><span class="todo TODO">TODO</span> Inférence automatisée par programmation linéaire</a></li>
 <li><a href="#org23d647e"><span class="todo TODO">TODO</span> Contexte logique et interaction utilisateur</a></li>
-<li><a href="#orgf304d59"><span class="todo TODO">TODO</span> Relation à l&rsquo;état de l&rsquo;art</a></li>
+<li><a href="#orgf304d59">Relation à l&rsquo;état de l&rsquo;art</a></li>
 </ul>
 </div>
 </div>
@@ -610,9 +610,9 @@ construction finitiste !
 </div>
 </div>
 
-<div id="outline-container-orgf1b5e73" class="outline-2">
-<h2 id="orgf1b5e73">Système de type</h2>
-<div class="outline-text-2" id="text-orgf1b5e73">
+<div id="outline-container-org4f16e86" class="outline-2">
+<h2 id="org4f16e86">Système de type</h2>
+<div class="outline-text-2" id="text-org4f16e86">
 <p>
 La sémantique de <i>Clight</i> est doté d&rsquo;une <i>métrique de ressource</i> <b>M</b> qui donne
 le coût dans <b>ℚ</b> de chaque étape de la sémantique opérationnelle. Dans nos
@@ -674,12 +674,33 @@ moins <b>Q<sub>f</sub>&rsquo;(σ&rsquo;)</b> de potentiel et <b>Γ<sub>f</sub>&r
 </div>
 
 
-<div id="outline-container-org4f16e86" class="outline-3">
-<h3 id="org4f16e86"><span class="todo TODO">TODO</span> Système de type</h3>
-</div>
+<div id="outline-container-orgf052875" class="outline-3">
+<h3 id="orgf052875"><span class="todo TODO">TODO</span> Système de type <code>[0/3]</code></h3>
+<div class="outline-text-3" id="text-orgf052875">
+<p>
+On utilise un système de type pour la logique de Hoare augmenté pour gérer le
+potentiel. Il faut donc <i>accumuler</i> le potentiel pour certaines instructions et
+le <i>dépenser</i>, après avoir vérifier que c&rsquo;est possible, pour d&rsquo;autre. L&rsquo;analyse
+statique préalable permet de spécialiser les règles de typages. Par exemple,
+<i>INCP</i> gère les instructions <code>x ← x+y</code> quand on peut déduire que <code>y ≥ 0</code>,
+<i>INCN</i> quand <code>y ≤ 0</code>, et <i>INC</i> quand l&rsquo;analyse de signe de <code>y</code> n&rsquo;est pas
+concluante. Des symétries apparaissent tout le long de notre système de type.
+</p>
 </div>
 
+<div id="outline-container-org116fd57" class="outline-4">
+<h4 id="org116fd57"><span class="todo TODO">TODO</span> Explication de <i>INCP</i></h4>
+</div>
 
+<div id="outline-container-org46b40d9" class="outline-4">
+<h4 id="org46b40d9"><span class="todo TODO">TODO</span> Explication de <i>LOOP</i></h4>
+</div>
+
+<div id="outline-container-orgaef606d" class="outline-4">
+<h4 id="orgaef606d"><span class="todo TODO">TODO</span> Explication de <i>CALL</i></h4>
+</div>
+</div>
+</div>
 
 <div id="outline-container-orgc3e0541" class="outline-2">
 <h2 id="orgc3e0541"><span class="todo TODO">TODO</span> Inférence automatisée par programmation linéaire</h2>
@@ -690,7 +711,51 @@ moins <b>Q<sub>f</sub>&rsquo;(σ&rsquo;)</b> de potentiel et <b>Γ<sub>f</sub>&r
 </div>
 
 <div id="outline-container-orgf304d59" class="outline-2">
-<h2 id="orgf304d59"><span class="todo TODO">TODO</span> Relation à l&rsquo;état de l&rsquo;art</h2>
+<h2 id="orgf304d59">Relation à l&rsquo;état de l&rsquo;art</h2>
+<div class="outline-text-2" id="text-orgf304d59">
+<p>
+<i>l&rsquo;auteur des notes invite une dernière fois de lire la partie <b>Travaux
+Connexes</b> des notes sur <a href="carbonneaux2018.html">la thèse de Carbonneaux</a>.</i>
+</p>
+
+<p>
+Nous avons été inspirés par l&rsquo;analyse de potentiel pour les programmes
+fonctionnels selon Hoffmann, et y avons ajouté aux potentiels des variables
+individuelles les potentiels aux intervalles entre variables, mais aussi entre
+<i>variables auxiliaires</i>, qui sont clés dans l&rsquo;analyse à la Hoare. Nous avons
+ainsi résolu le problème ouvert de l&rsquo;analyse de ressource amortie automatique
+des boucles sans décroissance bien-fondée triviale.
+</p>
+
+<p>
+L&rsquo;interaction utilisateur est une nouveauté dans l&rsquo;analyse amortie automatique,
+tout comme la possibilité de prendre en compte la libération dynamique de
+mémoire. Mais tout n&rsquo;est pas rose: notre analyse ne gère pas les pointeurs de
+fonctions ou les pointeurs vers la pile pour des raison d&rsquo;implémentation. Les
+points faibles de cette analyse sont, selon notre jugement:
+</p>
+<ul class="org-ul">
+<li>les invariants du tas (p.ex. les chaînes de caractères terminées par <code>\0</code>);</li>
+<li>l&rsquo;usage de ressource dépendant non-trivialement d&rsquo;opérateurs non-linéaires (<code>*</code>, <code>%</code>,
+&#x2026;)</li>
+<li>les programmes dont la terminaison n&rsquo;est prouvable que par des raisonnements
+complexes de flux de contrôle.</li>
+</ul>
+
+<p>
+Dans la littérature:
+</p>
+<ul class="org-ul">
+<li>Hoffmann a déjà produit des analyses dont les fonctions de potentiel sont de
+la forme <b>∑<sub>i,j∈I</sub> m<sub>i</sub>m<sub>j</sub></b>, permettant l&rsquo;analyse fine l&rsquo;algorithme de
+matrice encodées comme listes de listes. [/Note du lecteur: il est depuis allé
+beaucoup plus loin, voir <a href="hoffmann2016.html">TARBAC</a>/].</li>
+<li><a href="https://doi.org/10.1145/1375634.1375655">Braberman &amp; al</a> produit des bornes polynomiales pour la consommation de tas
+d&rsquo;appels de méthodes dans les langages à la Java par des méthodes de région,
+en passant par un problème d&rsquo;optimisation polynomiale paramétrique, résolue
+par un solveur externe.</li>
+</ul>
+</div>
 </div>
 </div>
 </body>
