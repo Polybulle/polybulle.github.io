@@ -240,10 +240,10 @@
 <li><a href="#org02c13e6">Potentiels linéaires</a></li>
 </ul>
 </li>
-<li><a href="#org84242cc">Système de type</a>
+<li><a href="#orgcbcba7b">Système de type</a>
 <ul>
 <li><a href="#org8acbaec">Jugements de typage</a></li>
-<li><a href="#orgcbcba7b"><span class="todo TODO">TODO</span> Système de type <code>[0/3]</code></a></li>
+<li><a href="#org22a6d58"><span class="todo TODO">TODO</span> Système de type</a></li>
 </ul>
 </li>
 <li><a href="#orgc3e0541"><span class="todo TODO">TODO</span> Inférence automatisée par programmation linéaire</a></li>
@@ -610,9 +610,9 @@ construction finitiste !
 </div>
 </div>
 
-<div id="outline-container-org84242cc" class="outline-2">
-<h2 id="org84242cc">Système de type</h2>
-<div class="outline-text-2" id="text-org84242cc">
+<div id="outline-container-orgcbcba7b" class="outline-2">
+<h2 id="orgcbcba7b">Système de type</h2>
+<div class="outline-text-2" id="text-orgcbcba7b">
 <p>
 La sémantique de <i>Clight</i> est doté d&rsquo;une <i>métrique de ressource</i> <b>M</b> qui donne
 le coût dans <b>ℚ</b> de chaque étape de la sémantique opérationnelle. Dans nos
@@ -674,9 +674,9 @@ moins <b>Q<sub>f</sub>&rsquo;(σ&rsquo;)</b> de potentiel et <b>Γ<sub>f</sub>&r
 </div>
 
 
-<div id="outline-container-orgcbcba7b" class="outline-3">
-<h3 id="orgcbcba7b"><span class="todo TODO">TODO</span> Système de type <code>[0/3]</code></h3>
-<div class="outline-text-3" id="text-orgcbcba7b">
+<div id="outline-container-org22a6d58" class="outline-3">
+<h3 id="org22a6d58"><span class="todo TODO">TODO</span> Système de type</h3>
+<div class="outline-text-3" id="text-org22a6d58">
 <p>
 On utilise un système de type pour la logique de Hoare augmenté pour gérer le
 potentiel. Il faut donc <i>accumuler</i> le potentiel pour certaines instructions et
@@ -688,16 +688,77 @@ concluante. Des symétries apparaissent tout le long de notre système de type.
 </p>
 </div>
 
-<div id="outline-container-org116fd57" class="outline-4">
-<h4 id="org116fd57"><span class="todo TODO">TODO</span> Explication de <i>INCP</i></h4>
+<div id="outline-container-org4fd0efb" class="outline-4">
+<h4 id="org4fd0efb">Assignement</h4>
+<div class="outline-text-4" id="text-org4fd0efb">
+<p>
+On considère l&rsquo;instruction uniquement <code>x←x+y</code> avec <code>y≥0</code>: les autres
+assignements linéaires sont identiques à symétrie près, quitte à perdre en
+précision. La règle correspondante est <i>INCP</i> et ses cousines sont <i>DECP</i>,
+<i>INCN</i>, <i>DECN</i>, <i>INC</i>, et <i>DEC</i>.
+</p>
+
+<p>
+L&rsquo;évaluation de <code>x+y</code> a un coût propre <b>M<sub>e</sub>(<code>x+y</code>)</b>, et l&rsquo;affectation un coût
+<b>M<sub>u</sub></b> (pour <i>update</i>). On paye ces coûts avec le potentiel, mais comment
+évolue-t-il quand <code>x</code> augmente de <code>y</code> ? Par linéarité, les seuls termes du
+potentiel qui changent sont ceux des intervalles impliquant <code>x</code>, qui sont
+<b>‹x,u›</b> et <b>‹u,x›</b> pour tout les autres symboles <b>u</b>.
+</p>
+
+<p>
+On fixe maintenant <b>u</b>. On note <code>x′</code> la valeur de <code>x</code> après l&rsquo;affectation.
+Nécessairement, <code>x ≤ x′</code>, donc <b>‹x,u›</b> diminue. On peut alors récupérer son
+potentiel. Si de plus <code>x′≤u</code>, le potentiel <b>q<sub>0y</sub></b> de <code>y</code> augmente d&rsquo;au moins
+<b>q<sub>xu</sub></b>. Dans le cas contraire, on a <code>u≤x′</code>, donc <b>‹x,u› = 0</b> après
+l&rsquo;affectation, et <b>‹u,x›</b> augmente durant. On paie cette augmentation avec
+<b>q<sub>0y</sub></b>. En itérant la construction pour tout les <b>u</b>, on obtient un règle
+dirigée par la syntaxe.
+</p>
+</div>
 </div>
 
-<div id="outline-container-org46b40d9" class="outline-4">
-<h4 id="org46b40d9"><span class="todo TODO">TODO</span> Explication de <i>LOOP</i></h4>
+<div id="outline-container-org4cfd934" class="outline-4">
+<h4 id="org4cfd934">Itération (règle <i>LOOP</i> et <i>BREAK</i>)</h4>
+<div class="outline-text-4" id="text-org4cfd934">
+<p>
+L&rsquo;itération dans notre langage cible est toujours de la forme <code>loop { ... break
+... }</code>. L&rsquo;analyse doit trouver le potentiel <b>Q</b> qui peut payer pour la boucle.
+Le potentiel post-boucle est passé dans les préconditions &laquo;&nbsp;break&nbsp;&raquo; du jugement du
+corps pour éventuellement être utilisée pour la sortie, et on paie le coût <b>M<sub>l</sub></b>
+de la boucle à chaque itération. On est encore dirigé par la syntaxe: la
+post-condition du <code>break</code> est celle de la boucle qu&rsquo;il termine.
+</p>
+</div>
 </div>
 
-<div id="outline-container-orgaef606d" class="outline-4">
-<h4 id="orgaef606d"><span class="todo TODO">TODO</span> Explication de <i>CALL</i></h4>
+<div id="outline-container-orga61350a" class="outline-4">
+<h4 id="orga61350a">Appels de fonctions: <i>CALL</i></h4>
+<div class="outline-text-4" id="text-orga61350a">
+<p>
+La règle est impressionnante, mais se résume à:
+</p>
+<ol class="org-ol">
+<li>Instancier la spécification de <code>f</code> avec les arguments et le retour effectif;</li>
+<li>Conserver les potentiels des intervalles de variables locales;</li>
+<li>Mettre à zéro les potentiels dépendants de variables globales.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgcbdd384" class="outline-4">
+<h4 id="orgcbdd384">Affaiblissement et relaxation</h4>
+<div class="outline-text-4" id="text-orgcbdd384">
+<p>
+L&rsquo;affaiblissement classique est autorisé. On peut aussi volontairement demander
+plus de potentiel dans les pré-conditions et en libérer moins dans les
+post-conditions. Cela implique une notion de <i>plus/moins</i> de potentiel, donnée
+par la règle <i>RELAX</i>. La relaxation définit le pré-ordre sur les potentiels,
+mais, plus important, elle permet la communication entre l&rsquo;analyse qualitative
+et quantitative: si on peut borner la valeur d&rsquo;un intervalle, on peut rendre
+constant le potentiel correspondant sans perte de sûreté.
+</p>
+</div>
 </div>
 </div>
 </div>
