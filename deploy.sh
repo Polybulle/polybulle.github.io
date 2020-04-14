@@ -7,3 +7,4 @@ git add .
 MSG="auto-deploy: $(date)"
 git commit -m $MSG
 git push
+echo "deployed with exit $?"
