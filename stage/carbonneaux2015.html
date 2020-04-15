@@ -224,31 +224,31 @@
 <h2>Table des matières</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org14f4a70">Introduction</a>
+<li><a href="#orga6d15c8">Introduction</a>
 <ul>
-<li><a href="#orga38599a">Motivation</a></li>
-<li><a href="#org2035fd9">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</a></li>
-<li><a href="#orga49ee73">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</a></li>
-<li><a href="#org6b98179">Contribution</a></li>
+<li><a href="#org87849ca">Motivation</a></li>
+<li><a href="#orgf7cb41a">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</a></li>
+<li><a href="#org96b4559">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</a></li>
+<li><a href="#org7fd4e4e">Contribution</a></li>
 </ul>
 </li>
-<li><a href="#orge11fb06">Méthode du potentiel</a>
+<li><a href="#orgd0b5aee">Méthode du potentiel</a>
 <ul>
-<li><a href="#org6ba9878">Analyse quantitative</a></li>
-<li><a href="#org2a0df54">Abstraction du programme</a></li>
-<li><a href="#org4ecbb51">Exemples juteux</a></li>
-<li><a href="#org02c13e6">Potentiels linéaires</a></li>
+<li><a href="#org247a817">Analyse quantitative</a></li>
+<li><a href="#org3113c58">Abstraction du programme</a></li>
+<li><a href="#orgb48c64d">Exemples juteux</a></li>
+<li><a href="#org3c00b14">Potentiels linéaires</a></li>
 </ul>
 </li>
-<li><a href="#org22a6d58">Système de type</a>
+<li><a href="#orgb22151e">Système de type</a>
 <ul>
-<li><a href="#org8acbaec">Jugements de typage</a></li>
-<li><a href="#org589e31d">Système de type</a></li>
+<li><a href="#orgcc0972f">Jugements de typage</a></li>
+<li><a href="#orgaff3944">Système de type</a></li>
 </ul>
 </li>
-<li><a href="#orgc3e0541"><span class="todo TODO">TODO</span> Inférence automatisée par programmation linéaire</a></li>
-<li><a href="#org23d647e"><span class="todo TODO">TODO</span> Contexte logique et interaction utilisateur</a></li>
-<li><a href="#orgf304d59">Relation à l&rsquo;état de l&rsquo;art</a></li>
+<li><a href="#org6b93b8b">Inférence automatisée par programmation linéaire</a></li>
+<li><a href="#orgad85cf6">Contexte logique et interaction utilisateur</a></li>
+<li><a href="#org5bab9a5">Relation à l&rsquo;état de l&rsquo;art</a></li>
 </ul>
 </div>
 </div>
@@ -260,13 +260,13 @@ de l&rsquo;époque (2015), elle est <i>composable</i>, <i>interactive</i>, <i>ce
 thèse de Carbonneaux.
 </p>
 
-<div id="outline-container-org14f4a70" class="outline-2">
-<h2 id="org14f4a70">Introduction</h2>
-<div class="outline-text-2" id="text-org14f4a70">
+<div id="outline-container-orga6d15c8" class="outline-2">
+<h2 id="orga6d15c8">Introduction</h2>
+<div class="outline-text-2" id="text-orga6d15c8">
 </div>
-<div id="outline-container-orga38599a" class="outline-3">
-<h3 id="orga38599a">Motivation</h3>
-<div class="outline-text-3" id="text-orga38599a">
+<div id="outline-container-org87849ca" class="outline-3">
+<h3 id="org87849ca">Motivation</h3>
+<div class="outline-text-3" id="text-org87849ca">
 <p>
 <i>Voir l&rsquo;abstract de <a href="carbonneaux2018.html">carbonneaux2018.html</a></i>.
 </p>
@@ -293,9 +293,9 @@ par le système d&rsquo;analyse: l&rsquo;humain donne des coupures, pas des axio
 </div>
 </div>
 
-<div id="outline-container-org2035fd9" class="outline-3">
-<h3 id="org2035fd9">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</h3>
-<div class="outline-text-3" id="text-org2035fd9">
+<div id="outline-container-orgf7cb41a" class="outline-3">
+<h3 id="orgf7cb41a">Analyses &laquo;&nbsp;impératives&nbsp;&raquo;</h3>
+<div class="outline-text-3" id="text-orgf7cb41a">
 <p>
 Les outils d&rsquo;analyse statique de ressources forment deux grandes familles, que
 l&rsquo;on nommera <i>impératives</i> et <i>fonctionnelles</i>, par abus. Les analyses
@@ -317,9 +317,9 @@ passage à l&rsquo;échelle.
 </div>
 </div>
 
-<div id="outline-container-orga49ee73" class="outline-3">
-<h3 id="orga49ee73">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</h3>
-<div class="outline-text-3" id="text-orga49ee73">
+<div id="outline-container-org96b4559" class="outline-3">
+<h3 id="org96b4559">Analyses &laquo;&nbsp;fonctionnelles&nbsp;&raquo;</h3>
+<div class="outline-text-3" id="text-org96b4559">
 <p>
 La seconde forme d&rsquo;analyse est basée sur l&rsquo;analyse amortie (méthode du
 potentiel) et les systèmes de types. Les invariants de classes en OOP, et ceux
@@ -340,9 +340,9 @@ la mutation ont formé jusqu&rsquo;à peut des obstacles insurmontables aux anal
 </div>
 </div>
 
-<div id="outline-container-org6b98179" class="outline-3">
-<h3 id="org6b98179">Contribution</h3>
-<div class="outline-text-3" id="text-org6b98179">
+<div id="outline-container-org7fd4e4e" class="outline-3">
+<h3 id="org7fd4e4e">Contribution</h3>
+<div class="outline-text-3" id="text-org7fd4e4e">
 <p>
 C<sup>4</sup>B est la première analyse <i>semi-automatique</i> de ressource. Nous avons
 adapté les méthodes à potentiels pour inférer l&rsquo;usage de ressource de programmes
@@ -389,13 +389,13 @@ tailles et des bornes locales sur des flots de contrôles complexes.
 </div>
 </div>
 
-<div id="outline-container-orge11fb06" class="outline-2">
-<h2 id="orge11fb06">Méthode du potentiel</h2>
-<div class="outline-text-2" id="text-orge11fb06">
+<div id="outline-container-orgd0b5aee" class="outline-2">
+<h2 id="orgd0b5aee">Méthode du potentiel</h2>
+<div class="outline-text-2" id="text-orgd0b5aee">
 </div>
-<div id="outline-container-org6ba9878" class="outline-3">
-<h3 id="org6ba9878">Analyse quantitative</h3>
-<div class="outline-text-3" id="text-org6ba9878">
+<div id="outline-container-org247a817" class="outline-3">
+<h3 id="org247a817">Analyse quantitative</h3>
+<div class="outline-text-3" id="text-org247a817">
 <p>
 On commence avec une <i>sémantique opérationnelle</i> à grands pas d&rsquo;un langage
 impératif idéal: un programme <b>S</b> munit d&rsquo;un ensemble d&rsquo;état initial <b>𝕊</b> et d&rsquo;un
@@ -447,9 +447,9 @@ Enfin, pour s&rsquo;éviter une lourdeur syntaxique, nous notons <b>‹x,y›</b
 </div>
 </div>
 
-<div id="outline-container-org2a0df54" class="outline-3">
-<h3 id="org2a0df54">Abstraction du programme</h3>
-<div class="outline-text-3" id="text-org2a0df54">
+<div id="outline-container-org3113c58" class="outline-3">
+<h3 id="org3113c58">Abstraction du programme</h3>
+<div class="outline-text-3" id="text-org3113c58">
 <p>
 Les analyses quantitatives ne suffisent pas à raisonner sur les programmes. Il
 faut maintenir <i>à minima</i> un état abstrait justifiant les opérations sur les
@@ -461,9 +461,9 @@ locaux faibles sont empiriquement suffisant.
 </div>
 </div>
 
-<div id="outline-container-org4ecbb51" class="outline-3">
-<h3 id="org4ecbb51">Exemples juteux</h3>
-<div class="outline-text-3" id="text-org4ecbb51">
+<div id="outline-container-orgb48c64d" class="outline-3">
+<h3 id="orgb48c64d">Exemples juteux</h3>
+<div class="outline-text-3" id="text-orgb48c64d">
 <p>
 Je conseille d&rsquo;essayer de trouver, à la main, le coût de ces fragments de code
 avant de lire la réponse exacte, inférée correctement par C<sup>4</sup>B. On passe les
@@ -471,11 +471,11 @@ exemples sur les fonctions mutuellement récursives et les itérations tordues.
 </p>
 </div>
 
-<div id="outline-container-org0c71311" class="outline-4">
-<h4 id="org0c71311">Quelques itérations classiques:</h4>
-<div class="outline-text-4" id="text-org0c71311">
+<div id="outline-container-org758bd66" class="outline-4">
+<h4 id="org758bd66">Quelques itérations classiques:</h4>
+<div class="outline-text-4" id="text-org758bd66">
 <div class="org-src-container">
-<pre class="src src-c"><span style="color: #b1b1b1;">/* </span><span style="color: #b1b1b1;">(1)</span><span style="color: #b1b1b1;"> */</span> <span style="color: #3b6ea8;">while</span><span style="color: #3b6ea8;">(</span>x &lt; y<span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>x++; tick<span style="color: #97365b;">(</span><span style="color: #97365b; font-weight: bold;">1</span><span style="color: #97365b;">)</span><span style="color: #3b6ea8;">}</span>
+<pre class="src src-C"><span style="color: #b1b1b1;">/* </span><span style="color: #b1b1b1;">(1)</span><span style="color: #b1b1b1;"> */</span> <span style="color: #3b6ea8;">while</span><span style="color: #3b6ea8;">(</span>x &lt; y<span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>x++; tick<span style="color: #97365b;">(</span><span style="color: #97365b; font-weight: bold;">1</span><span style="color: #97365b;">)</span><span style="color: #3b6ea8;">}</span>
 <span style="color: #b1b1b1;">/* </span><span style="color: #b1b1b1;">(2)</span><span style="color: #b1b1b1;"> */</span> <span style="color: #3b6ea8;">while</span><span style="color: #3b6ea8;">(</span>x+K &lt;= y<span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>x += K; tick<span style="color: #97365b;">(</span>T<span style="color: #97365b;">)</span><span style="color: #3b6ea8;">}</span>     <span style="color: #b1b1b1;">// </span><span style="color: #b1b1b1;">K et T sont des constantes</span>
 <span style="color: #b1b1b1;">/* </span><span style="color: #b1b1b1;">(3)</span><span style="color: #b1b1b1;"> */</span> <span style="color: #3b6ea8;">while</span><span style="color: #3b6ea8;">(</span>x &lt; y<span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>tick<span style="color: #97365b;">(</span>-<span style="color: #97365b; font-weight: bold;">1</span><span style="color: #97365b;">)</span>; x++; tick<span style="color: #97365b;">(</span><span style="color: #97365b; font-weight: bold;">1</span><span style="color: #97365b;">)</span><span style="color: #3b6ea8;">}</span>
 </pre>
@@ -492,11 +492,11 @@ programme est 0.
 </div>
 </div>
 
-<div id="outline-container-org70951b4" class="outline-4">
-<h4 id="org70951b4">Itérations imbriquées interdépendantes</h4>
-<div class="outline-text-4" id="text-org70951b4">
+<div id="outline-container-org81a94da" class="outline-4">
+<h4 id="org81a94da">Itérations imbriquées interdépendantes</h4>
+<div class="outline-text-4" id="text-org81a94da">
 <div class="org-src-container">
-<pre class="src src-c"><span style="color: #3b6ea8;">while</span> <span style="color: #3b6ea8;">(</span>n&lt;<span style="color: #97365b; font-weight: bold;">0</span><span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>
+<pre class="src src-C"><span style="color: #3b6ea8;">while</span> <span style="color: #3b6ea8;">(</span>n&lt;<span style="color: #97365b; font-weight: bold;">0</span><span style="color: #3b6ea8;">)</span> <span style="color: #3b6ea8;">{</span>
     n++;
     y = y+<span style="color: #97365b; font-weight: bold;">1000</span>;
     <span style="color: #3b6ea8;">while</span><span style="color: #97365b;">(</span>y&gt;=<span style="color: #97365b; font-weight: bold;">100</span> &amp;&amp; rand_bool<span style="color: #4f894c;">()</span><span style="color: #97365b;">)</span> <span style="color: #97365b;">{</span>
@@ -514,11 +514,11 @@ n&rsquo;influe que sur la première évaluation de la boucle.
 </div>
 </div>
 
-<div id="outline-container-org059ade0" class="outline-4">
-<h4 id="org059ade0">Traitement par bloc</h4>
-<div class="outline-text-4" id="text-org059ade0">
+<div id="outline-container-orgfb2109e" class="outline-4">
+<h4 id="orgfb2109e">Traitement par bloc</h4>
+<div class="outline-text-4" id="text-orgfb2109e">
 <div class="org-src-container">
-<pre class="src src-c"><span style="color: #3b6ea8;">for</span><span style="color: #3b6ea8;">(</span> ; l&gt;=<span style="color: #97365b; font-weight: bold;">8</span>; l-=<span style="color: #97365b; font-weight: bold;">8</span><span style="color: #3b6ea8;">)</span>
+<pre class="src src-C"><span style="color: #3b6ea8;">for</span><span style="color: #3b6ea8;">(</span> ; l&gt;=<span style="color: #97365b; font-weight: bold;">8</span>; l-=<span style="color: #97365b; font-weight: bold;">8</span><span style="color: #3b6ea8;">)</span>
     <span style="color: #29838d;">tick</span><span style="color: #3b6ea8;">(</span>N<span style="color: #3b6ea8;">)</span>;  <span style="color: #b1b1b1;">// </span><span style="color: #b1b1b1;">N est une constante</span>
 <span style="color: #3b6ea8;">for</span><span style="color: #3b6ea8;">(</span> ; l&gt;<span style="color: #97365b; font-weight: bold;">0</span>; l--<span style="color: #3b6ea8;">)</span>
     tick<span style="color: #3b6ea8;">(</span><span style="color: #97365b; font-weight: bold;">1</span><span style="color: #3b6ea8;">)</span>
@@ -540,9 +540,9 @@ valeurs de <b>N</b>.
 </div>
 </div>
 
-<div id="outline-container-org02c13e6" class="outline-3">
-<h3 id="org02c13e6">Potentiels linéaires</h3>
-<div class="outline-text-3" id="text-org02c13e6">
+<div id="outline-container-org3c00b14" class="outline-3">
+<h3 id="org3c00b14">Potentiels linéaires</h3>
+<div class="outline-text-3" id="text-org3c00b14">
 <p>
 Les fonctions de potentiel utilisées sont les combinaisons linéaires, à
 coefficients rationnels. Avant de proprement définir <b>Φ</b> nous devons définir les
@@ -610,9 +610,9 @@ construction finitiste !
 </div>
 </div>
 
-<div id="outline-container-org22a6d58" class="outline-2">
-<h2 id="org22a6d58">Système de type</h2>
-<div class="outline-text-2" id="text-org22a6d58">
+<div id="outline-container-orgb22151e" class="outline-2">
+<h2 id="orgb22151e">Système de type</h2>
+<div class="outline-text-2" id="text-orgb22151e">
 <p>
 La sémantique de <i>Clight</i> est doté d&rsquo;une <i>métrique de ressource</i> <b>M</b> qui donne
 le coût dans <b>ℚ</b> de chaque étape de la sémantique opérationnelle. Dans nos
@@ -624,9 +624,9 @@ résultats d&rsquo;opérations non-linéaires</i>.
 </p>
 </div>
 
-<div id="outline-container-org8acbaec" class="outline-3">
-<h3 id="org8acbaec">Jugements de typage</h3>
-<div class="outline-text-3" id="text-org8acbaec">
+<div id="outline-container-orgcc0972f" class="outline-3">
+<h3 id="orgcc0972f">Jugements de typage</h3>
+<div class="outline-text-3" id="text-orgcc0972f">
 <p>
 On définit les jugements de typages quantitatifs pour ce langage: ils sont basés
 sur ceux de la logique de Hoare: toutes les propositions sont séparées en une partie
@@ -674,9 +674,9 @@ moins <b>Q<sub>f</sub>&rsquo;(σ&rsquo;)</b> de potentiel et <b>Γ<sub>f</sub>&r
 </div>
 
 
-<div id="outline-container-org589e31d" class="outline-3">
-<h3 id="org589e31d">Système de type</h3>
-<div class="outline-text-3" id="text-org589e31d">
+<div id="outline-container-orgaff3944" class="outline-3">
+<h3 id="orgaff3944">Système de type</h3>
+<div class="outline-text-3" id="text-orgaff3944">
 <p>
 On utilise un système de type pour la logique de Hoare augmenté pour gérer le
 potentiel. Il faut donc <i>accumuler</i> le potentiel pour certaines instructions et
@@ -688,9 +688,9 @@ concluante. Des symétries apparaissent tout le long de notre système de type.
 </p>
 </div>
 
-<div id="outline-container-org4fd0efb" class="outline-4">
-<h4 id="org4fd0efb">Assignement</h4>
-<div class="outline-text-4" id="text-org4fd0efb">
+<div id="outline-container-org6ee41a0" class="outline-4">
+<h4 id="org6ee41a0">Assignement</h4>
+<div class="outline-text-4" id="text-org6ee41a0">
 <p>
 On considère l&rsquo;instruction uniquement <code>x←x+y</code> avec <code>y≥0</code>: les autres
 assignements linéaires sont identiques à symétrie près, quitte à perdre en
@@ -718,9 +718,9 @@ dirigée par la syntaxe.
 </div>
 </div>
 
-<div id="outline-container-org4cfd934" class="outline-4">
-<h4 id="org4cfd934">Itération (règle <i>LOOP</i> et <i>BREAK</i>)</h4>
-<div class="outline-text-4" id="text-org4cfd934">
+<div id="outline-container-org31b1493" class="outline-4">
+<h4 id="org31b1493">Itération (règle <i>LOOP</i> et <i>BREAK</i>)</h4>
+<div class="outline-text-4" id="text-org31b1493">
 <p>
 L&rsquo;itération dans notre langage cible est toujours de la forme <code>loop { ... break
 ... }</code>. L&rsquo;analyse doit trouver le potentiel <b>Q</b> qui peut payer pour la boucle.
@@ -732,9 +732,9 @@ post-condition du <code>break</code> est celle de la boucle qu&rsquo;il termine.
 </div>
 </div>
 
-<div id="outline-container-orga61350a" class="outline-4">
-<h4 id="orga61350a">Appels de fonctions: <i>CALL</i></h4>
-<div class="outline-text-4" id="text-orga61350a">
+<div id="outline-container-org90d99c7" class="outline-4">
+<h4 id="org90d99c7">Appels de fonctions: <i>CALL</i></h4>
+<div class="outline-text-4" id="text-org90d99c7">
 <p>
 La règle est impressionnante, mais se résume à:
 </p>
@@ -746,9 +746,9 @@ La règle est impressionnante, mais se résume à:
 </div>
 </div>
 
-<div id="outline-container-orgcbdd384" class="outline-4">
-<h4 id="orgcbdd384">Affaiblissement et relaxation</h4>
-<div class="outline-text-4" id="text-orgcbdd384">
+<div id="outline-container-org3e85f34" class="outline-4">
+<h4 id="org3e85f34">Affaiblissement et relaxation</h4>
+<div class="outline-text-4" id="text-org3e85f34">
 <p>
 L&rsquo;affaiblissement classique est autorisé. On peut aussi volontairement demander
 plus de potentiel dans les pré-conditions et en libérer moins dans les
@@ -763,17 +763,83 @@ constant le potentiel correspondant sans perte de sûreté.
 </div>
 </div>
 
-<div id="outline-container-orgc3e0541" class="outline-2">
-<h2 id="orgc3e0541"><span class="todo TODO">TODO</span> Inférence automatisée par programmation linéaire</h2>
+<div id="outline-container-org6b93b8b" class="outline-2">
+<h2 id="org6b93b8b">Inférence automatisée par programmation linéaire</h2>
+<div class="outline-text-2" id="text-org6b93b8b">
+<p>
+L&rsquo;analyse de ressource comporte deux étapes. La dérivation des contraintes
+quantitatives de potentiel est la première. On l&rsquo;applique co-inductivement sur
+tout les composant fortement connexe du code,en utilisant les spécifications
+de fonctions obtenues pour les composantes suivantes. Les coefficients <b>q<sub>i</sub></b>
+sont tous symboliques, et les contraintes sont accumulés.
+</p>
+
+<p>
+Dans un second temps, on utilise un solveur de programmation linéaire tiers pour
+obtenir les coefficients effectifs. On résout d&rsquo;abord pour les coefficients
+indicés par des variables, puis ceux indicés par des constantes dans un second
+temps:
+</p>
+
+<p>
+Pour les premiers coefficients, on demande de résoudre les contraintes
+collectées, mais on souhaite aussi minimiser les potentiels liés au variables
+libres, et cela plus que les ceux associés aux variables liés et au constantes.
+On fournit donc au solveur un objectif <b>Obj</b> de minimisation encodant nos choix
+de priorités. Comme on sait <b>‹10,x›</b> est plus précis que <b>‹0,x›</b> l&rsquo;est plus que
+<b>‹0,10›</b>&#x2026; on pose <b>Obj = 1·‹0,x› +1000·‹10,x› + &#x2026;</b> On obtient du solveur une
+solution pour les contraintes et une valeur minimale de l&rsquo;objectif <b>min</b>.
+</p>
+
+<p>
+On rajoute la contrainte <b>Obj ≤ min</b> et on demande à minimiser <b>∑(y-x+1)·‹x,y›</b>,
+qui donne les bornes pour les coefficients des constantes. Tout ces coefficients
+feront parti du certificat que nous générons. On notera que si nous avions
+utilisé un solveur SMT, ce certificat aurait pris la forme, plus complexe, d&rsquo;un
+contre exemple dans une théorie.
+</p>
+</div>
 </div>
 
-<div id="outline-container-org23d647e" class="outline-2">
-<h2 id="org23d647e"><span class="todo TODO">TODO</span> Contexte logique et interaction utilisateur</h2>
+<div id="outline-container-orgad85cf6" class="outline-2">
+<h2 id="orgad85cf6">Contexte logique et interaction utilisateur</h2>
+<div class="outline-text-2" id="text-orgad85cf6">
+<p>
+Le problème de l&rsquo;arrêt pouvant se réduire à la recherche d&rsquo;une fonction de
+potentiel, notre analyse est nécessairement incomplète. Il est alors judicieux
+de permettre une extension à posteriori de la partie logique de l&rsquo;analyse, comme
+les métriques interchangeables le permettent pour la partie quantitative.
+</p>
+
+<p>
+Dans cet article, l&rsquo;approche retenue est l&rsquo;ajout de <i>variables auxiliaires</i> et
+d&rsquo;assertions aux programmes pour lesquels l&rsquo;analyse automatique n&rsquo;est pas
+suffisante. En liant les variables auxiliaires et les variables utiles dans les
+assertions, on peut étendre localement le contexte logique et permettre à
+l&rsquo;analyse de progresser. Mais il faut pouvoir prouver (avec certificat) que
+l&rsquo;ajout variables auxiliaires ne change pas la sémantique, et étendre l&rsquo;outil
+pour permettre à l&rsquo;utilisateur de décrire les invariants des variables
+auxiliaires. La figure 7 exige, par exemple, de décrire que la variable
+auxiliaire <code>na</code> est le nombre d&rsquo;entrée dans un tableau de bit valant 1.
+</p>
+
+<p>
+Les artefacts de l&rsquo;article étant introuvables, la dernière version publique de
+C<sup>4</sup>B précédant cet article de 5 ans, le rapport technique ne donnant pas de
+détail, il est impossible de décrire un fonctionnement précis. On pourra noter
+que, dans la thèse de Carbonneaux, celui-ci indique la possibilité d&rsquo;annoter des
+programmes dans <i>Coq</i> avec des propositions du calcul des constructions
+inductives. On pourrait alors spéculer que des programmes <i>Clight</i> écrit en tant
+que littéraux Coq aurait pu servir d&rsquo;artefacts. L&rsquo;approche retenue dans la thèse
+est une approche modulaire de l&rsquo;analyse. Le cas de la figure 7 est résolu par
+l&rsquo;ajout d&rsquo;un domaine logarithmique aux fonctions de potentiels.
+</p>
+</div>
 </div>
 
-<div id="outline-container-orgf304d59" class="outline-2">
-<h2 id="orgf304d59">Relation à l&rsquo;état de l&rsquo;art</h2>
-<div class="outline-text-2" id="text-orgf304d59">
+<div id="outline-container-org5bab9a5" class="outline-2">
+<h2 id="org5bab9a5">Relation à l&rsquo;état de l&rsquo;art</h2>
+<div class="outline-text-2" id="text-org5bab9a5">
 <p>
 <i>l&rsquo;auteur des notes invite une dernière fois de lire la partie <b>Travaux
 Connexes</b> des notes sur <a href="carbonneaux2018.html">la thèse de Carbonneaux</a>.</i>

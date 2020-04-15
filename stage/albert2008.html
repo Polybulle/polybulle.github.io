@@ -224,33 +224,33 @@
 <h2>Table des matières</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgab377f6">Introduction</a></li>
-<li><a href="#org979db40">Relations de Coûts</a>
+<li><a href="#orgb1809ab">Introduction</a></li>
+<li><a href="#orgdbb793f">Relations de Coûts</a>
 <ul>
-<li><a href="#org134d156">Obtention</a></li>
-<li><a href="#org6145c36">Syntaxe</a></li>
-<li><a href="#org8f148d8">Sémantique</a></li>
-<li><a href="#org191cab8">Différences avec les relations de récurrences</a></li>
+<li><a href="#org9acb6e9">Obtention</a></li>
+<li><a href="#orgc6cdde3">Syntaxe</a></li>
+<li><a href="#org53fdd5d">Sémantique</a></li>
+<li><a href="#orgca36205">Différences avec les relations de récurrences</a></li>
 </ul>
 </li>
-<li><a href="#org98c0369">Bornes Supérieures de Forme Fermées des Relations de Coûts</a>
+<li><a href="#org6c0135e">Bornes Supérieures de Forme Fermées des Relations de Coûts</a>
 <ul>
-<li><a href="#org6e9fad9">Bornage du Nombre de Noeuds</a></li>
-<li><a href="#org3e36f91">Bornage du Coût par Noeud</a></li>
-<li><a href="#orgdb24392">Cas des Algorithmes <i>Diviser-pour-régner</i></a></li>
+<li><a href="#org1f3a50d">Bornage du Nombre de Noeuds</a></li>
+<li><a href="#orgdbe5630">Bornage du Coût par Noeud</a></li>
+<li><a href="#orgda8155d">Cas des Algorithmes <i>Diviser-pour-régner</i></a></li>
 </ul>
 </li>
-<li><a href="#orgad76f88"><span class="todo TODO">TODO</span> Mise en Forme de Récurrence Directe des Relations de Coûts</a></li>
-<li><a href="#orgf53b508">Incomplétude de l&rsquo;Analyse de Coût</a></li>
-<li><a href="#org520b10a"><span class="todo TODO">TODO</span> Évaluation Expérimentale</a></li>
-<li><a href="#orgc446e82">Travaux Connexes &amp; Conclusion</a></li>
+<li><a href="#org9ecf4db"><span class="todo TODO">TODO</span> Mise en Forme de Récurrence Directe des Relations de Coûts</a></li>
+<li><a href="#org154c35a">Incomplétude de l&rsquo;Analyse de Coût</a></li>
+<li><a href="#org8af71f9"><span class="todo TODO">TODO</span> Évaluation Expérimentale</a></li>
+<li><a href="#org8efbb18">Travaux Connexes &amp; Conclusion</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgab377f6" class="outline-2">
-<h2 id="orgab377f6">Introduction</h2>
-<div class="outline-text-2" id="text-orgab377f6">
+<div id="outline-container-orgb1809ab" class="outline-2">
+<h2 id="orgb1809ab">Introduction</h2>
+<div class="outline-text-2" id="text-orgb1809ab">
 <p>
 On cherche à borner le coût en une certaine ressource d&rsquo;un programme <i>P</i> sur une
 entrée arbitraire <i>x</i> sans pour autant avoir à déterminer le <i>x</i> qui réalise
@@ -298,13 +298,13 @@ Notre nouvelle approche, basée sur l&rsquo;analyse statique d&rsquo;une sémant
 </div>
 </div>
 
-<div id="outline-container-org979db40" class="outline-2">
-<h2 id="org979db40">Relations de Coûts</h2>
-<div class="outline-text-2" id="text-org979db40">
+<div id="outline-container-orgdbb793f" class="outline-2">
+<h2 id="orgdbb793f">Relations de Coûts</h2>
+<div class="outline-text-2" id="text-orgdbb793f">
 </div>
-<div id="outline-container-org134d156" class="outline-3">
-<h3 id="org134d156">Obtention</h3>
-<div class="outline-text-3" id="text-org134d156">
+<div id="outline-container-org9acb6e9" class="outline-3">
+<h3 id="org9acb6e9">Obtention</h3>
+<div class="outline-text-3" id="text-org9acb6e9">
 <p>
 On veut pouvoir inférer, depuis le code source d&rsquo;un programme impératif
 structuré (avec <code>if</code>, <code>while</code>,etc) ou non-structuré (avec <code>goto</code>, <code>jump</code>,etc) les
@@ -325,9 +325,9 @@ relations de coûts en elles-mêmes.</li>
 </div>
 </div>
 
-<div id="outline-container-org6145c36" class="outline-3">
-<h3 id="org6145c36">Syntaxe</h3>
-<div class="outline-text-3" id="text-org6145c36">
+<div id="outline-container-orgc6cdde3" class="outline-3">
+<h3 id="orgc6cdde3">Syntaxe</h3>
+<div class="outline-text-3" id="text-orgc6cdde3">
 <pre class="example">
 r   ::= ℝ+
 n   ::= ℕ
@@ -353,9 +353,9 @@ les contraintes présentes dans <i>φ</i>.
 </div>
 </div>
 
-<div id="outline-container-org8f148d8" class="outline-3">
-<h3 id="org8f148d8">Sémantique</h3>
-<div class="outline-text-3" id="text-org8f148d8">
+<div id="outline-container-org53fdd5d" class="outline-3">
+<h3 id="org53fdd5d">Sémantique</h3>
+<div class="outline-text-3" id="text-org53fdd5d">
 <p>
 Les <i>Systèmes de récurrences de coûts (CRS)</i> sont définis de manière analogues
 au programmes de programmation logique: les <code>C(x_{1}...x_{n}) = ...</code> sont comme des
@@ -394,9 +394,9 @@ des coûts engendrés.
 </div>
 </div>
 
-<div id="outline-container-org191cab8" class="outline-3">
-<h3 id="org191cab8">Différences avec les relations de récurrences</h3>
-<div class="outline-text-3" id="text-org191cab8">
+<div id="outline-container-orgca36205" class="outline-3">
+<h3 id="orgca36205">Différences avec les relations de récurrences</h3>
+<div class="outline-text-3" id="text-orgca36205">
 <dl class="org-dl">
 <dt>Non-déterminisme</dt><dd>L&rsquo;abstraction des valeurs par leurs tailles rends les CR
 <i>très</i> non-déterministes, même dans les cas ou le programme ne l&rsquo;est pas. Voir
@@ -431,9 +431,9 @@ par une CR déterministe.
 </div>
 </div>
 
-<div id="outline-container-org98c0369" class="outline-2">
-<h2 id="org98c0369">Bornes Supérieures de Forme Fermées des Relations de Coûts</h2>
-<div class="outline-text-2" id="text-org98c0369">
+<div id="outline-container-org6c0135e" class="outline-2">
+<h2 id="org6c0135e">Bornes Supérieures de Forme Fermées des Relations de Coûts</h2>
+<div class="outline-text-2" id="text-org6c0135e">
 <p>
 Dans une CRS <code>S</code>, on définit les <i>Bornes Supérieures de formes fermées d&rsquo;une CR <code>C</code></i>
 comme une fonction <code>f : Ζ^{n} -&gt; ℝ^{+}</code> telle que:
@@ -464,9 +464,9 @@ arbres d&rsquo;évaluation de <code>C</code>. Formellement:
 </p>
 </div>
 
-<div id="outline-container-org6e9fad9" class="outline-3">
-<h3 id="org6e9fad9">Bornage du Nombre de Noeuds</h3>
-<div class="outline-text-3" id="text-org6e9fad9">
+<div id="outline-container-org1f3a50d" class="outline-3">
+<h3 id="org1f3a50d">Bornage du Nombre de Noeuds</h3>
+<div class="outline-text-3" id="text-org1f3a50d">
 <p>
 On borne les valeurs de <code>internes(x)</code> et <code>feuilles(x)</code> en donnant une borne supérieure
 de la hauteur <code>h(x)</code> et du <i>facteur de branchement</i> <code>b</code> des arbres d&rsquo;évaluation.
@@ -507,9 +507,9 @@ suffit d&rsquo;approximer l&rsquo;arbre d&rsquo;évaluation par un arbre complet
 </div>
 </div>
 
-<div id="outline-container-org3e36f91" class="outline-3">
-<h3 id="org3e36f91">Bornage du Coût par Noeud</h3>
-<div class="outline-text-3" id="text-org3e36f91">
+<div id="outline-container-orgdbe5630" class="outline-3">
+<h3 id="orgdbe5630">Bornage du Coût par Noeud</h3>
+<div class="outline-text-3" id="text-orgdbe5630">
 <p>
 Il reste maintenant à obtenir les fonctions <code>cout-interne</code> et <code>cout-feuille</code>.
 Premièrement, on utilise l&rsquo;interprétation abstraite sur la forme de récurrence
@@ -526,9 +526,9 @@ supérieures calculées ici forment les fonctions <code>cout-interne</code> et
 </div>
 </div>
 
-<div id="outline-container-orgdb24392" class="outline-3">
-<h3 id="orgdb24392">Cas des Algorithmes <i>Diviser-pour-régner</i></h3>
-<div class="outline-text-3" id="text-orgdb24392">
+<div id="outline-container-orgda8155d" class="outline-3">
+<h3 id="orgda8155d">Cas des Algorithmes <i>Diviser-pour-régner</i></h3>
+<div class="outline-text-3" id="text-orgda8155d">
 <p>
 Dans les cas des algorithmes diviser-pour-régner, l&rsquo;approximation
 noeud-par-noeud n&rsquo;est pas assez précise. On borne alors le coût d&rsquo;une relation
@@ -561,9 +561,9 @@ calcul de <code>cout-interne</code>.</dd>
 </div>
 </div>
 
-<div id="outline-container-orgad76f88" class="outline-2">
-<h2 id="orgad76f88"><span class="todo TODO">TODO</span> Mise en Forme de Récurrence Directe des Relations de Coûts</h2>
-<div class="outline-text-2" id="text-orgad76f88">
+<div id="outline-container-org9ecf4db" class="outline-2">
+<h2 id="org9ecf4db"><span class="todo TODO">TODO</span> Mise en Forme de Récurrence Directe des Relations de Coûts</h2>
+<div class="outline-text-2" id="text-org9ecf4db">
 <p>
 &lt;Excuse de mauvaise foi&gt;
 On a rien compris à la définition maître de <i>Binding Time Classification</i>. En
@@ -581,9 +581,9 @@ rendre toutes les définitions récursives <i>directement</i> récursives.
 </div>
 </div>
 
-<div id="outline-container-orgf53b508" class="outline-2">
-<h2 id="orgf53b508">Incomplétude de l&rsquo;Analyse de Coût</h2>
-<div class="outline-text-2" id="text-orgf53b508">
+<div id="outline-container-org154c35a" class="outline-2">
+<h2 id="org154c35a">Incomplétude de l&rsquo;Analyse de Coût</h2>
+<div class="outline-text-2" id="text-org154c35a">
 <p>
 Le problème de l&rsquo;arrêt se réduit à un calcul de coût dans un modèle de temps.
 Donc notre analyse sera forcément incomplète. Mais même quand un programme admet un
@@ -612,13 +612,13 @@ il conviendrait d&rsquo;adapter la procédure de maximisation.</li>
 </div>
 </div>
 
-<div id="outline-container-org520b10a" class="outline-2">
-<h2 id="org520b10a"><span class="todo TODO">TODO</span> Évaluation Expérimentale</h2>
+<div id="outline-container-org8af71f9" class="outline-2">
+<h2 id="org8af71f9"><span class="todo TODO">TODO</span> Évaluation Expérimentale</h2>
 </div>
 
-<div id="outline-container-orgc446e82" class="outline-2">
-<h2 id="orgc446e82">Travaux Connexes &amp; Conclusion</h2>
-<div class="outline-text-2" id="text-orgc446e82">
+<div id="outline-container-org8efbb18" class="outline-2">
+<h2 id="org8efbb18">Travaux Connexes &amp; Conclusion</h2>
+<div class="outline-text-2" id="text-org8efbb18">
 <p>
 Dès le système <i>METRIC</i> de Wegbriet, on cherche à obtenir des CR à partir de
 programme. Mais <i>METRIC</i> se limite aux RR, qui sont déterministes, et déjà, les
