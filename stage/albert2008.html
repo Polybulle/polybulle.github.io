@@ -191,7 +191,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="/Users/polybulle/Site/css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -216,6 +216,28 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
@@ -251,12 +273,12 @@
 <h2 id="orgb1809ab">Introduction</h2>
 <div class="outline-text-2" id="text-orgb1809ab">
 <p>
-On cherche à borner le coût en une certaine ressource d&rsquo;un programme <i>P</i> sur une
-entrée arbitraire <i>x</i> sans pour autant avoir à déterminer le <i>x</i> qui réalise
-cette borne ou avoir à calculer <i>P(x)</i>. Pour ce faire, on procède avec un
-programme <i>P</i> et un <i>modèle de coût</i> donné. On produit dans un premier temps des
-<i>relations de coûts (CR)</i> pour <i>P</i>. Ces relations décrivent le coût de <i>P</i> selon
-le modèle du calcul en fonction de la <i>taille</i> de son entrée <i>x</i>.
+On cherche à borner le coût en une certaine ressource d&rsquo;un programme \(P\) sur une
+entrée arbitraire \(x\) sans pour autant avoir à déterminer le \(x\) qui réalise
+cette borne ou avoir à calculer \(P(x)\). Pour ce faire, on procède avec un
+programme \(P\) et un <i>modèle de coût</i> donné. On produit dans un premier temps des
+<i>relations de coûts (CR)</i> pour \(P\). Ces relations décrivent le coût de \(P\) selon
+le modèle du calcul en fonction de la <i>taille</i> de son entrée \(x\).
 </p>
 
 <p>
@@ -327,27 +349,20 @@ relations de coûts en elles-mêmes.</li>
 <div id="outline-container-orgc6cdde3" class="outline-3">
 <h3 id="orgc6cdde3">Syntaxe</h3>
 <div class="outline-text-3" id="text-orgc6cdde3">
-<pre class="example">
-r   ::= ℝ+
-n   ::= ℕ
-v   ::= Ζ
-lin ::= v1*x1 + ... vn*xn
-c   ::= lin &lt; lin | lin ≤ lin | lin = lin
-φ   ::= c+
-
-exp ::= r         | nat(lin)
-      | exp + exp | exp * exp  | exp - r
-      | exp ^ r   | log_{n}(exp) | n{exp}
-      | max( exp+ )
-
-cost ::=  C(x_{1}...x_{n}) = exp + ∑(i=1...n) D_i(y_{i,1}...y_{i,m}) where φ
-CRS  ::= cost+
-</pre>
+\begin{align*}
+& r ∈ ℝ, n ∈ ℕ, v ∈ ℤ \\
+lin &::= v1*x1 + ... vn*xn \\
+c   &::= (lin < lin | lin ≤ lin | lin = lin)+ \\
+exp &::= r | nat(lin) | exp + exp   | exp * exp | exp - r \\
+    &| exp ^ r     | log_{n}(exp) | n{exp} | max( exp+ ) \\
+cost &::=  C(x_{1}...x_{n}) = exp + ∑(i=1...n) D_i(y_{i,1}...y_{i,m}) where φ \\
+CRS  &::= cost+
+\end{align*}
 
 <p>
-On notera que dans <i>cost</i>, les variables de <i>exp</i> et <i>(y<sub>i,1</sub>&#x2026;y<sub>i,m</sub></i> ne
-sont pas <i>définies</i> grâce à <i>x<sub>1</sub>&#x2026;x<sub>n</sub></i>) mais seulement reliées à elles par
-les contraintes présentes dans <i>φ</i>.
+On notera que dans \(cost\), les variables de \(exp\) et \(y_{i,1}...y_{i,m}\) ne
+sont pas <i>définies</i> grâce à \(x_{1}...x_{n}\) mais seulement reliées à elles par
+les contraintes présentes dans \(φ\).
 </p>
 </div>
 </div>
@@ -357,26 +372,26 @@ les contraintes présentes dans <i>φ</i>.
 <div class="outline-text-3" id="text-org53fdd5d">
 <p>
 Les <i>Systèmes de récurrences de coûts (CRS)</i> sont définis de manière analogues
-au programmes de programmation logique: les <code>C(x_{1}...x_{n}) = ...</code> sont comme des
-définitions de clauses, et la partie droite de l&rsquo;égalité peut être vue comme une
-disjonction (somme) de contraintes, testables directement ou par récurrence sur
-d&rsquo;autres clauses.
+au programmes de programmation logique: les \(C(x_{1}...x_{n})\) sont comme des
+clauses, et la partie droite de l&rsquo;égalité peut être vue comme une disjonction
+(somme) de contraintes, testables directement ou par récurrence sur d&rsquo;autres
+clauses.
 </p>
 
 <p>
 La sémantique des <i>CRS</i> suit donc celle d&rsquo;un programme en progammation logique,
-définie par des arbres d&rsquo;évaluations. Pour évaluer un <code>C(v_{1}...v_{n})</code>, on procède
+définie par des arbres d&rsquo;évaluations. Pour évaluer un \(C(v_{1}...v_{n})\), on procède
 par étapes:
 </p>
 <ol class="org-ol">
-<li>On choisie une des clauses du CRS qui a <code>C</code> en tête.</li>
+<li>On choisie une des clauses du CRS qui a \(C\) en tête.</li>
 <li>on instancie les variables libres de manière à
-satisfaire <code>φ</code>.</li>
-<li>On calcule et accumule <code>exp</code> sous l&rsquo;instanciation précédente</li>
-<li>On itère sur tout les <code>D_{i}</code></li>
+satisfaire \(φ\).</li>
+<li>On calcule et accumule \(exp\) sous l&rsquo;instanciation précédente</li>
+<li>On itère sur tout les \(D_{i}\)</li>
 </ol>
 <p>
-Quand on ne peut pas satisfaire <code>φ</code>, on a atteint un échec.
+Quand on ne peut pas satisfaire \(φ\), on a atteint un échec.
 </p>
 
 <p>
@@ -386,8 +401,8 @@ est l&rsquo;ensemble des coût de ses arbres d&rsquo;évaluation.
 </p>
 
 <p>
-On note <code>Trees(C(v_{1}...v_{n}), S)</code> l&rsquo;ensemble des arbres de l&rsquo;évaluation de
-<code>C(v_{1}...v_{n})</code> dans le CRS <code>S</code>, et <code>Answer(C(v_{1}...v_{n}), S)</code> l&rsquo;ensemble
+On note \(Trees(C(v_{1}...v_{n}), S)\) l&rsquo;ensemble des arbres de l&rsquo;évaluation de
+\(C(v_{1}...v_{n})\) dans le CRS \(S\), et \(Answer(C(v_{1}...v_{n}), S)\) l&rsquo;ensemble
 des coûts engendrés.
 </p>
 </div>
@@ -434,32 +449,32 @@ par une CR déterministe.
 <h2 id="org6c0135e">Bornes Supérieures de Forme Fermées des Relations de Coûts</h2>
 <div class="outline-text-2" id="text-org6c0135e">
 <p>
-Dans une CRS <code>S</code>, on définit les <i>Bornes Supérieures de formes fermées d&rsquo;une CR <code>C</code></i>
-comme une fonction <code>f : Ζ^{n} -&gt; ℝ^{+}</code> telle que:
+Dans une CRS \(S\), on définit les /Bornes Supérieures de formes fermées d&rsquo;une CR \(C\)
+comme une fonction \(f : ℤ^{n} → ℝ^{+}\) telle que:
 </p>
 <ul class="org-ul">
-<li><code>f(x_{1}...x_{n}) = exp</code></li>
-<li><code>∀ v_{1}...v_{n}, ∀r ∈ Answers(C(v_{1}...v_{n}), S), f(v_{1}...v_{n}) ≥ r</code></li>
+<li>\(f(x_{1}...x_{n}) = exp\)</li>
+<li>\(∀ v_{1}...v_{n}, ∀r ∈ Answers(C(v_{1}...v_{n}), S), f(v_{1}...v_{n}) ≥ r\)</li>
 </ul>
 
 <p>
-La méthode décrite dans l&rsquo;article construit les bornes sup <code>f</code> en approchant par
+La méthode décrite dans l&rsquo;article construit les bornes sup \(f\) en approchant par
 le haut le nombre et le coût individuel des noeuds internes et des feuilles des
-arbres d&rsquo;évaluation de <code>C</code>. Formellement:
+arbres d&rsquo;évaluation de \(C\). Formellement:
 </p>
 
 <p>
-<code>f(x) = internes(x)*cout-interne(x) + feuilles(x)*cout-feuille(x)</code>
+\(f(x) = internes(x)*\text{cout-interne}(x) + feuilles(x)*\text{cout-feuille}(x)\)
 </p>
 
 <p>
-La méthode décrite dans l&rsquo;article construit les bornes sup <code>f</code> en approchant par
+La méthode décrite dans l&rsquo;article construit les bornes sup \(f\) en approchant par
 le haut le nombre et le coût individuel des noeuds internes et des feuilles des
-arbres d&rsquo;évaluation de <code>C</code>. Formellement:
+arbres d&rsquo;évaluation de \(C\). Formellement:
 </p>
 
 <p>
-<code>f(x) = internes(x)*cout-interne(x) + feuilles(x)*cout-feuille(x)</code>
+\(f(x) = internes(x)*\text{cout-interne}(x) + feuilles(x)*\text{cout-feuille}(x)\)
 </p>
 </div>
 
@@ -467,22 +482,22 @@ arbres d&rsquo;évaluation de <code>C</code>. Formellement:
 <h3 id="org1f3a50d">Bornage du Nombre de Noeuds</h3>
 <div class="outline-text-3" id="text-org1f3a50d">
 <p>
-On borne les valeurs de <code>internes(x)</code> et <code>feuilles(x)</code> en donnant une borne supérieure
-de la hauteur <code>h(x)</code> et du <i>facteur de branchement</i> <code>b</code> des arbres d&rsquo;évaluation.
+On borne les valeurs de \(internes(x)\) et \(feuilles(x)\) en donnant une borne supérieure
+de la hauteur \(h(x)\) et du <i>facteur de branchement</i> \(b\) des arbres d&rsquo;évaluation.
 Le facteur de branchement est facilement borné par le nombre maximal d&rsquo;appels
-récursifs dans une équation pour <code>C</code>. Il est donc immédiatement calculable.
+récursifs dans une équation pour \(C\). Il est donc immédiatement calculable.
 </p>
 
 <p>
-On cherche maintenant à borner la hauteur d&rsquo;un arbre d&rsquo;évaluation <code>T ∈
-Trees(C(v_{1}...v_{n}), S)</code>. On applique un pré-traitement à <code>S</code> pour garantir un
-invariant sur <code>T</code>: C&rsquo;est la <i>Mise en forme de récurrence directe</i>: Dans une
-descente dans <code>T</code>, les noeuds successifs représentent des appels imbriqués aux
-relations de coût idoines, étiquetés par les têtes des relations (<code>C</code>, <code>D</code>,
-&#x2026;); La forme de récurrence directe impose que si <code>C</code> apparaît comme un
-descendant de <code>C</code>, alors c&rsquo;est un descendant direct. Ce résultat permet de
-réduire le bornage de <code>h(x)</code> au bornage du nombre d&rsquo;appels successifs à une
-relation de coût <code>C</code>. Une technique de passage en forme de récurrence directe
+On cherche maintenant à borner la hauteur d&rsquo;un arbre d&rsquo;évaluation \(T ∈
+Trees(C(v_{1}...v_{n}), S)\). On applique un pré-traitement à \(S\) pour garantir un
+invariant sur \(T\): C&rsquo;est la <i>Mise en forme de récurrence directe</i>: Dans une
+descente dans \(T\), les noeuds successifs représentent des appels imbriqués aux
+relations de coût idoines, étiquetés par les têtes des relations (\(C\), \(D\),
+&#x2026;); La forme de récurrence directe impose que si \(C\) apparaît comme un
+descendant de \(C\), alors c&rsquo;est un descendant direct. Ce résultat permet de
+réduire le bornage de \(h(x)\) au bornage du nombre d&rsquo;appels successifs à une
+relation de coût \(C\). Une technique de passage en forme de récurrence directe
 est présentée plus loin.
 </p>
 
@@ -491,8 +506,8 @@ Le bornage du nombre d&rsquo;appel successifs à une relation de coût ou de ré
 à été étudié dans le cadre de l&rsquo;analyse de terminaison. Il en résulte des
 algorithmes d&rsquo;inférence de <i>fonctions de classement</i>, qui associe aux arguments
 des relations un <i>rang</i> dans un ordre bien-fondé. Si une fonction de classement
-<code>f_{C}</code> existe pour une relation de coût <code>C</code>, alors la hauteur de l&rsquo;arbre
-engendré par <code>C(v_{1}...v_{n})</code> est bornée <code>f_{C}(v_{1}...v_{n})</code>. Les fonctions
+\(f_{C}\) existe pour une relation de coût \(C\), alors la hauteur de l&rsquo;arbre
+engendré par \(C(v_{1}...v_{n})\) est bornée \(f_{C}(v_{1}...v_{n})\). Les fonctions
 de classement que nous utilisons sont linéaires, et inférées par l&rsquo;algorithme
 décrit par Podelski &amp; Rybalchenko dans <i>A complete method for the for synthesis
 of linear ranking functions (VMCAI04)</i>.
@@ -501,7 +516,7 @@ of linear ranking functions (VMCAI04)</i>.
 <p>
 Une fois les bornes de la hauteur est du facteur de branchement établie, il
 suffit d&rsquo;approximer l&rsquo;arbre d&rsquo;évaluation par un arbre complet de hauteur
-<code>h(v_{1}...v_{n})</code> et de facteur <code>b</code>.
+\(h(v_{1}...v_{n})\) et de facteur \(b\).
 </p>
 </div>
 </div>
@@ -510,17 +525,17 @@ suffit d&rsquo;approximer l&rsquo;arbre d&rsquo;évaluation par un arbre complet
 <h3 id="orgdbe5630">Bornage du Coût par Noeud</h3>
 <div class="outline-text-3" id="text-orgdbe5630">
 <p>
-Il reste maintenant à obtenir les fonctions <code>cout-interne</code> et <code>cout-feuille</code>.
+Il reste maintenant à obtenir les fonctions \(\text{cout-interne}\) et \(\text{cout-feuille}\).
 Premièrement, on utilise l&rsquo;interprétation abstraite sur la forme de récurrence
-directe de <code>S</code> pour obtenir des approximations sûres des invariants entre les
+directe de \(S\) pour obtenir des approximations sûres des invariants entre les
 appels successifs aux relations de coûts. On remarque alors que les coûts sont
-monotones en leurs composants <code>nat</code>. Il suffit alors de borner ces composants
+monotones en leurs composants \(nat\). Il suffit alors de borner ces composants
 en utilisant les invariants calculés plus haut et les arguments à la racine de
 l&rsquo;arbre d&rsquo;évaluation. (Voir la functions <code>ub_exp</code> de l&rsquo;article original pour
-l&rsquo;algorithme exact). Les relations de coûts récursives de <code>S</code> engendrent les
+l&rsquo;algorithme exact). Les relations de coûts récursives de \(S\) engendrent les
 noeuds internes, et les non-récursives engendrent les feuilles. Les bornes
-supérieures calculées ici forment les fonctions <code>cout-interne</code> et
-<code>cout-feuille</code>.
+supérieures calculées ici forment les fonctions \(\text{cout-interne}\) et
+\(\text{cout-feuille}\).
 </p>
 </div>
 </div>
@@ -531,7 +546,7 @@ supérieures calculées ici forment les fonctions <code>cout-interne</code> et
 <p>
 Dans les cas des algorithmes diviser-pour-régner, l&rsquo;approximation
 noeud-par-noeud n&rsquo;est pas assez précise. On borne alors le coût d&rsquo;une relation
-de coût <code>C</code> par <code>C^{+}(x) = levels(x)*cout-level(x)</code>. Comme précédemment, on borne
+de coût \(C\) par \(C^{+}(x) = levels(x)*cout-level(x)\). Comme précédemment, on borne
 de nombre de niveau avec la hauteur de l&rsquo;arbre.
 </p>
 
@@ -539,22 +554,22 @@ de nombre de niveau avec la hauteur de l&rsquo;arbre.
 Pour borner le coût par niveau, nous développons une caractérisation des CR
 <i>diviser-pour-régner</i> compatible avec notre analyse, un test automatique
 d&rsquo;appartenance à cette classe de CR, et une méthode pour calculer une borne
-<code>cout-level</code> pour ces CR.
+\(cout-level\) pour ces CR.
 </p>
 
 <dl class="org-dl">
 <dt>Caractérisation</dt><dd>Une CR est <i>diviser-pour-régner</i> si, pour tout ses arbres
 d&rsquo;évaluation, le coût propre d&rsquo;un niveau de son arbre d&rsquo;évaluation des
 supérieur ou égal au coût propre du niveau directement en dessous</dd>
-<dt>Calcul</dt><dd>On calcule, pour une CR <code>C</code>, les paires <code>(exp, exp')</code> des coûts
-abstraits propres <code>exp</code> de chaque équation la définissant, et de la somme
-<code>exp'</code> des coût abstraits propres de leurs enfants respectifs. Pour
-prouver que <code>C</code> est diviser-pour-régner, il suffit de prouver que pour tout
-assignement satisfaisant les contraintes locales de ces noeuds, le coût de <code>C</code>
+<dt>Calcul</dt><dd>On calcule, pour une CR \(C\), les paires \((exp, exp')\) des coûts
+abstraits propres \(exp\) de chaque équation la définissant, et de la somme
+\(exp'\) des coût abstraits propres de leurs enfants respectifs. Pour
+prouver que \(C\) est diviser-pour-régner, il suffit de prouver que pour tout
+assignement satisfaisant les contraintes locales de ces noeuds, le coût de \(C\)
 est au moins égal au coût total de ces enfants.</dd>
 <dt>Bornage</dt><dd>On borne alors le coût d&rsquo;un niveau par le coût de la racine, qui
 est le niveau de coût maximal. L&rsquo;algorithme de calcul est le même que pour le
-calcul de <code>cout-interne</code>.</dd>
+calcul de \(\text{cout-interne}\).</dd>
 </dl>
 </div>
 </div>
@@ -565,8 +580,8 @@ calcul de <code>cout-interne</code>.</dd>
 <div class="outline-text-2" id="text-org9ecf4db">
 <p>
 On effectue une analyse de composantes fortement connexes dans les CRS, . Il y a
-un lien entre <code>C</code> et <code>D</code> si <code>D</code> intervient à droite dans une équation
-définissant <code>C</code>. Ensuite, le cas échéant, on inline selon ces composantes pour
+un lien entre \(C\) et \(D\) si \(D\) intervient à droite dans une équation
+définissant \(C\). Ensuite, le cas échéant, on inline selon ces composantes pour
 rendre toutes les définitions récursives <i>directement</i> récursives.
 </p>
 </div>

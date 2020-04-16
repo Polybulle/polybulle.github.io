@@ -191,7 +191,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="/Users/polybulle/Site/css/stylesheet.css" />
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
@@ -216,6 +216,28 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
@@ -243,12 +265,24 @@
 <li><a href="#orgfe7f258">Sémantique à grand pas</a></li>
 </ul>
 </li>
-<li><a href="#org44e12b0">Core RAML, sémantique à pile</a></li>
-<li><a href="#orge5f9655">Limites</a></li>
+<li><a href="#org509632c">Système de type affine avec pile</a>
+<ul>
+<li><a href="#org251e564">Types des fonctions simple</a></li>
+<li><a href="#org892fc37">Types inductifs simples</a></li>
+<li><a href="#org84873f2">Partage et polymorphisme</a></li>
+<li><a href="#org0835a7b">Jugements et dérivations</a></li>
+</ul>
+</li>
+<li><a href="#orgb70d2af">Polynômes de ressources</a>
+<ul>
+<li><a href="#orgda58d15">Polynômes de base</a></li>
+<li><a href="#orgcec2160">Polynômes de ressources d&rsquo;un type</a></li>
+<li><a href="#org5d84025">Potentiel d&rsquo;un programme</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-
 
 <div id="outline-container-orgbd45aff" class="outline-2">
 <h2 id="orgbd45aff">Introduction</h2>
@@ -258,13 +292,12 @@ On introduit une analyse statique de ressources pour les programmes OCaml
 <i>fonctionnels</i>, <i>d&rsquo;ordre supérieur</i>, <i>avec polymorphisme</i> et <i>types
 utilisateurs</i>. On obtient en résultat des polynômes multivariables décrivant
 l&rsquo;usage de ressources tel que le temps d&rsquo;exécution au pire (WCET), l&rsquo;occupation
-mémoire, la consommation d&rsquo;énergie ou encore le nombre d&rsquo;appel à une API. Cette
-analyse utilise <i>AARA : Automatic Amortized Resource Analysis</i>, un nouveau
-système de type et une nouvelle sémantique de la machine virtuelle <i>ZINC</i>
-d&rsquo;OCaml. On peut trouver des bornes asymptotique fortes pour des programmes
-réels, comme les utilitaires de la bibliothèque standard sur les listes,
-l&rsquo;algorithme de Dijkstra, ou un client pour Amazon DynamoDB, avec à chaque fois
-les métriques pertinentes.
+mémoire, la consommation d&rsquo;énergie ou encore le nombre d&rsquo;appel à une API. On
+utilise un nouveau système de type et une nouvelle sémantique de la machine
+virtuelle <i>ZINC</i> d&rsquo;OCaml. On peut trouver des bornes non-asymptotiques fortes
+pour des programmes réels, comme les utilitaires de la bibliothèque standard sur
+les listes, l&rsquo;algorithme de Dijkstra, ou un client pour Amazon DynamoDB, avec à
+chaque fois les métriques pertinentes.
 </p>
 </div>
 
@@ -301,14 +334,13 @@ analysée, en terme d&rsquo;étape d&rsquo;évaluation dans la sémantique à gr
 Pour ce faire, on extrait un AST typé du compilateur OCaml, puis on infère de
 nouveaux types contenant des information de potentiel pour chaque expression. A
 partir d&rsquo;une déclaration <code>t : T</code>, on obtient une autre définition <code>t : (T';
-&lt;q1...qn&gt;))</code> ou <code>T'</code> est proche de <code>T</code> (on y précise les applications
-partielle/totales des fonctions aux sites d&rsquo;appels), et les <code>qi</code> sont des
-coefficients permettant de définir un potentiel <i>φ(t) = Σ q<sub>i</sub>*p<sub>i</sub>(t)</i>. Les
-polynômes <i>p<sub>i</sub></i> sont définis pour chaque constructeurs du type <code>T</code>. La sémantique
-du langage hôte induit des contraintes linéaires entre les potentiels. Elles
-sont résolues par un solveur de programmation linéaire externe lors d&rsquo;un
-parcours de l&rsquo;AST, comme on infère les types dans un programme en produisant et
-résolvant des contraintes d&rsquo;unification.
+&lt;q1…qn&gt;))</code> ou <code>T'</code> est proche de <code>T</code> (on y précise si les applications sont
+partielle ou totales), et les <code>qi</code> sont des coefficients permettant de définir
+un potentiel \(φ(t) = Σ q_{i}*p_{i}(t)\). Les polynômes \(p_{i}\) sont définis pour
+chaque constructeurs du type <code>T</code>. Notre sémantique induit des contraintes
+linéaires entre les potentiels. Elles sont résolues par un solveur de
+programmation linéaire après un parcours de l&rsquo;AST qui collecte les contraintes
+et détermine les objectifs.
 </p>
 </div>
 </div>
@@ -331,7 +363,7 @@ bords
 On prend comme exemple <code>val append : 'a list -&gt; 'a list -&gt; 'a list</code> de la
 bibliothèque standard. L&rsquo;appel <code>let foo = append xs</code> termine en temps constant,
 et ne fait que créer une fermeture. Par contre, l&rsquo;appel <code>foo ys</code> renvoie la
-liste <code>xs @ ys</code> en temps et espace <i>O(xs)</i>. Donc, l&rsquo;usage de ressource de <code>foo</code>
+liste <code>xs @ ys</code> en temps et espace \(O(xs)\). Donc, l&rsquo;usage de ressource de <code>foo</code>
 ne dépend pas de son argument <code>ys</code>, mais est linéaire en la taille de la valeur
 capturée <code>xs</code>. Hélas, il n&rsquo;est pas suffisant de dé-curryfier <code>append</code> pour
 retomber sur un cas plus simple: Un appel à une version dé-curryfiée d&rsquo;<code>append</code>
@@ -343,12 +375,12 @@ normal, on produit une fermeture si l&rsquo;application est partielle, et on app
 <p>
 On résout ce problème en raffinant les types des fonctions sur leurs sites
 d&rsquo;appels. Les applications partielles peuvent être saturées par eta-expansion,
-et on change le type de la fonction de <code>a1 -&gt; ... -&gt; an -&gt; t</code> en <code>[a1 ... an] -&gt;
-t</code>, où l&rsquo;annotation <code>[...]</code> indique la saturation de l&rsquo;appel. L&rsquo;analyse peut
-alors rendre compte de l&rsquo;usage correct des ressource pour le second type. Hélas,
+et on change le type de la fonction de <code>a1 -&gt; … -&gt; an -&gt; t</code> en <code>[a1 … an] -&gt;
+t</code>, où l&rsquo;annotation <code>[…]</code> indique la saturation de l&rsquo;appel. L&rsquo;analyse peut
+alors rendre compte de l&rsquo;usage correct des ressource dans le second cas. Hélas,
 elle est bien plus complexe si les valeurs capturées dans les fermetures
 interviennent dans le calcul de complexité. L&rsquo;analyse est donc limitée aux
-appels annotés précédemment. De cet exemple ressort le critère principal de
+appels annotés <code>[…]</code>. De cet exemple ressort le critère principal de
 notre analyse:
 </p>
 <blockquote>
@@ -428,7 +460,6 @@ en annotant le type de l&rsquo;exception et de ses arguments.
 </div>
 </div>
 
-
 <div id="outline-container-org2222241" class="outline-2">
 <h2 id="org2222241">Core RAML, première sémantique</h2>
 <div class="outline-text-2" id="text-org2222241">
@@ -440,7 +471,7 @@ syntaxe). Pour garantir que le programme transformé rend compte de la
 consommation du programme en entrée, on peut marquer des constructions comme
 <i>gratuites</i> via une meta-syntaxe, qui sont ignorés dans l&rsquo;analyse. On présente
 ici un langage réduit, sans types primitifs comme les tableaux, leurs
-opérations, ou conditionelle.
+opérations, ou la conditionelle.
 </p>
 </div>
 
@@ -457,8 +488,12 @@ opérations, ou conditionelle.
 </ul></li>
 <li><code>fail</code>, pour modéliser les exceptions</li>
 <li><code>tick(q ∈ ℚ)</code>, une consommation de ressources</li>
-<li><code>share x as (y,z) in ...</code>, le partage de valeurs</li>
+<li><code>share x as (y,z) in …</code>, le partage de valeurs</li>
 </ul>
+
+<p>
+Les types sont l&rsquo;unité, les tuples, les références, les fonctions et les ADT classiques.
+</p>
 </div>
 </div>
 
@@ -466,25 +501,26 @@ opérations, ou conditionelle.
 <h3 id="org2cc8f64">Définitions sémantique</h3>
 <div class="outline-text-3" id="text-org2cc8f64">
 <p>
-Les valeurs <b>Val</b> sont
+Les valeurs \(Val\) sont
 </p>
 <ul class="org-ul">
-<li><b>l</b> la position d&rsquo;une valeur sur le tas,</li>
-<li><b>(l<sub>1</sub>, &#x2026;, l<sub>n</sub>)</b> les tuples de valeur,</li>
-<li><b>(λx.e, V)</b> les fermetures, avec leurs environnements, et</li>
-<li><b>C l</b> les applications de constructeur à une valeur.</li>
+<li>\(l\) la position d&rsquo;une valeur sur le tas,</li>
+<li>\((l_1, …, l_n)\) les tuples de valeur,</li>
+<li>\((λx.e, V)\) les fermetures, avec leurs environnements, et</li>
+<li>\(C l\) les applications de constructeur à une valeur.</li>
 </ul>
 
 <p>
-<b>K ∈ Syn</b> sont les noeuds de syntaxe, <b>S</b> est une pile d&rsquo;arguments, et <b>M : Syn
-× ℕ -&gt; ℚ</b> est une <i>métrique de ressource</i>.
+\(K ∈ Syn\) sont les noeuds de syntaxe, \(S\) est une pile d&rsquo;arguments, et \(M : Syn
+× ℕ → ℚ\) est une <i>métrique de ressource</i>. Le paramètre naturel permet, par
+exemple, de spécifier la taille des tuples.
 </p>
 
 <p>
-Le modèle mémoire comporte des variables <b>x ∈ Var</b> des adresses <b>l ∈ Loc</b> et les
-valeurs <b>Val</b>. Les variables indicent un environnement (partiel) <b>V : Var -&gt;
-Loc</b>. Enfin le tas est <b>H : Loc -&gt; Val</b> et comporte un pointeur nul <b>null ∈
-dom(H)</b> tel que <b>H(null) = null</b>.
+Le modèle mémoire comporte des variables \(x ∈ Var\) des adresses \(l ∈ Loc\) et les
+valeurs \(Val\). Les variables indicent un environnement (partiel) \(V : Var →
+Loc\). Enfin le tas est \(H : Loc → Val\) et comporte un pointeur nul avec
+\(H(null) = null\).
 </p>
 </div>
 </div>
@@ -497,82 +533,300 @@ Le jugement principal
 </p>
 <blockquote>
 <p>
-<b>S,V,H  ⊢<sub>Μ</sub> e ⇓ w | (q,q&rsquo;)</b>
+\(S,V,H  ⊢_Μ e ⇓ w | (q,q')\)
 </p>
 </blockquote>
 <p>
 s&rsquo;entend par:
 </p>
 <ul class="org-ul">
-<li>Selon la métrique de ressource <b>M</b></li>
-<li>dans un environnement <b>V</b>,</li>
-<li>avec une pile S et un tas <b>H</b>,</li>
-<li>l&rsquo;expression <b>e</b> se réduit en <b>w</b>,</li>
-<li>en induisant un coût <b>(q,q&rsquo;)</b>.</li>
+<li>Selon la métrique de ressource \(M\)</li>
+<li>dans un environnement \(V\),</li>
+<li>avec une pile S et un tas \(H\),</li>
+<li>l&rsquo;expression \(e\) se réduit en \(w\),</li>
+<li>en induisant un coût \((q,q')\).</li>
 </ul>
 <p>
-En général, on note la consommation <b>(q, 0)</b> par <b>q</b> et <b>(0, -q)</b> par <b>-q</b>.
+En général, on note la consommation \((q, 0)\) par \(q\) et \((0, -q)\) par \(-q\).
 </p>
 
 <p>
-Les réductions <b>w</b> sont soit une valeur de retour et un nouvel état <b>(l&rsquo;H&rsquo;)</b>,
-soit un blocage <b>⊥</b>, soit une non-terminaison <b>○</b>.
+Les réductions \(w\) sont soit une valeur de retour et un nouvel état \((l,H')\),
+soit un blocage \(⊥\), soit une non-terminaison \(○\).
 </p>
 
 <p>
-Les consommation de ressources sont de la forme <b>(q,q&rsquo;)</b> où <b>q</b> est la &laquo;&nbsp;marée
-haute&nbsp;&raquo;, la quantité maximale de ressource dont on à besoin, et <b>q&rsquo;</b> est la
+Les consommation de ressources sont de la forme \((q,q')\) où \(q\) est la &laquo;&nbsp;marée
+haute&nbsp;&raquo;, la quantité maximale de ressource dont on à besoin, et \(q'\) est la
 quantité de ressource disponible après l&rsquo;évaluation. La consommation est
-paramétrée par la <i>métrique de ressources</i> <b>M</b>, qui est une fonction qui à un
-noeud de la syntaxe <b>k</b> et sa taille <b>n</b> associe le coût propre de la
-construction: <b>M(k,n) = (q,q&rsquo;)</b>.
+paramétrée par la <i>métrique de ressources</i> \(M\), qui est une fonction qui à un
+noeud de la syntaxe \(k\) et sa taille \(n\) associe le coût propre de la
+construction: \(M(k,n) = (q,q')\).
 </p>
 
 <p>
-Les consommations forment un monoïde avec
+Les consommations forment un monoïde avec \(0 = (0,0)\) et \((q,q')·(p,p') =\)
 </p>
 <ul class="org-ul">
-<li><b>0 = (0,0)</b></li>
-<li><b>(q,q&rsquo;)·(p,p&rsquo;) =</b>
-<ul class="org-ul">
-<li><b>(q + p - q&rsquo;, p&rsquo;) si q&rsquo; ≤ p</b></li>
-<li><b>(q, p&rsquo; + q&rsquo; - p) si q&rsquo; &gt; p</b></li>
-</ul></li>
+<li>\((q + p - q', p') \text{ si } q' ≤ p\)</li>
+<li>\((q, p' + q' - p) \text{ si } q' > p\)</li>
 </ul>
 
 <p>
 La composition de deux consommation est alors la consommation de la séquence.
-Dans le cas d&rsquo;une analyse de WCET, les consommation sont <b>(q, 0)</b> car on ne peut
+Dans le cas d&rsquo;une analyse de WCET, les consommation sont \((q, 0)\) car on ne peut
 pas libérer de temps.  On peut alors dénoter la consommation des structures de données,
-par exemple, <b>(e1,e2)</b> a une consommation <b>M(tuple,2)·(q1,q1&rsquo;)·(q2,q2&rsquo;)</b>
+par exemple, \((e1,e2)\) a une consommation \(M(\text{tuple},2)·(q1,q1')·(q2,q2')\)
+</p>
+
+<p>
+Cette sémantique est une version à grands pas de la ZAM, qui est plus proche de
+notre système de ressource, et donc facilite les preuves. On ne tient pas compte
+des différences entre ZAM et ZAM2, ou entre <i>push-enter</i> et <i>eval-apply</i>. Mais
+des métriques appropriées peuvent palier à cela.
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org44e12b0" class="outline-2">
-<h2 id="org44e12b0">Core RAML, sémantique à pile</h2>
-<div class="outline-text-2" id="text-org44e12b0">
+<div id="outline-container-org509632c" class="outline-2">
+<h2 id="org509632c">Système de type affine avec pile</h2>
+<div class="outline-text-2" id="text-org509632c">
 <p>
-<i>TODO</i>
+On introduit les <i>types simples</i>: unité, types numériques, références, tuples,
+variables de types (le tout classique), mais aussi <i>fonctions simples</i> et <i>types
+inductifs simples</i>:
+</p>
+</div>
+
+<div id="outline-container-org251e564" class="outline-3">
+<h3 id="org251e564">Types des fonctions simple</h3>
+<div class="outline-text-3" id="text-org251e564">
+<p>
+Plutôt que d&rsquo;avoir un type \(t → t\) dans la syntaxe, on a \([t_1…t_n] → t\) qui
+spécifie que les \(n\) arguments sont appliqués en même temps. On a donc \(λf,x,y.
+f x y : ([T, U] → V) → T → U → V\) mais \(λf,x,y. (f x) y : (T → U → V) → T → U →
+V\). On remplacera parfois \([T_1 … T_n]\) par une unique pile \(Σ\) pour les
+jugements de typages.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orge5f9655" class="outline-2">
-<h2 id="orge5f9655">Limites</h2>
-<div class="outline-text-2" id="text-orge5f9655">
+<div id="outline-container-org892fc37" class="outline-3">
+<h3 id="org892fc37">Types inductifs simples</h3>
+<div class="outline-text-3" id="text-org892fc37">
 <p>
-Ne sont pas inclut dans le langage réduit auquel RAML ramème OCaml:
+Dans un système normal, on défini les types algébriques comme: \(T = ηX.〈C_1:T_1
+… C_n:T_n〉\) avec \(X\) liée dans les \(T_i\). Pour prendre en compte la taille
+des composantes de type \(X\), il faut en connaître le nombre. Dans notre système
+affine, les types inductifs sont: \(T = ηX. 〈C_1:(T_1,k_1) … C_n:(T_n,K_n)〉\),
+avec \(X\) non liée dans les \(T_i\). On emballe avec un \(k_{i}\) valeurs de types
+\(X\), de sorte à ce que \((T,k) = T×X×…×X\) soit équivalent (dans un sens
+homotopique) à sa version classique.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org84873f2" class="outline-3">
+<h3 id="org84873f2">Partage et polymorphisme</h3>
+<div class="outline-text-3" id="text-org84873f2">
+<p>
+Le <i>let-polymorphisme</i> consiste à remplacer les valeurs quantifiés par des types
+par leur définition durant le typage pour pouvoir instancier sans conflit. Mais
+ici ce n&rsquo;est pas une bonne idée: on change la consommation de ressource! RAML ne
+supporte que let-polymorphisme des fermetures. Il suffit de les re-définir
+autant que nécéssaire, de marquer les copies comme gratuites, et d&rsquo;intancier les
+variables de types (maintenant des variables différentes) sans conflit.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0835a7b" class="outline-3">
+<h3 id="org0835a7b">Jugements et dérivations</h3>
+<div class="outline-text-3" id="text-org0835a7b">
+<p>
+Les jugements sont de la forme \(Σ,Γ ⊢ e : T\), avec \(Σ\) une pile de type rendant
+compte de l&rsquo;état de la pile de la ZAM durant l&rsquo;évaluation. Ainsi, il existe des
+jugements <i>fermés</i> pour lesquels \(Σ = ∅\), qui représentent les jugement des
+valeurs elle-mêmes fermés, et de jugements <i>ouvert</i>, présent comme noeuds
+internes des dérivations, où \(Σ ≠ ∅\). On a deux théorèmes importants:
+</p>
+
+<blockquote>
+<p>
+Si \(e\) est bien typée, il n&rsquo;existe qu&rsquo;une seule dérivation de \(∅,Γ ⊢ e : T\)
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+Pour tout \(Γ, Σ, T\), si \(e\) est bien typée, il y au plus une seule dérivation de
+\(Σ,Γ ⊢ e : T\). Alors, on a aussi \(∅,Γ ⊢ e : Σ → T\), et la première dérivation ne
+peut apparaître qu&rsquo;en sous-dérivation de la première.
+</p>
+</blockquote>
+
+<p>
+On garantie ces unicités en produisant une règle de typage par règle
+d&rsquo;évaluation.
+</p>
+
+<p>
+On définit \(H \models l ↦ a : A\) signifiant &laquo;&nbsp;Dans le tas \(H\), la position \(l\)
+contient une valeur de type \(A\) représentée en mémoire par \(a\)&nbsp;&raquo;. En forme simple,
+\(H \models l : A\), et en étendant point-par-point, \(H \models S : Σ\) et \(H
+\models V : Γ\) pour les piles et les ensembles de valeurs. On a alors,
+</p>
+
+<blockquote>
+<p>
+Si \(H \models S:Σ,V:Γ\) <br />
+et \(Σ;Γ ⊢ e:T\) <br />
+et \(S,V,H ⊢_{M} e ⇓ (l,H') | (q,q')\) <br />
+alors \(H' \models S:Σ, V:Γ, l:T\)
+</p>
+</blockquote>
+
+
+<p>
+Ce qui veut dire qu&rsquo;en gros, tout va bien jusqu&rsquo;à maintenant.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb70d2af" class="outline-2">
+<h2 id="orgb70d2af">Polynômes de ressources</h2>
+<div class="outline-text-2" id="text-orgb70d2af">
+</div>
+<div id="outline-container-orgda58d15" class="outline-3">
+<h3 id="orgda58d15">Polynômes de base</h3>
+<div class="outline-text-3" id="text-orgda58d15">
+<p>
+On veut, pour un type simple, définir les polynômes de base que l&rsquo;on va
+combiner. Pour se faire, on interprète les types simple \(T\) en tant qu&rsquo;arbres
+\(B_T\). Les, types numériques sont des nombres, les types inductifs des noeuds
+internes et le reste des feuilles. Encore une fois, on ignore le coût des
+fermetures, que l&rsquo;on a simplifié.
+</p>
+
+<p>
+On va définir des abstractions en arbres des représentations mémoires dans le
+tas. Les arbres \(b ∈ B_T\) d&rsquo;un type inductif simple \(T\) dont les constructeurs
+sont \((C_i:(T_i,n_i))_{i≤k}\) sont définis inductivement: les feuilles sont les
+types non-inductifs, et les noeuds internes sont \(C_i(a_i, b_1, …, b_{n_i})\)
+avec \(a_i ∈ B_{T_i}\) et \(b_j ∈ B_T】\).
+</p>
+
+<p>
+Pour un arbre \(b ∈ B_T\), on peut considérer une descente dans cet arbre, où l&rsquo;on
+ignore ou collecte des étiquettes. Il en résulte une suite finie \(A = (a_m :
+T_m)_{m≤k}\). On défini \(τ_B(b)\) l&rsquo;ensemble de ces suites. Muni d&rsquo;une suite \(D =
+(D_m)_{m≤k}\) de constructeurs de \(B\), on note \(τ_B(D,b)\) l&rsquo;ensemble des suites
+où \(a_i\) est l&rsquo;étiquette d&rsquo;un \(D_i \text{-noeud}\). Armé de \(τ_B(D,b)\), on peut
+<i>enfin</i> définir les polynômes de bases.
+</p>
+
+<p>
+Les <i>polynômes de bases</i> \(P(T)\) d&rsquo;un type simple \(T\) sont un ensemble de
+fonction des arbres de \(B_T\) vers les rationnels définis inductivement par:
 </p>
 <ul class="org-ul">
-<li>Les modules, les foncteurs, les enregistrements</li>
-<li>la programmation orienté objet et les structures mutables en général</li>
-<li>le lancement d&rsquo;exception (qui est ignoré)</li>
-<li>le pattern matching imbriqué et les arguments optionnels, car on travaille
-avant qu&rsquo;ils ne soit traduits vers des structures syntaxiques plus simples</li>
-<li>la FFI vers C, pour des raisons évidentes</li>
+<li>Pour tout \(T\), \(λa.1 ∈ P(T)\)</li>
+<li>Pour \(T = T_1×…×T_n\), si \(p_i ∈ P(T_i)\) alors \(λa_1…a_n. ∏p_i(a_i) ∈ P(T)\)</li>
+<li>Pour \(A = (a_m : T_m)_{m≤k}\) résultante d&rsquo;une descente, et</li>
+<li>Pour \(T = 〈(C_i:(T_i,n_i)〉\), pour toute suite \(D\) de constructeurs de \(B_T\), on a
+\(λb. ∑_{A ∈ τ_B(D,b)} ∏_{m≤k} p_m(a_m)\) dans \(P(T)\) dès que \(∀m, p_m ∈ P(T_m)\).</li>
 </ul>
+
+<p>
+Les polynômes de base de \(T\) sont indicés par la famille \(I(T)\) définie
+inductivement par:
+</p>
+<ul class="org-ul">
+<li>Pour tout \(T\), \(★ ∈ I(T)\)</li>
+<li>Pour \(T = T_1×…×T_n\), si \(i_j ∈ I(T_j)\) alors \((i_1, …, i_n) ∈ I(T)\)</li>
+<li>Pour \(T\) type inductif de constructeurs \((C_j:(T_j,n_j))_{j≤k}\), toute
+séquence \([(C_{j_m}, i_m)]_{m≤k}\) est dans \(I(T)\) dès que \(∀m, i_m ∈ I(T_{j_m})\).</li>
+<li>On identifie \(★\), \((★,…,★)\), et \([]\).</li>
+</ul>
+<p>
+On associe naturellement un polynôme de \(p_i ∈ P(T)\) à tout indice de \(i ∈
+I(T)\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcec2160" class="outline-3">
+<h3 id="orgcec2160">Polynômes de ressources d&rsquo;un type</h3>
+<div class="outline-text-3" id="text-orgcec2160">
+<p>
+Pour un type \(T\), les polynômes de ressources \(∑q_i•p_i\) sont les combinaisons
+linéaires (de support fini) à facteurs rationnels de polynômes de base indicés
+par \(I(T)\). Ils sont ainsi représentes par les séquences \((q_i)_{i∈I}\). On
+notera qu&rsquo;ils sont croissants en chacun de leurs composantes, et on note \(R(T)\)
+l&rsquo;ensemble des polynômes, et \(Q(T)\) l&rsquo;ensemble de leurs réprésentations.
+</p>
+
+<p>
+Le degré d&rsquo;un polynôme de ressource est au plus celui d&rsquo;un de ses polynôme de
+base, qui lui-même est calculable depuis son indice. On peut alors limiter
+l&rsquo;espace de recherche de l&rsquo;analyse en limitant les indices. <i>RAML</i> par exemple
+impose les indices tels que les polynômes de ressources inférés soient de degrés
+au plus \(K\), une constante définie par l&rsquo;utilisateur.
+</p>
+
+<p>
+Enfin, il sera bon de noter que deux indices peuvent dénoter le même polynôme de
+base, ce qui ne blesse pas la correction de l&rsquo;analyse, et que certains indices
+peuvent représenter des polynômes nuls. Ces derniers peuvent être détectés et
+éliminés par leurs indices simplement.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5d84025" class="outline-3">
+<h3 id="org5d84025">Potentiel d&rsquo;un programme</h3>
+<div class="outline-text-3" id="text-org5d84025">
+<p>
+On va annoter les types simple avec des polynômes de ressources. A partir de
+maintenant, \(T\) réfère au type et \(|T|\) à sa version simple, sans annotation, et
+ce inductivement. On peut spécifier les consommation des fonctions \(f : T_f =
+[A_1, …, A_n] → B\) par des annotations \(Θ\) qui sont des ensemble de paires
+\((Q_A,Q_B)\) avec \(Q_A ∈ Q(|A_1×…×A_n|)\) et \(Q_B ∈ Q(|B|)\). Dans les types, on
+a donc $f : 〈T<sub>f</sub>, Θ〉. On nomme <i>type annoté</i> une paire \((A,Q)\) d&rsquo;un type \(A\)
+et d&rsquo;un polynôme de ressource de \(Q(|A|)\).
+</p>
+
+<p>
+On peut alors définir le <i>potentiel</i> d&rsquo;une valeur \(v\) d&rsquo;un tas \(H\). Si pour \(v\),
+\(H \models l → a : |A|\), et que \(v : (A, Q)\), son potentiel est
+</p>
+
+<p>
+\[ Φ_H(v : (A,Q)) = ∑q_i•p_i(a)  \]
+</p>
+
+<p>
+On étends point-à-point ce potentiel aux contextes et pile, en les entendant
+comme un produit cartésien des indices de leurs éléments. On note \(I(Σ;Γ)\) les
+indices d&rsquo;un contexte, et un <i>contexte annoté</i> est simplement \(Σ;Γ;Q\). On
+définit le potentiel de l&rsquo;état d&rsquo;un programme comme tel:
+</p>
+
+<p>
+Soit \(H\) un tas, \(S\) une pile et \(V\) en environnement tels que \(H \models V : Γ,
+S:Σ\). On déconstruit \(Γ = x_1 : A_1, …, x_n : A_n\) avec \(H \models V(x_j) ↦
+a_j : |A_j|\), et \(S = l_1, …, l_m\) avec \(H \models l_k ↦ b_k : |B_k|\). Le
+potentiel est la combinaison linéaire sur \(I(Σ,Γ)\)
+</p>
+
+<p>
+\[
+    Φ_{S,V,H}(Σ;Γ;Q) = ∑ q_i•∏p_j(a_j)∏p_k(b_k)
+\]
+</p>
+</div>
 </div>
 </div>
 </div>
