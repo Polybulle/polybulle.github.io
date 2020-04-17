@@ -280,6 +280,16 @@
 <li><a href="#org5d84025">Potentiel d&rsquo;un programme</a></li>
 </ul>
 </li>
+<li><a href="#org87285a5">Typage de ressources</a>
+<ul>
+<li><a href="#org2600b9c">(Dé)-construction des termes</a></li>
+<li><a href="#orgb0bf9d4">Partage</a></li>
+<li><a href="#org4ade613">Sous-typage</a></li>
+<li><a href="#org18387ac">Jugement</a></li>
+<li><a href="#org3971182">Règles</a></li>
+<li><a href="#orgc63fb02">Théorème: Cohérence</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -823,8 +833,125 @@ potentiel est la combinaison linéaire sur \(I(Σ,Γ)\)
 
 <p>
 \[
-    Φ_{S,V,H}(Σ;Γ;Q) = ∑ q_i•∏p_j(a_j)∏p_k(b_k)
+    Φ_{S,V,H}(Σ;Γ;Q) = ∑ q_i•∏p_j(a_j) ∏p_k(b_k)
 \]
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org87285a5" class="outline-2">
+<h2 id="org87285a5">Typage de ressources</h2>
+<div class="outline-text-2" id="text-org87285a5">
+<p>
+Les règles de typages sont un médium peu adapté à la communication des calculs
+d&rsquo;annotations que l&rsquo;on présente dans cette partie. On choisi de les omettre. On
+présente néanmoins les opérations définis pour établir les jugements de type annotés.
+</p>
+</div>
+
+<div id="outline-container-org2600b9c" class="outline-3">
+<h3 id="org2600b9c">(Dé)-construction des termes</h3>
+<div class="outline-text-3" id="text-org2600b9c">
+<p>
+On considère ici la transformation des potentiels issus de la
+construction/destruction d&rsquo;un \(x : B = ηX.〈…, C : (A,n),…〉\). Si le
+constructeur de \(x\) est \(C\), et que \(y : A×B^{n}\) (avec \(B^{n}\) les
+\(n\text{-uplets}\) de \(B\)), alors \(x\) et \(y\) sont équivalents et l&rsquo;on passe de
+l&rsquo;un à l&rsquo;autre lors de l&rsquo;application de \(C\) ou d&rsquo;un filtrage par motif.Pour
+préciser les changements d&rsquo;annotations que cet isomorphisme induit, on définit
+le \(C\text{-dépliage}\) d&rsquo;annotations de potentiels.
+</p>
+
+<p>
+On pose \(Σ\) et \(Γ,x:B\) le contexte exécution <i>plié</i> et \(Q\) son annotation, et
+\(Γ' = Γ,y:A×B^{n}\) l&rsquo;environnement <i>déplié</i>. L&rsquo;annotation associée à \(Σ;Γ'\) est
+notée \(◁_B^{C}(Q)\), et est définie afin de conserver le potentiel total entre
+les deux contextes d&rsquo;évaluation. On peut heureusement définir ce dépliage par
+contraintes linéaires.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb0bf9d4" class="outline-3">
+<h3 id="orgb0bf9d4">Partage</h3>
+<div class="outline-text-3" id="text-orgb0bf9d4">
+<p>
+Comme nous utilisons le partage, il nous faut aussi pouvoir combiner les
+annotations que \(x_1:A\) et \(x_2:A\) quand elles sont le résultat de <code>let share x
+as (x_{1}, x_{2}) in</code>. On prendra soin de remarquer que les usages de <code>x_1</code> et
+<code>x_2</code> ne sont en général pas symétriques, et qu&rsquo;il faut donc coefficienter
+correctement les participations de <code>x_1</code> et <code>x_2</code> au potentiel de <code>x</code> dans
+l&rsquo;annotation de la forme <code>let share</code> et de ses sur-formes. Encore une fois, ces
+coefficients sont décrits par contraintes linéaires. Si \(Q\) est l&rsquo;annotation
+sous le <code>let share</code>, on note \(\curlyveedownarrow Q\) au dessus.
+</p>
+
+<p>
+Si vous regardez ce document eu format HTML, l&rsquo;opérateur ne rendra pas
+correctement. Il s&rsquo;agit d&rsquo;une flèche vers le bas, avec deux branches en guise de
+corps, l&rsquo;une courbant vers la gauche, et l&rsquo;autre vers la droite
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4ade613" class="outline-3">
+<h3 id="org4ade613">Sous-typage</h3>
+<div class="outline-text-3" id="text-org4ade613">
+<p>
+On définit le sous-typage structurel classique sur les types annotés, avec pour
+les fonctions, la condition qu&rsquo;un type \(A → B, Θ\) est sous-type de \(A' → B', Θ'\)
+si \(A'\) est un sous-type de \(A\), \(B\) en est un de \(B'\) et \(Θ' ⊂ Θ\).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org18387ac" class="outline-3">
+<h3 id="org18387ac">Jugement</h3>
+<div class="outline-text-3" id="text-org18387ac">
+<p>
+Le jugement du système de ressourece est \(Σ;Γ;Q ⊢_{M} e : (A, Q')\) s&rsquo;entendant
+comme &laquo;&nbsp;Selon la métrique de ressourec \(M\), dans un contexte d&rsquo;évaluation \(Σ;Γ\)
+(distingués pour leurs coûts) annotés par \(Q\), si on a disposition au moins
+\(Φ(Σ;Γ;Q)\) de potentiel, alors l&rsquo;expression \(e\) a le type \(|A|\), et soit elle
+diverge, soit elle produit une valeur \(v\), et dans ce cas le potentiel restant
+est d&rsquo;au moins \(Φ(v : (A,Q'))\)&nbsp;&raquo;.
+</p>
+
+<p>
+On introduit la métrique \(\text{cf}\) de coût nul pour les constantes, purement
+utilitaire, qui intervient dans la règle <i>LET</i>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3971182" class="outline-3">
+<h3 id="org3971182">Règles</h3>
+<div class="outline-text-3" id="text-org3971182">
+<p>
+<i>C&rsquo;est un gros morceau, qui est certainement plus clair en algorithme qu&rsquo;en
+code. On le passe pour le moment.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc63fb02" class="outline-3">
+<h3 id="orgc63fb02">Théorème: Cohérence</h3>
+<div class="outline-text-3" id="text-orgc63fb02">
+<p>
+Si \(H \models V:Γ, S:Σ\) et \(Σ,Γ,Q ⊢_{M} e : (B,Q')\):
+</p>
+<ol class="org-ol">
+<li>alors \(S,V,H ⊢_{M} e ⇓ w | (p,p')\) et \(p ≤ Φ_{S,V,H}(Σ,Γ,Q)\),</li>
+<li>et si, de plus \(w = (l,H')\):
+<ol class="org-ol">
+<li>\(H \models l : B\),</li>
+<li>et \(p-p' ≤ Φ_{S,V,H}(Σ,Γ,Q) - Φ_{H'}(l : (B,Q'))\)</li>
+</ol></li>
+</ol>
+
+<p>
+Preuve par double induction: sur le jugement de réduction, et au delà dans le
+jugement de typage.
 </p>
 </div>
 </div>
