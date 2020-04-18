@@ -1,21 +1,14 @@
 body {
   margin: auto auto;
   max-width: 40em;
-  background-color: #fffff7;
-  font-family: "Helvetica", "Arial", sans-serif;
+  background-color: #f4f4f4;
   line-height: 1.3;
   padding: 4em 1em;
 }
 
 h1,
 h2,
-body,
-code {
-  color: #011424;
+h3 {
+  color: #011111;
+  font-family: "Helvetica", "Arial", sans-serif;
 }
-
-pre,
-blockquote {
-  background: #efebd5;
-  padding: 2pt 1em 2pt
- }
